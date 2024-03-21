@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Colors {
+class ColorManager {
   static const primaryColor = Color(0xff126e85);
   static const secondaryColor = Color(0xffdef3f8);
-  
+
   static const LinearGradient linearGradientPrimary = LinearGradient(
     colors: [
       Color(0xff74c9dc),

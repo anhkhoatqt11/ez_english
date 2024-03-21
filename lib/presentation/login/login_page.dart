@@ -1,7 +1,7 @@
-import 'package:ez_english/utils/routes/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:ez_english/utils/route_manager.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
