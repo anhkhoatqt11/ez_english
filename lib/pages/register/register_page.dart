@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -12,7 +13,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: Text(
+          AppLocalizations.of(context)!.register,
+        ),
       ),
     );
   }

@@ -1,0 +1,14 @@
+{
+    "language": "English",
+    "@language": {
+        "description": "The current Language"
+    },
+    "login": "Login",
+    "@login": {
+        "description": "The login button"
+    },
+    "register": "Register",
+    "@register": {
+        "description": "The register button"
+    }
+}
