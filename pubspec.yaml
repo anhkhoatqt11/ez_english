@@ -41,6 +41,7 @@ dependencies:
   google_fonts: ^6.2.1
   logging: ^1.2.0
   rxdart: ^0.27.7
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
