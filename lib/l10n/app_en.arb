@@ -10,5 +10,12 @@
     "register": "Register",
     "@register": {
         "description": "The register button"
-    }
+    },
+    "home": "Home",
+    "practice": "Practice",
+    "test": "Test",
+    "profile": "Profile",
+    "language_option": "Language",
+    "settings": "Settings",
+    "sign_out": "Sign out"
 }

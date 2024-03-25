@@ -1,5 +1,12 @@
 {
     "language": "Tiếng Việt",
     "login": "Đăng nhập",
-    "register": "Đăng ký"
+    "register": "Đăng ký",
+    "home": "Trang chủ",
+    "practice": "Tập luyện",
+    "test": "Thi",
+    "profile": "Hồ sơ",
+    "language_option": "Ngôn ngữ",
+    "settings": "Cài đặt",
+    "sign_out": "Đăng xuất"
 }
