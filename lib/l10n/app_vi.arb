@@ -1,5 +1,17 @@
 {
+    "@@locale": "vi",
     "language": "Tiếng Việt",
     "login": "Đăng nhập",
-    "register": "Đăng ký"
+    "login_description": "Nhập thông tin đăng nhập của bạn",
+    "email": "Email",
+    "enter_email": "Nhập email của bạn",
+    "password": "Mật khẩu",
+    "enter_password": "Nhập mật khẩu của bạn",
+    "forgot_password": "Quên mật khẩu?",
+    "move_to_register": "Chưa có tài khoản? ",
+    "register": "Đăng ký",
+    "register_description": "Nhập thông tin đăng ký của bạn",
+    "username": "Tên người dùng",
+    "enter_username": "Nhập tên người dùng của bạn",
+    "move_to_login": "Đã có tài khoản? "
 }
