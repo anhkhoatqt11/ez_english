@@ -1,8 +1,8 @@
 import 'package:ez_english/presentation/common/widgets/stateful/app_bottom_navigation_bar.dart';
 import 'package:ez_english/presentation/main/home/home_page.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
+import 'package:ez_english/presentation/main/profile/profile_page.dart';
 import 'package:ez_english/presentation/main/test/test_page.dart';
-import 'package:ez_english/presentation/main/user/user_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -32,13 +32,14 @@ class _MainViewState extends State<MainView> {
     const HomePage(),
     const PracticePage(),
     const TestPage(),
-    const UserPage(),
+    const ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       body: PageView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => pages[index],
         controller: _pageController,
       ),

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppBottomNavigationBar extends StatefulWidget {
   AppBottomNavigationBar({super.key, required this.pageController});
@@ -38,10 +39,14 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _buildBottomNavItem(ImagePath.homeSvgPath, 'Home', 0),
-          _buildBottomNavItem(ImagePath.praticeSvgPath, 'Practice', 1),
-          _buildBottomNavItem(ImagePath.testSvgPath, 'Test', 2),
-          _buildBottomNavItem(ImagePath.userSvgPath, 'User', 3),
+          _buildBottomNavItem(
+              ImagePath.homeSvgPath, AppLocalizations.of(context)!.home, 0),
+          _buildBottomNavItem(ImagePath.praticeSvgPath,
+              AppLocalizations.of(context)!.practice, 1),
+          _buildBottomNavItem(
+              ImagePath.testSvgPath, AppLocalizations.of(context)!.test, 2),
+          _buildBottomNavItem(
+              ImagePath.userSvgPath, AppLocalizations.of(context)!.profile, 3),
         ],
       ),
     );
