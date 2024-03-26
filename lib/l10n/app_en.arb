@@ -1,11 +1,40 @@
 {
+    "@@locale": "en",
     "language": "English",
     "@language": {
         "description": "The current Language"
     },
     "login": "Login",
     "@login": {
-        "description": "The login button"
+        "description": "Login text using in Login Page"
+    },
+    "login_description": "Login to use the application",
+    "@login_description": {
+        "description": "Login description using in Login Page"
+    },
+    "email": "Email",
+    "@email": {
+        "description": "Email text using in Authentication Pages"
+    },
+    "enter_email": "Enter your email",
+    "@enter_email": {
+        "description": "Enter your email text using in Email Input"
+    },
+    "password": "Password",
+    "@password": {
+        "description": "Email text using in Authentication Pages"
+    },
+    "enter_password": "Enter your password",
+    "@enter_password": {
+        "description": "Enter your password text using in Password Input"
+    },
+    "forgot_password": "Forgot Password?",
+    "@forgot_password": {
+        "description": "Forgot Password text using in Login Page"
+    },
+    "move_to_register": "Don't have an account? ",
+    "@move_to_register": {
+        "description": "Move to Register text using in Login Page"
     },
     "register": "Register",
     "@register": {
