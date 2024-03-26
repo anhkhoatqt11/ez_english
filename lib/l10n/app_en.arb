@@ -38,22 +38,13 @@
     },
     "register": "Register",
     "@register": {
-        "description": "Register text using in Register Page"
+        "description": "The register button"
     },
-    "register_description": "Register your personal information",
-    "@register_description": {
-        "description": "Register description using in Register Page"
-    },
-    "username": "Username",
-    "@username": {
-        "description": "Username text using in Register Page"
-    },
-    "enter_username": "Enter your username",
-    "@enter_username": {
-        "description": "Enter username text using in Register Page"
-    },
-    "move_to_login": "Have an account? ",
-    "@move_to_login": {
-        "description": "Move to Login text using in Register Page"
-    }
+    "home": "Home",
+    "practice": "Practice",
+    "test": "Test",
+    "profile": "Profile",
+    "language_option": "Language",
+    "settings": "Settings",
+    "sign_out": "Sign out"
 }

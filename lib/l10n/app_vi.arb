@@ -13,5 +13,12 @@
     "register_description": "Nhập thông tin đăng ký của bạn",
     "username": "Tên người dùng",
     "enter_username": "Nhập tên người dùng của bạn",
-    "move_to_login": "Đã có tài khoản? "
+    "move_to_login": "Đã có tài khoản? ",
+    "home": "Trang chủ",
+    "practice": "Tập luyện",
+    "test": "Thi",
+    "profile": "Hồ sơ",
+    "language_option": "Ngôn ngữ",
+    "settings": "Cài đặt",
+    "sign_out": "Đăng xuất"
 }
