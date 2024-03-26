@@ -19,7 +19,7 @@ TextStyle _getTextStyle(double fontSize, FontWeight fontWeight, Color color) {
 
 // regular style
 
-TextStyle getRegularStyle(int i, {double fontSize = 12, required Color color}) {
+TextStyle getRegularStyle({double fontSize = 12, required Color color}) {
   return _getTextStyle(fontSize, FontWeightManager.regular, color);
 }
 
