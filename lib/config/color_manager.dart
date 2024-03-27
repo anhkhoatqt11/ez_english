@@ -9,6 +9,10 @@ class ColorManager {
   static const darkSlateGrayColor = Color(0xff343234);
   static const inputBgColor = Color(0xfff7f8fa);
   static const inputBorderColor = Color(0xfff2f3f7);
+  static const indicatorColor = Color(0xffd9d9d9);
+  static const indicatorDotColor = Color(0xffbfbfbf);
+  static const activityColor = Color(0xFFD6F0FF);
+  static const primaryTextColor = Color(0xff72c7db);
 
   static const LinearGradient linearGradientPrimary = LinearGradient(
     colors: [
