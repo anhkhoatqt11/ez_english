@@ -45,57 +45,12 @@ class _TestInformationPageState extends State<TestInformationPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 177,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    image: const DecorationImage(
-                        image: AssetImage(ImagePath.testPath),
-                        fit: BoxFit.cover)),
-              ),
+              _buildTestImage(context),
               const SizedBox(
                 height: 8,
               ),
-              Card(
-                child: Wrap(
-                  children: [
-                    _buildIconText(
-                        content:
-                            '120 ${AppLocalizations.of(context)!.questions}',
-                        iconPath: ImagePath.timerSvgPath),
-                    _buildIconText(
-                        content: 'Intermediate',
-                        iconPath: ImagePath.testLevelSvgPath),
-                    _buildIconText(
-                        content: '120 ${AppLocalizations.of(context)!.minutes}',
-                        iconPath: ImagePath.questionSvgPath),
-                  ],
-                ),
-              ),
-              Card(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.about_test,
-                        style: getBoldStyle(color: Colors.black, fontSize: 14),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        'sdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffLorem ipsum dolor sit amet consectetur. Cras habitasse tempus consequat faucibus habitasse dictum elementum nulla. Pellentesque sed consectetur nulla a pretium fames elementum. Etiam amet adipiscing proin sodales hac sed massa. Pretium maecenas ipsum tortor ac adipiscing.',
-                        maxLines: 50,
-                        style: getLightStyle(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              _buildGeneralTestInfo(context),
+              _buildAboutTest(context),
               const SizedBox(
                 height: 60,
               )
@@ -103,20 +58,81 @@ class _TestInformationPageState extends State<TestInformationPage> {
           ),
         ),
       ),
-      floatingActionButton: InkWell(
-        onTap: () {},
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 4),
-          height: 48,
-          width: MediaQuery.of(context).size.width * 0.7,
-          decoration: BoxDecoration(
-              gradient: ColorManager.linearGradientPrimary,
-              borderRadius: BorderRadius.circular(30)),
-          child: Center(child: Text(AppLocalizations.of(context)!.take_test)),
-        ),
-      ),
+      floatingActionButton: _buildTakeTestButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  InkWell _buildTakeTestButton(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 4),
+        height: 48,
+        width: MediaQuery.of(context).size.width * 0.7,
+        decoration: BoxDecoration(
+            gradient: ColorManager.linearGradientPrimary,
+            borderRadius: BorderRadius.circular(30)),
+        child: Center(child: Text(AppLocalizations.of(context)!.take_test)),
+      ),
+    );
+  }
+
+  Container _buildTestImage(BuildContext context) {
+    return Container(
+              height: 177,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: const DecorationImage(
+                      image: AssetImage(ImagePath.testPath),
+                      fit: BoxFit.cover)),
+            );
+  }
+
+  Card _buildGeneralTestInfo(BuildContext context) {
+    return Card(
+              child: Wrap(
+                children: [
+                  _buildIconText(
+                      content:
+                          '120 ${AppLocalizations.of(context)!.questions}',
+                      iconPath: ImagePath.timerSvgPath),
+                  _buildIconText(
+                      content: 'Intermediate',
+                      iconPath: ImagePath.testLevelSvgPath),
+                  _buildIconText(
+                      content: '120 ${AppLocalizations.of(context)!.minutes}',
+                      iconPath: ImagePath.questionSvgPath),
+                ],
+              ),
+            );
+  }
+
+  Card _buildAboutTest(BuildContext context) {
+    return Card(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.about_test,
+                      style: getBoldStyle(color: Colors.black, fontSize: 14),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      'sdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffLorem ipsum dolor sit amet consectetur. Cras habitasse tempus consequat faucibus habitasse dictum elementum nulla. Pellentesque sed consectetur nulla a pretium fames elementum. Etiam amet adipiscing proin sodales hac sed massa. Pretium maecenas ipsum tortor ac adipiscing.',
+                      maxLines: 50,
+                      style: getLightStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            );
   }
 
   Widget _buildIconText({required String content, required String iconPath}) {
