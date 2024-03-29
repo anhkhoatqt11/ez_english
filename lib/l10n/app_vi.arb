@@ -20,5 +20,11 @@
     "profile": "Hồ sơ",
     "language_option": "Ngôn ngữ",
     "settings": "Cài đặt",
-    "sign_out": "Đăng xuất"
+    "sign_out": "Đăng xuất",
+    "see_more": "Xem thêm",
+    "status": "Trạng thái",
+    "about_test": "Về bài test",
+    "take_test": "Làm bài",
+    "questions": "Câu",
+    "minutes": "Phút"
 }

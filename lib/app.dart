@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: Routes.generateRoute,
         theme: getAppTheme(),
         supportedLocales: L10n.all,
-        locale: const Locale('en'), //Change language here
+        locale: const Locale('vi'), //Change language here
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

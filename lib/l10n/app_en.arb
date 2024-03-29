@@ -40,11 +40,21 @@
     "@register": {
         "description": "The register button"
     },
+    "register_description": "Register your personal information",
+    "username": "Username",
+    "enter_username": "Enter your name",
+    "move_to_login": "Have an account? ",
     "home": "Home",
     "practice": "Practice",
     "test": "Test",
     "profile": "Profile",
     "language_option": "Language",
     "settings": "Settings",
-    "sign_out": "Sign out"
+    "sign_out": "Sign out",
+    "see_more": "See more",
+    "status": "Status",
+    "about_test": "About test",
+    "take_test": "Take test",
+    "questions": "Questions",
+    "minutes": "Minutes"
 }
