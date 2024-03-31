@@ -110,7 +110,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               onTap: () {
                 Navigator.of(context)
-                    .pushReplacementNamed(RoutesName.registerRoute);              },
+                    .pushReplacementNamed(RoutesName.registerRoute);
+              },
             )
           ],
         ),
