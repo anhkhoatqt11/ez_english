@@ -17,11 +17,11 @@ class MyApp extends StatelessWidget {
     ));
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: RoutesName.mainRoute,
+        initialRoute: RoutesName.loginRoute,
         onGenerateRoute: Routes.generateRoute,
         theme: getAppTheme(),
         supportedLocales: L10n.all,
-        locale: const Locale('en'), //Change language here
+        locale: const Locale('vi'), //Change language here
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
