@@ -1,4 +1,5 @@
 import 'package:ez_english/presentation/main/main_view.dart';
+import 'package:ez_english/presentation/main/test/test_information_page.dart';
 import 'package:ez_english/presentation/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class RoutesName {
   static const String loginRoute = "login";
   static const String registerRoute = "register";
   static const String mainRoute = "main";
+  static const String testInformation = "testInformation";
 }
 
 class Routes {
@@ -23,6 +25,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const RegisterPage());
       case RoutesName.mainRoute:
         return MaterialPageRoute(builder: (_) => const MainView());
+      case RoutesName.testInformation:
+        return MaterialPageRoute(builder: (_) => const TestInformationPage());
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

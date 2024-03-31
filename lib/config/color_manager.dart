@@ -13,6 +13,7 @@ class ColorManager {
   static const indicatorDotColor = Color(0xffbfbfbf);
   static const activityColor = Color(0xFFD6F0FF);
   static const primaryTextColor = Color(0xff72c7db);
+  static const errorColor = Color(0xFFB63737);
 
   static const LinearGradient linearGradientPrimary = LinearGradient(
     colors: [
