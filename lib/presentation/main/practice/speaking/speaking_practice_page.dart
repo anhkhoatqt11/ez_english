@@ -135,8 +135,8 @@ class SpeakingPracticeItem extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.grey, 
-              spreadRadius: 5, 
-              blurRadius: 8, 
+              spreadRadius: 1, 
+              blurRadius: 10, 
               offset: const Offset(0, 3), 
             ),
           ],
