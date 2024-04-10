@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
-import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListeningPage extends StatefulWidget {
   const ListeningPage({super.key});
@@ -62,7 +62,7 @@ class _ListeningPageAppBarState extends State<ListeningPageAppBar> {
           ),
           const SizedBox(width: 12.91),
           Text(
-            'Listening', 
+            AppLocalizations.of(context)!.listening,
             style: getSemiBoldStyle(color: Colors.white, fontSize: 14),
           ),
         ],
@@ -87,12 +87,12 @@ class _ListeningPageBodyState extends State<ListeningPageBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget> [
               Text(
-                'Listening Practice',
+                AppLocalizations.of(context)!.listening_practice,
                 style: getSemiBoldStyle(color: Colors.black, fontSize: 24),
               ),
               const SizedBox(height: 9),
               Text(
-                'Choose once to begin',
+                AppLocalizations.of(context)!.choose_once_to_begin,
                 style: getSemiBoldStyle(color: ColorManager.lightTextColor, fontSize: 14),
               ),
             ],
@@ -110,34 +110,21 @@ class ListeningPracticeList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ListeningPracticeItem('Listening Practice 1'),
-        ListeningPracticeItem('Listening Practice 2'),
-        ListeningPracticeItem('Listening Practice 3'),
-        ListeningPracticeItem('Listening Practice 4'),
-        ListeningPracticeItem('Listening Practice 1'),
-        ListeningPracticeItem('Listening Practice 2'),
-        ListeningPracticeItem('Listening Practice 3'),
-        ListeningPracticeItem('Listening Practice 4'),
-        ListeningPracticeItem('Listening Practice 1'),
-        ListeningPracticeItem('Listening Practice 2'),
-        ListeningPracticeItem('Listening Practice 3'),
-        ListeningPracticeItem('Listening Practice 4'),
+        for (int i = 1; i < 11; i++) ListeningPracticeItem(i),
       ],
     );
   }
 }
 
 class ListeningPracticeItem extends StatelessWidget {
-  final String practiceName;
+  final int index;
 
-  ListeningPracticeItem(this.practiceName);
+  ListeningPracticeItem(this.index);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print('Tapped');
-      },
+      onTap: () {},
       child: Container(
         height: 106,
         width: 324,
@@ -167,6 +154,12 @@ class ListeningPracticeItem extends StatelessWidget {
                     color: ColorManager.secondaryColor,
                     shape: BoxShape.circle,
                   ),
+                  child: Center(
+                    child: Text(
+                      index < 10 ? '0$index' : '$index',
+                      style: getSemiBoldStyle(color: ColorManager.primaryColor, fontSize: 14),
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Column(
@@ -177,7 +170,7 @@ class ListeningPracticeItem extends StatelessWidget {
                       style: getSemiBoldStyle(color: Colors.black, fontSize: 12),
                     ),
                     Text(
-                      'corectAnswer / totalQuestion',
+                      'correctAnswer / totalQuestion',
                       style: getLightStyle(color: Colors.black, fontSize: 8),
                     ),
                   ]
@@ -189,7 +182,7 @@ class ListeningPracticeItem extends StatelessWidget {
               children: <Widget>[
                 const SizedBox(width: 20),
                 Text(
-                  'Progress',
+                  AppLocalizations.of(context)!.progress,
                   style: getLightStyle(color: Colors.black, fontSize: 8),
                 ),
                 const SizedBox(width: 8),
