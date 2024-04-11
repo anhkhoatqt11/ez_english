@@ -3,10 +3,13 @@ import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/presentation/common/widgets/stateful/language_picker_dialog.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
+import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ez_english/main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,6 +21,26 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Future<void> signOut() async {
+    try {
+      await supabase.auth.signOut();
+    } on AuthException catch (error) {
+      SnackBar(
+        content: Text(error.message),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      );
+    } catch (error) {
+      SnackBar(
+        content: const Text('Unexpected error occurred'),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      );
+    } finally {
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed(RoutesName.loginRoute);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -81,11 +104,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     }),
                 _buildProfleItem(
-                    content: AppLocalizations.of(context)!.settings,
-                    prefixIconPath: ImagePath.settingsSvgPath),
+                  content: AppLocalizations.of(context)!.settings,
+                  prefixIconPath: ImagePath.settingsSvgPath,
+                ),
                 _buildProfleItem(
-                    content: AppLocalizations.of(context)!.sign_out,
-                    prefixIconPath: ImagePath.signOutSvgPath),
+                  content: AppLocalizations.of(context)!.sign_out,
+                  prefixIconPath: ImagePath.signOutSvgPath,
+                  function: signOut,
+                ),
               ],
             ),
           ),

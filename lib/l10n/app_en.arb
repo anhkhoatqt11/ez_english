@@ -26,5 +26,6 @@
     "about_test": "About test",
     "take_test": "Take test",
     "questions": "Questions",
-    "minutes": "Minutes"
+    "minutes": "Minutes",
+    "login_success": "Login success!"
 }

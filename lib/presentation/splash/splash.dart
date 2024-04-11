@@ -1,10 +1,39 @@
 import 'package:ez_english/config/asset_manager.dart';
 import 'package:ez_english/config/color_manager.dart';
+import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ez_english/presentation/main/main_view.dart';
+import 'package:ez_english/main.dart';
 
-class SplashView extends StatelessWidget {
-  const SplashView({Key? key});
+
+class SplashView extends StatefulWidget {
+  const SplashView({super.key});
+
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
+  @override
+  void initState() {
+    super.initState();
+    redirect();
+  }
+
+  Future<void> redirect() async {
+    await Future.delayed(Duration.zero);
+    if (!mounted) {
+      return;
+    }
+
+    final session = supabase.auth.currentSession;
+    if (session != null) {
+      Navigator.of(context).pushReplacementNamed(RoutesName.mainRoute);
+    } else {
+      Navigator.of(context).pushReplacementNamed(RoutesName.loginRoute);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

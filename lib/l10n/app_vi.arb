@@ -26,5 +26,6 @@
     "about_test": "Về bài test",
     "take_test": "Làm bài",
     "questions": "Câu",
-    "minutes": "Phút"
+    "minutes": "Phút",
+    "login_succcess": "Đăng nhập thành công!"
 }

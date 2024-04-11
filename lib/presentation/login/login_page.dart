@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:ez_english/config/asset_manager.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/common_text_input.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ez_english/utils/route_manager.dart';
+import 'package:ez_english/main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,8 +20,65 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool isLoading = false;
+  bool redirecting = false;
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late final StreamSubscription<AuthState> authStateSubscription;
+
+  Future<void> signIn() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      await supabase.auth.signInWithPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login success'),
+          ),
+        );
+        emailController.clear();
+        passwordController.clear();
+      }
+    } on AuthException catch (error) {
+      SnackBar(
+        content: Text(error.message),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      if (redirecting) return;
+      final session = data.session;
+      if (session != null) {
+        redirecting = true;
+        Navigator.of(context).pushReplacementNamed(RoutesName.mainRoute);
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    authStateSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                   obsucure: false,
                   textInputType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 20), // Added SizedBox for spacing
+                const SizedBox(height: 20),
                 CommonTextInput(
                   controller: passwordController,
                   text: AppLocalizations.of(context)!.enter_password,
@@ -88,7 +150,9 @@ class _LoginPageState extends State<LoginPage> {
                   textInputType: TextInputType.visiblePassword,
                 ),
                 const SizedBox(height: 30),
-                CommonButton(text: AppLocalizations.of(context)!.login),
+                ElevatedButton(
+                    onPressed: isLoading ? null : signIn,
+                    child: Text(AppLocalizations.of(context)!.login)),
               ],
             ),
           ),
