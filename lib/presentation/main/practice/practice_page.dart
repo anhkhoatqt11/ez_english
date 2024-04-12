@@ -84,7 +84,7 @@ class _PracticePageBodyState extends State<PracticePageBody> {
     return ListView(
       children: <Widget>[
         Container(
-          height: 129,
+          height: 50,
           padding: const EdgeInsets.only(left: 27),
           child: Text(
             AppLocalizations.of(context)!.choose_a_skill_to_pratice,
@@ -140,9 +140,8 @@ class _PracticeListState extends State<PracticeList> {
             },
           ),
         ),
-        const SizedBox(height: 32),
         Container(                     // Page Indicator
-          height: 44,
+          height: 20,
           child: Center(
             child: Container(
               height: 24,
@@ -209,7 +208,7 @@ class PracticeItem extends StatelessWidget{
           const SizedBox(
             height: 20,
           ),
-          Container(
+          SizedBox(
               width: 309,
               child: CommonButton(text: AppLocalizations.of(context)!.start),
           ),

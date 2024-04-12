@@ -28,7 +28,7 @@ class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
       body: Column(
         children: <Widget>[
           ListeningQuestionPageAppBar(),
-          Expanded(
+          const Expanded(
             child: ListeningQuestionPageBody(1),
           ),  
         ]
@@ -101,8 +101,9 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
     return ListView(
       children: <Widget>[
         Container(
-          width: 340,
           height: 255,
+          margin: const EdgeInsets.only(left: 15, right: 15),
+          width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.red,
             borderRadius: BorderRadius.circular(14),
@@ -110,12 +111,12 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
         ),
         const SizedBox(height: 32),
         TrackBar(),
-        const SizedBox(height: 100),
+        const SizedBox(height: 60),
         Container(
           height: 22,
           padding: const EdgeInsets.only(left: 34),
           child: Text(
-            AppLocalizations.of(context)!.question + ' ${widget.questionIndex}',
+            '${AppLocalizations.of(context)!.question} ${widget.questionIndex}',
             style: getSemiBoldStyle(color: Colors.black, fontSize: 14)
           ),
         ),
@@ -123,7 +124,7 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
         AnswerBar(),
         const SizedBox(height: 32),
         Container(
-          width: 309,
+          padding: const EdgeInsets.only(left: 15, right: 15),
           child: CommonButton(text: AppLocalizations.of(context)!.next),
         ),
         const SizedBox(height: 23)
@@ -159,46 +160,39 @@ class _TrackBarState extends State<TrackBar> {
       ),
       child: Row(
         children: <Widget>[
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           InkWell(
             onTap: (){},
-            child: Container(
-                child: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 20,
-                )
-            ),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 30,
+            )
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           InkWell(
             onTap: (){},
-            child: Container(
-              child: const Icon(
-                Icons.pause,
-                color: Colors.white,
-                size: 20,
-              )
-            ),
+            child: const Icon(
+              Icons.pause,
+              color: Colors.white,
+              size: 30,
+            )
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           InkWell(
             onTap: (){},
-            child: Container(
-                child: const Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.white,
-                  size: 20,
-                )
-            ),
+            child: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white,
+              size: 30,
+            )
           ),
-          const SizedBox(width: 8),
           Text(
             '00:00',
             style: getSemiBoldStyle(color: Colors.white, fontSize: 14)
           ),
-          Container(
-            width: 180,
+          SizedBox(
+            width: 150,
             child: Slider(
               value: widget._value,
               min: 0.0,
