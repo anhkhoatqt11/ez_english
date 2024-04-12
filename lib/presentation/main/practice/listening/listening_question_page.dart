@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListeningQuestionPage extends StatefulWidget {
   const ListeningQuestionPage({super.key});
@@ -27,8 +28,8 @@ class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
       body: Column(
         children: <Widget>[
           ListeningQuestionPageAppBar(),
-          Expanded(
-            child: ListeningQuestionPageBody(),
+          const Expanded(
+            child: ListeningQuestionPageBody(1),
           ),  
         ]
       ),
@@ -57,7 +58,7 @@ class _ListeningQuestionPageAppBarState extends State<ListeningQuestionPageAppBa
             children: <Widget>[ 
               const SizedBox(height: 60),
               Text(
-                'Photograph',
+                'practiceType',
                 textAlign: TextAlign.center,
                 style: getSemiBoldStyle(color: Colors.white, fontSize: 14)
               ),
@@ -86,6 +87,10 @@ class _ListeningQuestionPageAppBarState extends State<ListeningQuestionPageAppBa
 }
 
 class ListeningQuestionPageBody extends StatefulWidget {
+  final int questionIndex;
+
+  const ListeningQuestionPageBody(this.questionIndex);
+
   @override
   _ListeningQuestionPageBodyState createState() => _ListeningQuestionPageBodyState();
 }
@@ -95,10 +100,10 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        const SizedBox(height: 67),
         Container(
-          width: 340,
           height: 255,
+          margin: const EdgeInsets.only(left: 15, right: 15),
+          width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.red,
             borderRadius: BorderRadius.circular(14),
@@ -106,19 +111,22 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
         ),
         const SizedBox(height: 32),
         TrackBar(),
-        const SizedBox(height: 100),
+        const SizedBox(height: 60),
         Container(
           height: 22,
           padding: const EdgeInsets.only(left: 34),
           child: Text(
-            'Question 1',
+            '${AppLocalizations.of(context)!.question} ${widget.questionIndex}',
             style: getSemiBoldStyle(color: Colors.black, fontSize: 14)
           ),
         ),
         const SizedBox(height: 32),
         AnswerBar(),
         const SizedBox(height: 32),
-        const CommonButton(text: 'Next'),
+        Container(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: CommonButton(text: AppLocalizations.of(context)!.next),
+        ),
         const SizedBox(height: 23)
       ],
     );
@@ -152,50 +160,50 @@ class _TrackBarState extends State<TrackBar> {
       ),
       child: Row(
         children: <Widget>[
-          const SizedBox(width: 23),
-          IconButton(
-            onPressed: (){}, 
-            color: Colors.white,
-            icon: const Icon(
+          const SizedBox(width: 10),
+          InkWell(
+            onTap: (){},
+            child: const Icon(
               Icons.arrow_back_ios,
-              size: 18,
+              color: Colors.white,
+              size: 30,
             )
           ),
-          const SizedBox(width: 34.91),
-          IconButton(
-            onPressed: (){}, 
-            color: Colors.white,
-            icon: const Icon(
+          const SizedBox(width: 10),
+          InkWell(
+            onTap: (){},
+            child: const Icon(
               Icons.pause,
-              size: 18,
+              color: Colors.white,
+              size: 30,
             )
           ),
-          const SizedBox(width: 34.91),
-          IconButton(
-            onPressed: (){}, 
-            color: Colors.white,
-            icon: const Icon(
+          const SizedBox(width: 10),
+          InkWell(
+            onTap: (){},
+            child: const Icon(
               Icons.arrow_forward_ios,
-              size: 18,
+              color: Colors.white,
+              size: 30,
             )
           ),
-          const SizedBox(width: 32.91),
           Text(
             '00:00',
             style: getSemiBoldStyle(color: Colors.white, fontSize: 14)
           ),
-          const SizedBox(width: 4),
-          Slider(
-            value: widget._value,
-            min: 0.0,
-            max: 100.0,
-            onChanged: (value) {
-              changeValue(value);
-            },
-            activeColor: ColorManager.primaryColor, 
-            inactiveColor: Colors.white,
+          SizedBox(
+            width: 150,
+            child: Slider(
+              value: widget._value,
+              min: 0.0,
+              max: 100.0,
+              onChanged: (value) {
+                changeValue(value);
+              },
+              activeColor: ColorManager.primaryColor,
+              inactiveColor: Colors.white,
+            ),
           ),
-          const SizedBox(width: 8),
           Text(
             '00:00',
             style: getSemiBoldStyle(color: Colors.white, fontSize: 14)

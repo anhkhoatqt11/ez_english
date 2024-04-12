@@ -1,6 +1,8 @@
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ez_english/presentation/common/widgets/stateful/app_bottom_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,7 +36,11 @@ class _HomePageState extends State<HomePage> {
           ),  
         ]
       ),
-      //bottomNavigationBar:,
+      bottomNavigationBar: AppBottomNavigationBar(
+        pageController: PageController(
+          initialPage: 0,
+        ),
+      )
     );
   }
 }
@@ -105,12 +111,13 @@ class _HomePageBodyState extends State<HomePageBody> {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
+        const SizedBox(height: 30),
         TipList(),
         Container(
           width: 393,
           padding: const EdgeInsets.only(left: 36),
           child: Text(
-            'Continue where you left off',
+            AppLocalizations.of(context)!.continue_where_you_left_off,
             style: getSemiBoldStyle(color: Colors.black, fontSize: 20),
           ),
         ),

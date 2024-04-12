@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
-import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SpeakingPage extends StatefulWidget {
   const SpeakingPage({super.key});
@@ -62,7 +62,7 @@ class _SpeakingPageAppBarState extends State<SpeakingPageAppBar> {
           ),
           const SizedBox(width: 12.91),
           Text(
-            'Speaking', 
+            AppLocalizations.of(context)!.speaking,
             style: getSemiBoldStyle(color: Colors.white, fontSize: 14),
           ),
         ],
@@ -87,12 +87,12 @@ class _SpeakingPageBodyState extends State<SpeakingPageBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget> [
               Text(
-                'Speaking Practice',
+                AppLocalizations.of(context)!.speaking_practice,
                 style: getSemiBoldStyle(color: Colors.black, fontSize: 24),
               ),
               const SizedBox(height: 9),
               Text(
-                'Choose once to begin',
+                AppLocalizations.of(context)!.choose_once_to_begin,
                 style: getSemiBoldStyle(color: ColorManager.lightTextColor, fontSize: 14),
               ),
             ],
@@ -110,34 +110,21 @@ class SpeakingPracticeList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SpeakingPracticeItem('Speaking Practice 1'),
-        SpeakingPracticeItem('Speaking Practice 2'),
-        SpeakingPracticeItem('Speaking Practice 3'),
-        SpeakingPracticeItem('Speaking Practice 4'),
-        SpeakingPracticeItem('Speaking Practice 1'),
-        SpeakingPracticeItem('Speaking Practice 2'),
-        SpeakingPracticeItem('Speaking Practice 3'),
-        SpeakingPracticeItem('Speaking Practice 4'),
-        SpeakingPracticeItem('Speaking Practice 1'),
-        SpeakingPracticeItem('Speaking Practice 2'),
-        SpeakingPracticeItem('Speaking Practice 3'),
-        SpeakingPracticeItem('Speaking Practice 4'),
+        for (int i = 1; i < 11; i++) SpeakingPracticeItem(i),
       ],
     );
   }
 }
 
 class SpeakingPracticeItem extends StatelessWidget {
-  final String practiceName;
+  final int index;
 
-  SpeakingPracticeItem(this.practiceName);
+  SpeakingPracticeItem(this.index);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print('Tapped');
-      },
+      onTap: () {},
       child: Container(
         height: 106,
         width: 324,
@@ -148,8 +135,8 @@ class SpeakingPracticeItem extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.grey, 
-              spreadRadius: 5, 
-              blurRadius: 8, 
+              spreadRadius: 1, 
+              blurRadius: 10, 
               offset: const Offset(0, 3), 
             ),
           ],
@@ -166,6 +153,12 @@ class SpeakingPracticeItem extends StatelessWidget {
                   decoration: const BoxDecoration(
                     color: ColorManager.secondaryColor,
                     shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      index < 10 ? '0$index' : '$index',
+                      style: getSemiBoldStyle(color: ColorManager.primaryColor, fontSize: 14),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -189,7 +182,7 @@ class SpeakingPracticeItem extends StatelessWidget {
               children: <Widget>[
                 const SizedBox(width: 20),
                 Text(
-                  'Progress',
+                  AppLocalizations.of(context)!.progress,
                   style: getLightStyle(color: Colors.black, fontSize: 8),
                 ),
                 const SizedBox(width: 8),

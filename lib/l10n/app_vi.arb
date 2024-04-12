@@ -27,5 +27,20 @@
     "take_test": "Làm bài",
     "questions": "Câu",
     "minutes": "Phút",
-    "login_succcess": "Đăng nhập thành công!"
+    "login_succcess": "Đăng nhập thành công!",
+    "listening": "Nghe",
+    "reading": "Đọc",
+    "writing": "Viết",
+    "speaking": "Nói",
+    "continue_where_you_left_off": "Tiếp tục từ nơi bạn đã dừng",
+    "choose_a_skill_to_pratice": "Chọn một kỹ năng để tập luyện",
+    "start": "Bắt đầu",
+    "train_your": "Luyện ",
+    "skill_by_our_tests": " bằng các bài test của chúng tôi",
+    "choose_once_to_begin": "Chọn để bắt đầu",
+    "progress": "Tiến độ",
+    "listening_practice": "Luyện nghe",
+    "speaking_practice": "Luyện nói",
+    "next": "Tiếp theo",
+    "question": "Câu "
 }

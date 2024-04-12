@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
 import 'package:ez_english/presentation/common/widgets/stateful/app_bottom_navigation_bar.dart';
 
@@ -62,7 +65,7 @@ class _PracticePageAppBarState extends State<PracticePageAppBar> {
         padding: const EdgeInsets.only(top: 63),
         alignment: Alignment.center,
         child: Text(
-          'Practice', 
+          AppLocalizations.of(context)!.practice,
           style: getSemiBoldStyle(color: Colors.white, fontSize: 14),
         ),  
       ),
@@ -81,19 +84,19 @@ class _PracticePageBodyState extends State<PracticePageBody> {
     return ListView(
       children: <Widget>[
         Container(
-          height: 149,
-          padding: const EdgeInsets.only(left: 27, top: 20),
+          height: 50,
+          padding: const EdgeInsets.only(left: 27),
           child: Text(
-            'Choose a skill to practice',
+            AppLocalizations.of(context)!.choose_a_skill_to_pratice,
             style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
           ),
         ),
         PracticeList(
           practiceItem: [
-            PracticeItem('Listening'),
-            PracticeItem('Speaking'),
-            PracticeItem('Reading'),
-            PracticeItem('Writing')
+            PracticeItem(AppLocalizations.of(context)!.listening),
+            PracticeItem(AppLocalizations.of(context)!.speaking),
+            PracticeItem(AppLocalizations.of(context)!.reading),
+            PracticeItem(AppLocalizations.of(context)!.writing),
           ],
         ),
         
@@ -119,14 +122,14 @@ class _PracticeListState extends State<PracticeList> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(                 // PageView
-          height: 387,
+        Container(                 // PageView
+          height: 463,
           width: double.infinity,
           child: PageView.builder(
             controller: _controller,
             itemCount: widget.practiceItem.length,
             itemBuilder: (context, index) {
-              return widget.practiceItem[index].build();
+              return widget.practiceItem[index].build(context);
             },
             onPageChanged: (int index) {
               setState(
@@ -137,9 +140,8 @@ class _PracticeListState extends State<PracticeList> {
             },
           ),
         ),
-        const SizedBox(height: 32),
-        SizedBox(                     // Page Indicator
-          height: 44,
+        Container(                     // Page Indicator
+          height: 20,
           child: Center(
             child: Container(
               height: 24,
@@ -172,12 +174,14 @@ class _PracticeListState extends State<PracticeList> {
   } 
 } 
 
-class PracticeItem{
+class PracticeItem extends StatelessWidget{
   final String title;
 
   PracticeItem(this.title);
 
-  Widget build() {
+  Widget build(BuildContext context) {
+    String trainNote = AppLocalizations.of(context)!.train_your + title + AppLocalizations.of(context)!.skill_by_our_tests;
+
     return Container(
       color: Colors.white,
       child: Column(
@@ -198,13 +202,16 @@ class PracticeItem{
             height: 9,
           ),
           Text(
-            'Train your $title skill by our tests',
+            trainNote,
             style: getRegularStyle(color: ColorManager.lightTextColor, fontSize: 14)
           ),
           const SizedBox(
             height: 20,
           ),
-          const CommonButton(text: 'Start'),
+          SizedBox(
+              width: 309,
+              child: CommonButton(text: AppLocalizations.of(context)!.start),
+          ),
         ]
       ),  
     );

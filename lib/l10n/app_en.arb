@@ -27,5 +27,20 @@
     "take_test": "Take test",
     "questions": "Questions",
     "minutes": "Minutes",
-    "login_success": "Login success!"
+    "login_success": "Login success!",
+    "listening": "Listening",
+    "reading": "Reading",
+    "writing": "Writing",
+    "speaking": "Speaking",
+    "continue_where_you_left_off": "Continue where you left off",
+    "choose_a_skill_to_pratice": "Choose a skill to practice",
+    "start": "Start",
+    "train_your": "Train your ",
+    "skill_by_our_tests": " skill by our tests",
+    "choose_once_to_begin": "Choose one to begin",
+    "progress": "Progress",
+    "listening_practice": "Listening Practice",
+    "speaking_practice": "Speaking Practice",
+    "next": "Next",
+    "question": "Question"
 }
