@@ -10,6 +10,7 @@ import 'package:ez_english/presentation/main/practice/practice_page.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_practice_page.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/speaking/speaking_practice_page.dart';
+import 'package:ez_english/presentation/main/practice/speaking/speaking_question_page.dart';
 
 
 class RoutesName {
@@ -23,6 +24,7 @@ class RoutesName {
   static const String listeningPracticeRoute = "listening_practice";
   static const String listeningQuestionRoute = "listening_question";
   static const String speakingPracticeRoute = "speaking_practice";
+  static const String speakingQuestionRoute = "speaking_question";
 }
 
 class Routes {
@@ -48,6 +50,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const ListeningQuestionPage());
       case RoutesName.speakingPracticeRoute:
         return MaterialPageRoute(builder: (_) => const SpeakingPage());
+      case RoutesName.speakingQuestionRoute:
+        return MaterialPageRoute(builder: (_) => const SpeakingQuestionPage());
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(
