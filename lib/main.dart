@@ -1,10 +1,11 @@
+import 'package:ez_english/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'app.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await initAppModule();
   await Supabase.initialize(
     url: 'https://txtkdxqiihbhcqrhippj.supabase.co',
     anonKey:

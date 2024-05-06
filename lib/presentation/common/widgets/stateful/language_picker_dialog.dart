@@ -22,7 +22,7 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
   }
 
   int _selectedIndex = 0;
-  List<String> languageList = ['VI', 'EN'];
+  List<String> languageList = ['vi', 'en'];
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -36,11 +36,12 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
               itemBuilder: (context, index) {
                 return RadioListTile<int>(
                     value: index,
-                    title: Text(languageList[index]),
+                    title: Text(languageList[index].toUpperCase()),
                     groupValue: _selectedIndex,
                     onChanged: (value) {
                       if (value == null) return;
                       if (_selectedIndex == value) return;
+                      widget.selectedLanguage = languageList[value];
                       Navigator.of(context).pop(widget.selectedLanguage);
                     });
               }),

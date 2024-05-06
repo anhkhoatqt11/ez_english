@@ -32,8 +32,16 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(boxShadow: [
+        BoxShadow(
+            color: Colors.black,
+            offset: Offset(0, -1),
+            blurStyle: BlurStyle.outer,
+            spreadRadius: 1,
+            blurRadius: 0.5)
+      ]),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         mainAxisSize: MainAxisSize.max,
