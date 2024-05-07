@@ -1,3 +1,6 @@
+import 'package:ez_english/config/asset_manager.dart';
+import 'package:ez_english/config/constants.dart';
+import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
@@ -6,6 +9,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
 import 'package:ez_english/presentation/common/widgets/stateful/app_bottom_navigation_bar.dart';
+
+import '../../../utils/route_manager.dart';
 
 class PracticePage extends StatefulWidget {
   const PracticePage({super.key});
@@ -32,83 +37,54 @@ class _PracticePageState extends State<PracticePage> {
     // TODO: implement build
     return Scaffold(
       body: Column(
-        children: <Widget>[
-          PracticePageAppBar(),
-          Expanded(
-            child: PracticePageBody(),
-          ),  
-        ]
-      ),
-      bottomNavigationBar: AppBottomNavigationBar(
-        pageController: PageController(
-          initialPage: 1,
-        ),
-      )
-    );
-  }
-}
-
-class PracticePageAppBar extends StatefulWidget {
-  @override
-  _PracticePageAppBarState createState() => _PracticePageAppBarState();
-}
-
-class _PracticePageAppBarState extends State<PracticePageAppBar> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 96,
-      decoration: const BoxDecoration(
-        gradient: ColorManager.linearGradientPrimary,
-      ),
-      child: Container(
-        padding: const EdgeInsets.only(top: 63),
-        alignment: Alignment.center,
-        child: Text(
-          AppLocalizations.of(context)!.practice,
-          style: getSemiBoldStyle(color: Colors.white, fontSize: 14),
-        ),  
-      ),
-    );
-  }
-}
-
-class PracticePageBody extends StatefulWidget {
-  @override
-  _PracticePageBodyState createState() => _PracticePageBodyState();
-}
-
-class _PracticePageBodyState extends State<PracticePageBody> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        Container(
-          height: 50,
-          padding: const EdgeInsets.only(left: 27),
-          child: Text(
-            AppLocalizations.of(context)!.choose_a_skill_to_pratice,
-            style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
+        children: [
+          GradientAppBar(
+            content: AppLocalizations.of(context)!.practice,
           ),
-        ),
-        PracticeList(
-          practiceItem: [
-            PracticeItem(AppLocalizations.of(context)!.listening),
-            PracticeItem(AppLocalizations.of(context)!.speaking),
-            PracticeItem(AppLocalizations.of(context)!.reading),
-            PracticeItem(AppLocalizations.of(context)!.writing),
-          ],
-        ),
-        
-      ]
+          const Expanded(child: PracticePageBody()),
+          const SizedBox(
+            height: 8,
+          )
+        ],
+      ),
     );
+  }
+}
+
+class PracticePageBody extends StatelessWidget {
+  const PracticePageBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(children: <Widget>[
+      Container(
+        height: 50,
+        padding: const EdgeInsets.only(left: 27),
+        child: Text(
+          AppLocalizations.of(context)!.choose_a_skill_to_pratice,
+          style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
+        ),
+      ),
+      PracticeList(
+        practiceItem: [
+          PracticeItem(0, AppLocalizations.of(context)!.listening,
+              ImagePath.listeningSkillsPath),
+          PracticeItem(1, AppLocalizations.of(context)!.speaking,
+              ImagePath.speakingSkillsPath),
+          PracticeItem(2, AppLocalizations.of(context)!.reading,
+              ImagePath.readingSkillsPath),
+          PracticeItem(3, AppLocalizations.of(context)!.writing,
+              ImagePath.writingSkillsPath),
+        ],
+      ),
+    ]);
   }
 }
 
 class PracticeList extends StatefulWidget {
   final List<PracticeItem> practiceItem;
 
-  PracticeList({required this.practiceItem});
+  const PracticeList({super.key, required this.practiceItem});
 
   @override
   _PracticeListState createState() => _PracticeListState();
@@ -122,98 +98,99 @@ class _PracticeListState extends State<PracticeList> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(                 // PageView
-          height: 463,
+        SizedBox(
           width: double.infinity,
+          height: 380,
           child: PageView.builder(
             controller: _controller,
             itemCount: widget.practiceItem.length,
             itemBuilder: (context, index) {
-              return widget.practiceItem[index].build(context);
+              return widget.practiceItem[index];
             },
             onPageChanged: (int index) {
-              setState(
-                () {
-                  _currentPage = index;
-                }
-              );
+              setState(() {
+                _currentPage = index;
+              });
             },
           ),
         ),
-        Container(                     // Page Indicator
-          height: 20,
-          child: Center(
+        Center(
             child: Container(
-              height: 24,
-              width: 24*widget.practiceItem.length.toDouble(),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: ColorManager.indicatorColor,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: ColorManager.indicatorColor,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              widget.practiceItem.length,
+              (index) => Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _currentPage == index
+                        ? Colors.black
+                        : ColorManager.indicatorDotColor),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  widget.practiceItem.length,
-                  (index) => Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _currentPage == index ? 
-                        Colors.black : ColorManager.indicatorDotColor
-                    ),
-                  ),
-                ),
-              ),
-            )
-          )
-        )
+            ),
+          ),
+        ))
       ],
     );
-  } 
-} 
+  }
+}
 
-class PracticeItem extends StatelessWidget{
+class PracticeItem extends StatelessWidget {
+  final int index;
   final String title;
+  final String imagePath;
 
-  PracticeItem(this.title);
+  const PracticeItem(this.index, this.title, this.imagePath, {super.key});
 
+  @override
   Widget build(BuildContext context) {
-    String trainNote = AppLocalizations.of(context)!.train_your + title + AppLocalizations.of(context)!.skill_by_our_tests;
+    String trainNote = AppLocalizations.of(context)!.train_your +
+        title +
+        AppLocalizations.of(context)!.skill_by_our_tests;
 
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 180,
-            width: 204,
-            color: Colors.red,
-          ),
-          const SizedBox(
-            height: 86,
-          ),
-          Text(
-            title,
-            style: getSemiBoldStyle(color: ColorManager.primaryTextColor, fontSize: 24),
-          ),
-          const SizedBox(
-            height: 9,
-          ),
-          Text(
-            trainNote,
-            style: getRegularStyle(color: ColorManager.lightTextColor, fontSize: 14)
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-              width: 309,
-              child: CommonButton(text: AppLocalizations.of(context)!.start),
-          ),
-        ]
-      ),  
-    );
+    return Column(children: <Widget>[
+      Image.asset(
+        imagePath,
+        height: 200,
+        width: 200,
+        fit: BoxFit.cover,
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      Text(
+        title,
+        style: getSemiBoldStyle(
+            color: ColorManager.primaryTextColor, fontSize: 24),
+      ),
+      const SizedBox(
+        height: 9,
+      ),
+      Text(trainNote,
+          style: getRegularStyle(
+              color: ColorManager.lightTextColor, fontSize: 14)),
+      const SizedBox(
+        height: 20,
+      ),
+      FractionallySizedBox(
+        widthFactor: 0.8,
+        child: CommonButton(
+          text: AppLocalizations.of(context)!.start,
+          action: () {
+            Navigator.pushNamed(context, RoutesName.skillPracticeRoute,
+                arguments: skillList[index]);
+          },
+        ),
+      ),
+    ]);
   }
 }

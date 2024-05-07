@@ -13,4 +13,8 @@ class ImagePath {
   static const String testLevelSvgPath = '$_imagePath/test_level_ic.svg';
   static const String timerSvgPath = '$_imagePath/timer_ic.svg';
   static const String testPath = '$_imagePath/test_img.png';
+  static const String listeningSkillsPath = '$_imagePath/listening-skills.jpg';
+  static const String speakingSkillsPath = '$_imagePath/speaking-skills.jpg';
+  static const String readingSkillsPath = '$_imagePath/reading-skills.jpg';
+  static const String writingSkillsPath = '$_imagePath/writing-skills.jpg';
 }
