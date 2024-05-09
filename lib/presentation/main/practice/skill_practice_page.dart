@@ -156,8 +156,17 @@ class SkillPracticeItem extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {},
-      child: Card(
-        elevation: 4,
+      child: Container(
+        margin: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black,
+                  offset: Offset(0, 0),
+                  blurRadius: 1,
+                  blurStyle: BlurStyle.outer)
+            ]),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

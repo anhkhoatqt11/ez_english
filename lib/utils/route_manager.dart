@@ -1,5 +1,5 @@
 import 'package:ez_english/presentation/main/main_view.dart';
-import 'package:ez_english/presentation/main/practice/reading/reading_practice_page.dart';
+
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
 import 'package:ez_english/presentation/splash/splash.dart';
@@ -9,9 +9,9 @@ import 'package:ez_english/presentation/login/login_page.dart';
 import 'package:ez_english/presentation/register/register_page.dart';
 import 'package:ez_english/presentation/main/home/home_page.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
-import 'package:ez_english/presentation/main/practice/listening/listening_practice_page.dart';
+
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
-import 'package:ez_english/presentation/main/practice/speaking/speaking_practice_page.dart';
+
 import 'package:ez_english/presentation/main/practice/speaking/speaking_question_page.dart';
 
 class RoutesName {
