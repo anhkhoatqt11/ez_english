@@ -1,12 +1,16 @@
 import 'package:ez_english/config/constants.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
+import 'package:ez_english/presentation/main/practice/practice_page.dart';
+import 'package:ez_english/presentation/main/practice/question_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../utils/route_manager.dart';
 
 class SkillPracticePage extends StatefulWidget {
   const SkillPracticePage({super.key, required this.skill});
@@ -29,31 +33,42 @@ class _SkillPracticePageState extends State<SkillPracticePage> {
         titleAppBar = AppLocalizations.of(context)!.listening;
         titlePage = AppLocalizations.of(context)!.listening_practice;
         partList = [
-          PartObject(1, AppLocalizations.of(context)!.photographs),
-          PartObject(2, AppLocalizations.of(context)!.question_response),
-          PartObject(3, AppLocalizations.of(context)!.conversations),
-          PartObject(4, AppLocalizations.of(context)!.talks),
+          PartObject(
+              1, AppLocalizations.of(context)!.photographs, widget.skill),
+          PartObject(
+              2, AppLocalizations.of(context)!.question_response, widget.skill),
+          PartObject(
+              3, AppLocalizations.of(context)!.conversations, widget.skill),
+          PartObject(4, AppLocalizations.of(context)!.talks, widget.skill),
         ];
         break;
       case "Speaking":
         titleAppBar = AppLocalizations.of(context)!.speaking;
         titlePage = AppLocalizations.of(context)!.speaking_practice;
         partList = [
-          PartObject(1, AppLocalizations.of(context)!.read_aloud),
-          PartObject(2, AppLocalizations.of(context)!.describe_picture),
-          PartObject(3, AppLocalizations.of(context)!.respond_questions),
-          PartObject(4,
-              AppLocalizations.of(context)!.respond_questions_infor_provided),
-          PartObject(5, AppLocalizations.of(context)!.express_opinion),
+          PartObject(1, AppLocalizations.of(context)!.read_aloud, widget.skill),
+          PartObject(
+              2, AppLocalizations.of(context)!.describe_picture, widget.skill),
+          PartObject(
+              3, AppLocalizations.of(context)!.respond_questions, widget.skill),
+          PartObject(
+              4,
+              AppLocalizations.of(context)!.respond_questions_infor_provided,
+              widget.skill),
+          PartObject(
+              5, AppLocalizations.of(context)!.express_opinion, widget.skill),
         ];
         break;
       case "Reading":
         titleAppBar = AppLocalizations.of(context)!.reading;
         titlePage = AppLocalizations.of(context)!.reading_practice;
         partList = [
-          PartObject(5, AppLocalizations.of(context)!.incomplete_sentences),
-          PartObject(6, AppLocalizations.of(context)!.text_completion),
-          PartObject(7, AppLocalizations.of(context)!.reading_comprehension),
+          PartObject(5, AppLocalizations.of(context)!.incomplete_sentences,
+              widget.skill),
+          PartObject(
+              6, AppLocalizations.of(context)!.text_completion, widget.skill),
+          PartObject(7, AppLocalizations.of(context)!.reading_comprehension,
+              widget.skill),
         ];
         break;
       case "Writing":
@@ -61,9 +76,13 @@ class _SkillPracticePageState extends State<SkillPracticePage> {
         titlePage = AppLocalizations.of(context)!.writing_practice;
         partList = [
           PartObject(
-              1, AppLocalizations.of(context)!.write_sentence_based_on_picture),
-          PartObject(2, AppLocalizations.of(context)!.respond_written_request),
-          PartObject(3, AppLocalizations.of(context)!.write_opinion_essay),
+              1,
+              AppLocalizations.of(context)!.write_sentence_based_on_picture,
+              widget.skill),
+          PartObject(2, AppLocalizations.of(context)!.respond_written_request,
+              widget.skill),
+          PartObject(3, AppLocalizations.of(context)!.write_opinion_essay,
+              widget.skill),
         ];
         break;
     }
@@ -148,16 +167,18 @@ class SkillPageBody extends StatelessWidget {
 
 class SkillPracticeItem extends StatelessWidget {
   final PartObject part;
-
   const SkillPracticeItem({super.key, required this.part});
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, RoutesName.questionRoute,
+            arguments: [part.index, part.skill]);
+      },
       child: Container(
-        margin: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             boxShadow: const [

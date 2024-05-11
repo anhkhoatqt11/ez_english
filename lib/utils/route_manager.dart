@@ -1,4 +1,6 @@
+import 'package:ez_english/dependency_injection.dart';
 import 'package:ez_english/presentation/main/main_view.dart';
+import 'package:ez_english/presentation/main/practice/question_page.dart';
 
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
@@ -9,8 +11,6 @@ import 'package:ez_english/presentation/login/login_page.dart';
 import 'package:ez_english/presentation/register/register_page.dart';
 import 'package:ez_english/presentation/main/home/home_page.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
-
-import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 
 import 'package:ez_english/presentation/main/practice/speaking/speaking_question_page.dart';
 
@@ -29,6 +29,7 @@ class RoutesName {
   static const String readingPracticeRoute = "reading_practice";
   static const String writingPracticeRoute = "writing_practice";
   static const String skillPracticeRoute = "skill_practice";
+  static const String questionRoute = "question_route";
 }
 
 class Routes {
@@ -52,6 +53,15 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) =>
                 SkillPracticePage(skill: settings.arguments as String));
+      case RoutesName.questionRoute:
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => QuestionPage(
+                  skill: arguments[1] as String,
+                  part: arguments[0] as int,
+                ));
+
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

@@ -12,7 +12,7 @@ class GradientAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      height: 96,
+      padding: const EdgeInsets.only(top: 40, bottom: 10),
       decoration: const BoxDecoration(
         gradient: ColorManager.linearGradientPrimary,
       ),
