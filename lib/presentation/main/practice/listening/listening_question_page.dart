@@ -1,9 +1,9 @@
 import 'package:ez_english/domain/model/choice.dart';
 import 'package:ez_english/presentation/common/objects/get_questions_by_part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
+import 'package:ez_english/presentation/main/practice/widgets/answer_bar.dart';
 import 'package:ez_english/presentation/main/practice/widgets/time_counter.dart';
 import 'package:ez_english/presentation/main/practice/widgets/track_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
@@ -13,18 +13,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../domain/model/question.dart';
-import '../../blocs/questions_by_part/questions_by_part_bloc.dart';
+import '../../../../domain/model/question.dart';
+import '../../../blocs/questions_by_part/questions_by_part_bloc.dart';
 
-class QuestionPage extends StatefulWidget {
-  const QuestionPage({super.key, required this.skill, required this.part});
-  final String skill;
+class ListeningQuestionPage extends StatefulWidget {
+  const ListeningQuestionPage({super.key, required this.part});
   final int part;
   @override
-  State<QuestionPage> createState() => _QuestionPageState();
+  State<ListeningQuestionPage> createState() => _ListeningQuestionPageState();
 }
 
-class _QuestionPageState extends State<QuestionPage> {
+class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
   Map<int, String> answerMap = {};
 
   QuestionsByPartBloc questionsByPartBloc =
@@ -33,8 +32,8 @@ class _QuestionPageState extends State<QuestionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    questionsByPartBloc.add(
-        LoadQuestions(GetQuestionsByPartObject(widget.part, widget.skill)));
+    questionsByPartBloc
+        .add(LoadQuestions(GetQuestionsByPartObject(widget.part, "Listening")));
   }
 
   @override
@@ -97,6 +96,26 @@ class ListeningQuestionPageBody extends StatefulWidget {
 
 class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
   final PageController _pageController = PageController();
+
+  void showExplanation(String explanation) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: FractionallySizedBox(
+              widthFactor: 1,
+              heightFactor: 0.6,
+              child: Text(
+                explanation,
+                style: getRegularStyle(color: Colors.black),
+                maxLines: 100,
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
@@ -128,114 +147,26 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
             const SizedBox(
               height: 32,
             ),
-            question.audioUrl != null ? TrackBar() : Container(),
+            question.audioUrl != null
+                ? TrackBar(audioUrl: question.audioUrl!)
+                : Container(),
             Padding(
               padding: const EdgeInsets.only(left: 12.0),
               child: AnswerBar(
-                  choiceList: question.choices,
+                  question: question,
                   questionIndex: index + 1,
                   answerMap: widget.answerMap,
                   pageController: _pageController),
             ),
-            const SizedBox(
-              height: 32,
-            ),
+            FilledButton(
+                onPressed: () {
+                  showExplanation(question.explanation ??
+                      AppLocalizations.of(context)!.not_update_yet);
+                },
+                child: Text(AppLocalizations.of(context)!.explanation))
           ],
         );
       },
-    );
-  }
-}
-
-class AnswerBar extends StatefulWidget {
-  final int questionIndex;
-  Map<int, String> answerMap;
-  AnswerBar(
-      {super.key,
-      required this.questionIndex,
-      required this.answerMap,
-      required this.pageController,
-      required this.choiceList});
-  final PageController pageController;
-  final List<Choice> choiceList;
-  @override
-  _AnswerBarState createState() => _AnswerBarState();
-}
-
-class _AnswerBarState extends State<AnswerBar> {
-  void chooseAnswer(String letter) {
-    setState(() {
-      widget.answerMap[widget.questionIndex] = letter;
-    });
-    widget.pageController.nextPage(
-        duration: const Duration(milliseconds: 200), curve: Curves.linear);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-            '${AppLocalizations.of(context)!.question} ${widget.questionIndex}',
-            style: getSemiBoldStyle(color: Colors.black, fontSize: 14)),
-        const SizedBox(
-          height: 8,
-        ),
-        ...widget.choiceList.map((i) => Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        color: (widget.answerMap[widget.questionIndex] ?? '') ==
-                                i.letter
-                            ? ColorManager.primaryColor
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(
-                          color:
-                              (widget.answerMap[widget.questionIndex] ?? '') ==
-                                      i.letter
-                                  ? ColorManager.primaryColor
-                                  : Colors.black,
-                          width: 1,
-                        ),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          chooseAnswer(i.letter);
-                        },
-                        child: Text(i.letter,
-                            style: getSemiBoldStyle(
-                                color:
-                                    (widget.answerMap[widget.questionIndex] ??
-                                                '') ==
-                                            i.letter
-                                        ? Colors.white
-                                        : Colors.black,
-                                fontSize: 14)),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Expanded(
-                        child: Text(
-                      i.content ?? i.letter,
-                      style: getRegularStyle(color: Colors.black)
-                          .copyWith(overflow: TextOverflow.clip),
-                    ))
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                )
-              ],
-            )),
-      ],
     );
   }
 }

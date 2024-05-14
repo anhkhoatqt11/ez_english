@@ -2,7 +2,7 @@ import 'package:ez_english/config/constants.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
-import 'package:ez_english/presentation/main/practice/question_page.dart';
+import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
@@ -174,8 +174,18 @@ class SkillPracticeItem extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, RoutesName.questionRoute,
-            arguments: [part.index, part.skill]);
+        switch (part.skill) {
+          case "Listening":
+            Navigator.pushNamed(context, RoutesName.listeningQuestionRoute,
+                arguments: part.index);
+          case "Reading":
+            Navigator.pushNamed(context, RoutesName.readingQuestionRoute,
+                arguments: part.index);
+          case "Speaking":
+            break;
+          case "Writing":
+            break;
+        }
       },
       child: Container(
         margin: const EdgeInsets.all(8),

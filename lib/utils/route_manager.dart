@@ -1,6 +1,7 @@
 import 'package:ez_english/dependency_injection.dart';
 import 'package:ez_english/presentation/main/main_view.dart';
-import 'package:ez_english/presentation/main/practice/question_page.dart';
+import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
+import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
 
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
@@ -24,12 +25,12 @@ class RoutesName {
   static const String practiceRoute = "practice";
   static const String listeningPracticeRoute = "listening_practice";
   static const String listeningQuestionRoute = "listening_question";
+  static const String readingQuestionRoute = "reading_question";
   static const String speakingPracticeRoute = "speaking_practice";
   static const String speakingQuestionRoute = "speaking_question";
   static const String readingPracticeRoute = "reading_practice";
   static const String writingPracticeRoute = "writing_practice";
   static const String skillPracticeRoute = "skill_practice";
-  static const String questionRoute = "question_route";
 }
 
 class Routes {
@@ -53,13 +54,17 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) =>
                 SkillPracticePage(skill: settings.arguments as String));
-      case RoutesName.questionRoute:
-        List<dynamic> arguments = settings.arguments as List<dynamic>;
+      case RoutesName.listeningQuestionRoute:
         initQuestionPageModule();
         return MaterialPageRoute(
-            builder: (_) => QuestionPage(
-                  skill: arguments[1] as String,
-                  part: arguments[0] as int,
+            builder: (_) => ListeningQuestionPage(
+                  part: settings.arguments as int,
+                ));
+      case RoutesName.readingQuestionRoute:
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => ReadingQuestionPage(
+                  part: settings.arguments as int,
                 ));
 
       default:

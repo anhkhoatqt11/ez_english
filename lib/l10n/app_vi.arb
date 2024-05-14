@@ -63,5 +63,7 @@
     "respond_written_request": "Phản Hồi Yêu Cầu",
     "write_opinion_essay": "Viết Luận",
     "reading_practice": "Luyện Đọc Hiểu",
-    "writing_practice": "Luyện Viết"
+    "writing_practice": "Luyện Viết",
+    "explanation": "Giải thích",
+    "not_update_yet": "Chưa cập nhật lời giải cho câu hỏi này"
 }

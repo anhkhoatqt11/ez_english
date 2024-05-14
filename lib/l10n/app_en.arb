@@ -63,5 +63,7 @@
     "respond_written_request": "Respond to a written request",
     "write_opinion_essay": "Write an opinion essay",
     "reading_practice": "Reading Practice",
-    "writing_practice": "Writing Practice"
+    "writing_practice": "Writing Practice",
+    "explanation": "Explanation",
+    "not_update_yet": "The explanation is not updated yet"
 }

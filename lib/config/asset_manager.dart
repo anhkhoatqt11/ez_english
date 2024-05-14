@@ -17,4 +17,5 @@ class ImagePath {
   static const String speakingSkillsPath = '$_imagePath/speaking-skills.jpg';
   static const String readingSkillsPath = '$_imagePath/reading-skills.jpg';
   static const String writingSkillsPath = '$_imagePath/writing-skills.jpg';
+  static const String forward5Path = '$_imagePath/forward_5_ic.svg';
 }

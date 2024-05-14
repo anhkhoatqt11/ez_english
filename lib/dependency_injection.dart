@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:ez_english/app_prefs.dart';
 import 'package:ez_english/data/data_source/question_remote_datasource.dart';
 import 'package:ez_english/data/network/network_info.dart';
@@ -14,7 +15,6 @@ final _instance = GetIt.instance;
 Future<void> initAppModule() async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
-
   _instance.registerLazySingleton<AppPrefs>(() => AppPrefs(sharedPreferences));
   _instance.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(InternetConnectionChecker()));

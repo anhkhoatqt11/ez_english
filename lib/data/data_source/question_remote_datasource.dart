@@ -17,6 +17,7 @@ class QuestionRemoteDateSouceImpl implements QuestionRemoteDataSouce {
   @override
   Future<List<QuestionResponse>> getQuestionByPart(
       GetQuestionByPartRequest request) async {
+    debugPrint("${request.skill} ${request.partIndex}");
     try {
       final response = await supabaseClient
           .from(QUESTION_TABLE)
