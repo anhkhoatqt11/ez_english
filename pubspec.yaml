@@ -47,6 +47,7 @@ dependencies:
   dartz: ^0.10.1
   get_it: ^7.7.0
   internet_connection_checker: ^1.0.0+1
+  speech_to_text: ^6.6.1
 
 dev_dependencies:
   flutter_test:

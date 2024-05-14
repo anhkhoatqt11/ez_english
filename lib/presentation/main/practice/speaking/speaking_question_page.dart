@@ -3,6 +3,8 @@ import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class SpeakingQuestionPage extends StatefulWidget {
   const SpeakingQuestionPage({super.key});
@@ -63,7 +65,7 @@ class _SpeakingQuestionPageAppBarState extends State<SpeakingQuestionPageAppBar>
                 style: getSemiBoldStyle(color: Colors.white, fontSize: 14)
               ),
             ],
-          ),     
+          ),
         ),
         Positioned(
           top: 63,
@@ -96,6 +98,45 @@ class SpeakingQuestionPageBody extends StatefulWidget {
 }
 
 class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
+  int _currentRecordingIndex = 0;
+  final SpeechToText _speechToText = SpeechToText();
+  String _lastWords = '';
+  String wordToPronounce = 'hello';
+
+  @override
+  void initState() {
+    super.initState();
+    _initSpeech();
+  }
+
+  void _initSpeech() async {   
+    setState(() {
+      _speechToText.initialize();
+    });
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(onResult: _onSpeechResult);
+    setState(() {});
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() {
+      if (_lastWords.toLowerCase() == wordToPronounce.toLowerCase()) {
+        _currentRecordingIndex = 3;
+      } else {
+        _currentRecordingIndex = 2;
+      }
+    });
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      _lastWords = result.recognizedWords;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -115,22 +156,36 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
               children: <Widget>[
                 const SizedBox(height: 150),
                 Text(
-                  'wordToPronounce',
+                  wordToPronounce,
                   style: getBoldStyle(color: Colors.black, fontSize: 30),
                 ),
-                const SizedBox(height: 160),
-                RecordingAttribute(3),
+                const SizedBox(height: 135),
+                Text(_speechToText.isListening ? '$_lastWords' : ''),
+                const SizedBox(height: 5),
+                RecordingAttribute(_currentRecordingIndex),
                 const SizedBox(height: 20),
-                InkWell(
-                  onLongPress: () {},
-                  splashColor: Colors.blue,
+                ElevatedButton(
+                  onPressed: () {
+                    if (_speechToText.isNotListening) 
+                    {
+                      _currentRecordingIndex = 1;
+                      _startListening();
+                    } 
+                    else
+                    {
+                      _stopListening();
+                    }
+                  },        
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(100, 100),
+                    padding: const EdgeInsets.all(0),    
+                  ),
                   child: Container(
                     height: 100,
                     width: 100,
                     decoration: BoxDecoration(
                       gradient: ColorManager.linearGradientPrimary,
                       borderRadius: BorderRadius.circular(100),
-                      border: Border.all(color: Colors.white, width: 1)
                     ),
                     child: const Icon(
                       Icons.mic,
@@ -143,11 +198,11 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
             ),
           )
         ),
+        const SizedBox(height: 20),
         Container(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: CommonButton(text: AppLocalizations.of(context)!.next),
         ),
-        const SizedBox(height: 23)
       ],
     );
   }
@@ -168,7 +223,7 @@ class _RecordingAttributeState extends State<RecordingAttribute> {
     if (widget.index == 0)
     { 
       return Text(
-        AppLocalizations.of(context)!.press_and_hold,
+        AppLocalizations.of(context)!.press,
         style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
       ); 
     }
@@ -195,5 +250,4 @@ class _RecordingAttributeState extends State<RecordingAttribute> {
     }
   }
 }
-
 
