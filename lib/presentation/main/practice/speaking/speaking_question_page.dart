@@ -1,19 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
-import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
+import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
+import 'package:ez_english/presentation/main/practice/widgets/time_counter.dart';
+import 'package:ez_english/presentation/main/practice/widgets/track_bar.dart';
+import 'package:ez_english/main.dart';
+
+class SpeakingQuestion {
+  final int id;
+  final String? answer;
+  final String? imageUrl;
+  final String? audioUrl;
+  final String? explanation;
+  final int part_id;
+
+  SpeakingQuestion({
+    required this.id,
+    this.answer,
+    this.imageUrl,
+    this.audioUrl,
+    this.explanation,
+    required this.part_id,
+  });
+}
+>>>>>>> Stashed changes
 
 class SpeakingQuestionPage extends StatefulWidget {
-  const SpeakingQuestionPage({super.key});
+  final int part;
+
+  const SpeakingQuestionPage({super.key, required this.part});
   
   @override
   _SpeakingQuestionPageState createState() => _SpeakingQuestionPageState();
 }
 
 class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
+
   @override
   void initState() {
     super.initState();
@@ -26,44 +54,29 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          SpeakingQuestionPageAppBar(),
-          const Expanded(
-            child: SpeakingQuestionPageBody(1),
-          ),  
-        ]
-      ),
-    );
-  }
-}
+    final _future = supabase.from("speaking_question").select().eq("part_id", widget.part);
 
-class SpeakingQuestionPageAppBar extends StatefulWidget {
-  @override
-  _SpeakingQuestionPageAppBarState createState() => _SpeakingQuestionPageAppBarState();
-}
-
-class _SpeakingQuestionPageAppBarState extends State<SpeakingQuestionPageAppBar> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          height: 96,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: ColorManager.linearGradientPrimary,
-          ),
-          child: Column(
-            children: <Widget>[ 
-              const SizedBox(height: 60),
-              Text(
-                'practiceType',
-                textAlign: TextAlign.center,
-                style: getSemiBoldStyle(color: Colors.white, fontSize: 14)
+    return FutureBuilder(
+      future: _future,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }    
+        return Scaffold(
+          body: Column(
+            children: <Widget>[
+              GradientAppBar(
+                content: '',
+                prefixIcon: InkWell(
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    }),
               ),
+<<<<<<< Updated upstream
             ],
           ),
         ),
@@ -81,17 +94,29 @@ class _SpeakingQuestionPageAppBarState extends State<SpeakingQuestionPageAppBar>
                 size: 15.63,
               )
             ),
+=======
+              const TimeCounter(timeLimit: Duration(minutes: 3)),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SpeakingQuestionPageBody(
+                    questionList: snapshot.data!,
+                  ),
+                ),     
+              ),
+            ]
+>>>>>>> Stashed changes
           ),
-        ),
-      ]
+        );
+      }
     );
   }
 }
 
 class SpeakingQuestionPageBody extends StatefulWidget {
-  final int questionIndex;
+  List<Map<String, dynamic>> questionList;
 
-  const SpeakingQuestionPageBody(this.questionIndex);
+  SpeakingQuestionPageBody({super.key, required this.questionList});
 
   @override
   _SpeakingQuestionPageBodyState createState() => _SpeakingQuestionPageBodyState();
@@ -101,7 +126,12 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
   int _currentRecordingIndex = 0;
   final SpeechToText _speechToText = SpeechToText();
   String _lastWords = '';
+<<<<<<< Updated upstream
   String wordToPronounce = 'hello';
+=======
+  final PageController _pageController = PageController();
+  String _answer = '';
+>>>>>>> Stashed changes
 
   @override
   void initState() {
@@ -123,7 +153,11 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
   void _stopListening() async {
     await _speechToText.stop();
     setState(() {
+<<<<<<< Updated upstream
       if (_lastWords.toLowerCase() == wordToPronounce.toLowerCase()) {
+=======
+      if (_lastWords.toLowerCase() == _answer.toLowerCase()) {
+>>>>>>> Stashed changes
         _currentRecordingIndex = 3;
       } else {
         _currentRecordingIndex = 2;
@@ -137,23 +171,65 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
     });
   }
 
+<<<<<<< Updated upstream
+=======
+  void showExplanation(String explanation) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: FractionallySizedBox(
+            widthFactor: 1,
+            heightFactor: 0.6,
+            child: Text(
+              explanation,
+              style: getRegularStyle(color: Colors.black),
+              maxLines: 100,
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        Container(
-          height: 22,
-          padding: const EdgeInsets.only(left: 34),
-          child: Text(
-            '${AppLocalizations.of(context)!.question} ${widget.questionIndex}',
-            style: getSemiBoldStyle(color: Colors.black, fontSize: 14)
-          ),
-        ),
-        SizedBox(
-          height: 520,
-          child: Center(
-            child: Column(
+    return PageView.builder(
+      controller: _pageController,
+      itemCount: widget.questionList.length,
+      itemBuilder: (context, index) {
+        late Widget questionContent;
+        final question = widget.questionList[index];
+        _answer = question['answer'] ?? '';
+
+        if (question['imageUrl'] != null)
+        {
+          questionContent = ImageBox(question['imageUrl']);
+        }
+        else if (question['audioUrl'] != null)
+        {
+          questionContent = TrackBarBox(question['audioUrl']);
+        }
+        else
+        {
+          questionContent = TextBox(_answer);
+        }
+
+        return ListView(
+          children: <Widget>[
+            Text(
+              '${AppLocalizations.of(context)!.question} ${index + 1}',
+              maxLines: 100,
+              style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Column(
               children: <Widget>[
+<<<<<<< Updated upstream
                 const SizedBox(height: 150),
                 Text(
                   wordToPronounce,
@@ -164,6 +240,13 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
                 const SizedBox(height: 5),
                 RecordingAttribute(_currentRecordingIndex),
                 const SizedBox(height: 20),
+=======
+                questionContent,
+                Text(_speechToText.isListening ? '$_lastWords' : ''),
+                const SizedBox(height: 5),
+                RecordingAttribute(_currentRecordingIndex),
+                const SizedBox(height: 20),          
+>>>>>>> Stashed changes
                 ElevatedButton(
                   onPressed: () {
                     if (_speechToText.isNotListening) 
@@ -196,14 +279,101 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
                 ),
               ],
             ),
-          )
+            const SizedBox(height: 10),
+            FilledButton(
+              onPressed: () {
+                showExplanation(question['explanation'] ??
+                    AppLocalizations.of(context)!.not_update_yet);
+              },
+              child: Text(AppLocalizations.of(context)!.explanation)
+            ),
+            const SizedBox(height: 10),
+            CommonButton(
+              text: AppLocalizations.of(context)!.next, 
+              action: () {
+                if (index == widget.questionList.length - 1) {
+                  Navigator.pop(context);
+                } else {
+                  _pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              }
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class TextBox extends StatelessWidget {
+  final String wordsToPronounce;
+
+  TextBox(this.wordsToPronounce);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 150),
+        Text(
+          wordsToPronounce,
+          style: getSemiBoldStyle(color: Colors.black, fontSize: 30),
         ),
+<<<<<<< Updated upstream
         const SizedBox(height: 20),
+=======
+        const SizedBox(height: 135),
+      ]
+    );
+  }
+}
+
+class ImageBox extends StatelessWidget {
+  final String imageUrl;
+
+  ImageBox(this.imageUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 30),
+>>>>>>> Stashed changes
         Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: CommonButton(text: AppLocalizations.of(context)!.next),
+          height: 255,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.scaleDown,
+                image: NetworkImage(imageUrl)),
+          ),
         ),
+<<<<<<< Updated upstream
       ],
+=======
+        const SizedBox(height: 30),
+      ]
+    );
+  }
+}
+
+class TrackBarBox extends StatelessWidget {
+  final String audioUrl;
+
+  TrackBarBox(this.audioUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 142),
+        TrackBar(audioUrl: audioUrl),
+        const SizedBox(height: 142),
+      ]
+>>>>>>> Stashed changes
     );
   }
 }

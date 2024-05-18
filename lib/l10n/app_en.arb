@@ -46,5 +46,26 @@
     "press": "Press to start speaking",
     "recording": "Recording...",
     "incorrect_try_again": "Incorrect, try again",
+<<<<<<< Updated upstream
     "correct": "Correct!"
+=======
+    "correct": "Correct!",
+    "photographs": "Photographs",
+    "question_response": "Question-Response",
+    "talks": "Talks",
+    "conversations": "Conversations",
+    "incomplete_sentences": "Incomplete Sentences",
+    "text_completion": "Text Completion",
+    "reading_comprehension": "Reading Comprehension",
+    "read_aloud_word": "Read the words below aloud",
+    "describe_picture": "What is in the picture below?",
+    "pronounce_audio": "Pronounce what you hear",
+    "write_sentence_based_on_picture": "Write a sentence based on a picture",
+    "respond_written_request": "Respond to a written request",
+    "write_opinion_essay": "Write an opinion essay",
+    "reading_practice": "Reading Practice",
+    "writing_practice": "Writing Practice",
+    "explanation": "Explanation",
+    "not_update_yet": "The explanation is not updated yet"
+>>>>>>> Stashed changes
 }

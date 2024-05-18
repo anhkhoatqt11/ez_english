@@ -46,5 +46,26 @@
     "press": "Nhấn để nói",
     "recording": "Đang ghi...",
     "incorrect_try_again": "Chưa đúng, thử lại",
+<<<<<<< Updated upstream
     "correct": "Chính xác!"
+=======
+    "correct": "Chính xác!",
+    "photographs": "Mô Tả Hình Ảnh",
+    "question_response": "Hỏi & Đáp",
+    "talks": "Bài Nói Chuyện Ngắn",
+    "conversations": "Đoạn Hội Thoại",
+    "incomplete_sentences": "Điền Vào Câu",
+    "text_completion": "Điền Vào Đoạn Văn",
+    "reading_comprehension": "Đọc Hiểu Đoạn Văn",
+    "read_aloud_word": "Đọc to các từ bên dưới",
+    "describe_picture": "Thứ gì trong tranh phía dưới?",
+    "pronounce_audio": "Phát âm những gì bạn nghe",
+    "write_sentence_based_on_picture": "Mô Tả Tranh",
+    "respond_written_request": "Phản Hồi Yêu Cầu",
+    "write_opinion_essay": "Viết Luận",
+    "reading_practice": "Luyện Đọc Hiểu",
+    "writing_practice": "Luyện Viết",
+    "explanation": "Giải thích",
+    "not_update_yet": "Chưa cập nhật lời giải cho câu hỏi này"
+>>>>>>> Stashed changes
 }

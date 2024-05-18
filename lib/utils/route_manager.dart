@@ -47,11 +47,31 @@ class Routes {
       case RoutesName.listeningPracticeRoute:
         return MaterialPageRoute(builder: (_) => const ListeningPage());
       case RoutesName.listeningQuestionRoute:
+<<<<<<< Updated upstream
         return MaterialPageRoute(builder: (_) => const ListeningQuestionPage());
       case RoutesName.speakingPracticeRoute:
         return MaterialPageRoute(builder: (_) => const SpeakingPage());
       case RoutesName.speakingQuestionRoute:
         return MaterialPageRoute(builder: (_) => const SpeakingQuestionPage());
+=======
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => ListeningQuestionPage(
+                  part: settings.arguments as int,
+                ));
+      case RoutesName.readingQuestionRoute:
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => ReadingQuestionPage(
+                  part: settings.arguments as int,
+                ));
+      case RoutesName.speakingQuestionRoute:
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => SpeakingQuestionPage(
+                  part: settings.arguments as int,
+                ));
+>>>>>>> Stashed changes
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

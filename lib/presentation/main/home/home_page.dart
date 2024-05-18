@@ -2,11 +2,16 @@ import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+<<<<<<< Updated upstream
 import 'package:flutter_svg/flutter_svg.dart';
+=======
+>>>>>>> Stashed changes
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ez_english/presentation/common/widgets/stateful/app_bottom_navigation_bar.dart';
+import 'package:ez_english/main.dart';
 
 class HomePage extends StatefulWidget {
+
   const HomePage({super.key});
 
   @override
@@ -16,6 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   void initState() {
     super.initState();
@@ -28,12 +34,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< Updated upstream
     return Scaffold(
       body: Column(
         children: <Widget>[
           HomePageAppBar(),
           Expanded(
             child: HomePageBody(),
+=======
+    final String uuid = "bbf3f15f-c9d4-4666-ba91-c08edd7af597";
+
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          HomePageAppBar(uuid),
+          Expanded(
+            child: HomePageBody(uuid),
+>>>>>>> Stashed changes
           ),  
         ]
       ),
@@ -47,13 +64,18 @@ class _HomePageState extends State<HomePage> {
 }
 
 class HomePageAppBar extends StatefulWidget {
+  final String uuid;
+  const HomePageAppBar(this.uuid);
   @override
   _HomePageAppBarState createState() => _HomePageAppBarState();
 }
 
-class _HomePageAppBarState extends State<HomePageAppBar> {
+class _HomePageAppBarState extends State<HomePageAppBar> {  
+  late String userLevel;
+
   @override
   Widget build(BuildContext context) {
+<<<<<<< Updated upstream
     return Container(
       height: 154,
       decoration: const BoxDecoration(
@@ -98,11 +120,78 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
           ),
         ]
       ),
+=======
+    final _future = supabase.from("profiles").select().eq("uuid", widget.uuid).single();
+
+    return FutureBuilder(
+      future: _future, 
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final userInfor = snapshot.data!;
+        switch (userInfor['level_id']) {
+          case 0:
+            userLevel = "Beginner";
+            break;
+          case 1:
+            userLevel = "Intermediate";
+            break;
+          case 2:
+            userLevel = "Advanced";
+            break;
+        }
+        return Container(
+          height: 154,
+          decoration: const BoxDecoration(
+            gradient: ColorManager.linearGradientPrimary,
+          ),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 66),
+              Row(
+                children: <Widget>[
+                  const SizedBox(width: 28),
+                  SizedBox(
+                    width: 62,
+                    height: 62,
+                    child: ClipOval(
+                      child: Image.network(
+                        userInfor['avatar_url'],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        userInfor['full_name'],
+                        style: getSemiBoldStyle(color: Colors.white, fontSize: 20)
+                      ),
+                      Text(
+                        userLevel,
+                        style: getRegularStyle(color: Colors.white, fontSize: 14)
+                      ),
+                    ]
+                  )
+                ]
+              ),
+            ]
+          ),
+        );
+      }
+>>>>>>> Stashed changes
     );
   }
 }    
 
 class HomePageBody extends StatefulWidget {
+  final String uuid;
+
+  const HomePageBody(this.uuid);
+
   @override
   _HomePageBodyState createState() => _HomePageBodyState();
 }
@@ -132,7 +221,11 @@ class _HomePageBodyState extends State<HomePageBody> {
               width: 36,
             ),
             Expanded(
+<<<<<<< Updated upstream
               child: HistoryList()
+=======
+              child: HistoryList(widget.uuid),
+>>>>>>> Stashed changes
             )
           ],
         )
@@ -170,7 +263,11 @@ class _BannerListState extends State<BannerList> {
   
   final PageController _controller = PageController();
   int _currentPage = 0;
+<<<<<<< Updated upstream
   final _future = Supabase.instance.client.from("banners").select("media_url");
+=======
+  final _future = supabase.from("banners").select("media_url");
+>>>>>>> Stashed changes
 
   @override
   Widget build(BuildContext context) {
@@ -236,31 +333,49 @@ class _BannerListState extends State<BannerList> {
 }  
 
 class HistoryList extends StatefulWidget {
+  final String uuid;
+
+  const HistoryList(this.uuid);
+
   @override
   _HistoryListState createState() => _HistoryListState();
 }
 
 class _HistoryListState extends State<HistoryList> {
-  final List<String> items = ['1', '2', '3'];
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: <Widget>[
-          for (var item in items) Activity(),
-        ],
-      ),
+    final _future = supabase.from("history").select().eq("by_uuid", widget.uuid);
+
+    return FutureBuilder(
+      future: _future,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final activities = snapshot.data!;
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: <Widget>[
+              for (var activity in activities)
+                Activity(
+                  activity['skill'],
+                  activity['part']
+                )
+            ],
+          ),
+        );
+      }
     );
   }
 }
 
 class Activity extends StatelessWidget {
-  //final String skill;
-  //final String chapter;
+  final String skill;
+  final int part;
 
-  //Activity(this.skill, this.chapter);
+  Activity(this.skill, this.part);
 
   @override
   Widget build(BuildContext context) {
@@ -279,11 +394,19 @@ class Activity extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+<<<<<<< Updated upstream
               'skill',
               style: getSemiBoldStyle(color: Colors.black, fontSize: 14)
             ),
             Text(
               'chapter',
+=======
+              skill,
+              style: getSemiBoldStyle(color: Colors.black, fontSize: 14)
+            ),
+            Text(
+              'Part $part',
+>>>>>>> Stashed changes
               style: getLightStyle(color: Colors.black, fontSize: 14)
             ),
           ]
