@@ -1,9 +1,11 @@
+import 'package:ez_english/app_prefs.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/domain/model/choice.dart';
 import 'package:ez_english/domain/model/question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 
 class AnswerBar extends StatefulWidget {
   final int questionIndex;
@@ -21,13 +23,15 @@ class AnswerBar extends StatefulWidget {
 }
 
 class _AnswerBarState extends State<AnswerBar> {
-  Future<void> chooseAnswer(String letter) async {
+  Future<void> chooseAnswer(String letter , String correctLetter) async {
     setState(() {
-      widget.answerMap[widget.questionIndex] = letter;
+      widget.answerMap[widget.questionIndex] = "$letter:$correctLetter";
     });
-    await Future.delayed(const Duration(seconds: 1));
-    widget.pageController.nextPage(
-        duration: const Duration(milliseconds: 200), curve: Curves.linear);
+    if (GetIt.instance<AppPrefs>().getAutoChangeQuestion() ?? true) {
+      await Future.delayed(const Duration(seconds: 1));
+      widget.pageController.nextPage(
+          duration: const Duration(milliseconds: 200), curve: Curves.linear);
+    }
   }
 
   Color setChoiceColor(String letter) {
@@ -65,12 +69,6 @@ class _AnswerBarState extends State<AnswerBar> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-              '${AppLocalizations.of(context)!.question} ${widget.questionIndex}',
-              style: getSemiBoldStyle(color: Colors.black, fontSize: 14)),
-          const SizedBox(
-            height: 8,
-          ),
           ...widget.question.choices.map((i) => Column(
                 children: [
                   Row(
@@ -88,7 +86,7 @@ class _AnswerBarState extends State<AnswerBar> {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            chooseAnswer(i.letter);
+                            chooseAnswer(i.letter , widget.question.correctLetter ?? i.letter);
                           },
                           child: Text(i.letter,
                               style: getSemiBoldStyle(

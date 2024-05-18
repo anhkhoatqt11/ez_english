@@ -65,5 +65,14 @@
     "reading_practice": "Luyện Đọc Hiểu",
     "writing_practice": "Luyện Viết",
     "explanation": "Giải thích",
-    "not_update_yet": "Chưa cập nhật lời giải cho câu hỏi này"
+    "not_update_yet": "Chưa cập nhật lời giải cho câu hỏi này",
+    "bottom_screen": "Chọn câu trả lời ở cuối màn hình",
+    "ask_answer_interface": "Bạn muốn sử dụng giao diện chọn đáp án nào ?",
+    "recommend_answer_interface": "( Đề xuất, giống với trải nghiệm thực tế khi đi thi )",
+    "above_question": "Chọn câu trả lời ở đề bài",
+    "answer_interface": "Giao diện trả lời",
+    "audio_volume": "Âm lượng âm thanh",
+    "audio_rate": "Tốc độ âm thanh",
+    "auto_next": "Tự động chuyển câu",
+    "display": "Hiển thị"
 }

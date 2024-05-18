@@ -65,5 +65,14 @@
     "reading_practice": "Reading Practice",
     "writing_practice": "Writing Practice",
     "explanation": "Explanation",
-    "not_update_yet": "The explanation is not updated yet"
+    "not_update_yet": "The explanation is not updated yet",
+    "ask_answer_interface": "Which answer interface you want to use ?",
+    "bottom_screen": "Choose the answer at the bottom of the screen",
+    "above_question": "Choose the answer right above the topic",
+    "recommend_answer_interface": "( Recommend, similar to the actual experience when taking the exam )",
+    "answer_interface": "Answer interface",
+    "audio_volume": "Audio volume",
+    "audio_rate": "Audio speed",
+    "auto_next": "Auto next",
+    "display": "Display"
 }

@@ -13,8 +13,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../app_prefs.dart';
+import '../../../../config/functions.dart';
 import '../../../../domain/model/question.dart';
 import '../../../blocs/questions_by_part/questions_by_part_bloc.dart';
+import '../widgets/horizontal_answer_bar.dart';
 
 class ReadingQuestionPage extends StatefulWidget {
   const ReadingQuestionPage({super.key, required this.part});
@@ -96,24 +99,13 @@ class ReadingQuestionPageBody extends StatefulWidget {
 
 class _ReadingQuestionPageBodyState extends State<ReadingQuestionPageBody> {
   final PageController _pageController = PageController();
-
-  void showExplanation(String explanation) {
-    showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: FractionallySizedBox(
-              widthFactor: 1,
-              heightFactor: 0.6,
-              child: Text(
-                explanation,
-                style: getRegularStyle(color: Colors.black),
-                maxLines: 100,
-              ),
-            ),
-          );
-        });
+  final appPrefs = GetIt.instance<AppPrefs>();
+  late bool isHorizontal;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isHorizontal = appPrefs.getHorizontalAnswerBarLayout() ?? false;
   }
 
   @override
@@ -123,47 +115,82 @@ class _ReadingQuestionPageBodyState extends State<ReadingQuestionPageBody> {
       itemCount: widget.questionList.length,
       itemBuilder: (context, index) {
         Question question = widget.questionList[index];
-        return ListView(
-          children: <Widget>[
-            Text(
-              question.title ?? '',
-              maxLines: 100,
-              style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            question.imageUrl != null
-                ? Container(
-                    height: 255,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.scaleDown,
-                          image: NetworkImage(question.imageUrl ?? '')),
+        return Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            '${AppLocalizations.of(context)!.question} ${index + 1}',
+                            style: getSemiBoldStyle(
+                                color: Colors.black, fontSize: 14)),
+                        FilledButton(
+                          onPressed: () {
+                            showExplanation(
+                                question.explanation ??
+                                    AppLocalizations.of(context)!
+                                        .not_update_yet,
+                                context);
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.explanation,
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                : Container(),
-            const SizedBox(
-              height: 32,
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      question.title ?? '',
+                      maxLines: 100,
+                      style:
+                          getSemiBoldStyle(color: Colors.black, fontSize: 14),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    question.imageUrl != null
+                        ? Container(
+                            height: 255,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.scaleDown,
+                                  image: NetworkImage(question.imageUrl ?? '')),
+                            ),
+                          )
+                        : Container(),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: AnswerBar(
+                          question: question,
+                          questionIndex: index + 1,
+                          answerMap: widget.answerMap,
+                          pageController: _pageController),
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                  ],
+                ),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12.0),
-              child: AnswerBar(
-                  question: question,
-                  questionIndex: index + 1,
-                  answerMap: widget.answerMap,
-                  pageController: _pageController),
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-            FilledButton(
-                onPressed: () {
-                  showExplanation(question.explanation ??
-                      AppLocalizations.of(context)!.not_update_yet);
-                },
-                child: Text(AppLocalizations.of(context)!.explanation))
+            isHorizontal
+                ? HorizontalAnswerBar(
+                    questionIndex: index + 1,
+                    answerMap: widget.answerMap,
+                    pageController: _pageController,
+                    question: question)
+                : Container()
           ],
         );
       },

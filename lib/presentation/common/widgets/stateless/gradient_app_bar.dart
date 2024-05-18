@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class GradientAppBar extends StatelessWidget {
-  GradientAppBar({super.key, required this.content, this.prefixIcon});
+  GradientAppBar(
+      {super.key, required this.content, this.prefixIcon, this.suffixIcon});
   String content;
   Widget? prefixIcon;
+  Widget? suffixIcon;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -30,6 +32,9 @@ class GradientAppBar extends StatelessWidget {
               ),
             ),
           ),
+          Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: suffixIcon ?? Container()),
           Container(
             width: 16,
           )

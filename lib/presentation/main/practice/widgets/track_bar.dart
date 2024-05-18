@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:ez_english/app_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../../config/color_manager.dart';
 import '../../../../config/style_manager.dart';
@@ -19,39 +23,54 @@ class _TrackBarState extends State<TrackBar> {
   Duration audioDuration = Duration.zero;
   Duration position = Duration.zero;
   bool isPlaying = true;
+  late StreamSubscription onPlayerStateStream,
+      onDurationStream,
+      onPositionStream;
+  final appPrefs = GetIt.instance<AppPrefs>();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initFuncForAudio();
+    double volume = appPrefs.getAudioVolume() ?? 100;
+    double rate = appPrefs.getAudioRate() ?? 1;
+    player.setPlaybackRate(rate);
+    player.setVolume(volume);
     player.play(UrlSource(widget.audioUrl));
   }
 
   void initFuncForAudio() {
-    player.onPlayerStateChanged.listen((state) {
+    onPlayerStateStream = player.onPlayerStateChanged.listen((state) {
       setState(() {
         isPlaying = state == PlayerState.playing;
       });
     });
 
-    player.onDurationChanged.listen((newDuration) {
+    onDurationStream = player.onDurationChanged.listen((newDuration) {
       setState(() {
         audioDuration = newDuration;
       });
     });
 
-    player.onPositionChanged.listen((newPosition) {
+    onPositionStream = player.onPositionChanged.listen((newPosition) {
       setState(() {
         position = newPosition;
       });
     });
   }
 
+  void disposeAudioPlayer() {
+    onPlayerStateStream.cancel();
+    onDurationStream.cancel();
+    onPositionStream.cancel();
+    player.dispose();
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
+    disposeAudioPlayer();
     super.dispose();
-    player.dispose();
   }
 
   String formatTime(int seconds) {
