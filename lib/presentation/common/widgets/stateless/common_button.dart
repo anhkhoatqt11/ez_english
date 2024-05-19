@@ -3,12 +3,13 @@ import 'package:ez_english/config/style_manager.dart';
 import 'package:flutter/material.dart';
 
 class CommonButton extends StatelessWidget {
-  const CommonButton({super.key, required this.text});
+  const CommonButton({super.key, required this.text, this.action});
   final String text;
-
+  final Function? action;
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () => action?.call(),
       child: Container(
         alignment: Alignment.center,
         height: 55,

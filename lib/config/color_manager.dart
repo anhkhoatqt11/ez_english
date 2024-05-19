@@ -14,6 +14,9 @@ class ColorManager {
   static const activityColor = Color(0xFFD6F0FF);
   static const primaryTextColor = Color(0xff72c7db);
   static const errorColor = Color(0xFFB63737);
+  static const selectedChoiceColor = Color(0xff72c7db);
+  static const correctChoiceColor = Colors.greenAccent;
+  static const defaultChoiceColor = Colors.white;
 
   static const LinearGradient linearGradientPrimary = LinearGradient(
     colors: [
