@@ -1,5 +1,6 @@
 import 'package:ez_english/app_prefs.dart';
 import 'package:ez_english/config/color_manager.dart';
+import 'package:ez_english/config/functions.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/domain/model/choice.dart';
 import 'package:ez_english/domain/model/question.dart';
@@ -23,7 +24,7 @@ class AnswerBar extends StatefulWidget {
 }
 
 class _AnswerBarState extends State<AnswerBar> {
-  Future<void> chooseAnswer(String letter , String correctLetter) async {
+  Future<void> chooseAnswer(String letter, String correctLetter) async {
     setState(() {
       widget.answerMap[widget.questionIndex] = "$letter:$correctLetter";
     });
@@ -86,7 +87,8 @@ class _AnswerBarState extends State<AnswerBar> {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            chooseAnswer(i.letter , widget.question.correctLetter ?? i.letter);
+                            chooseAnswer(i.letter,
+                                widget.question.correctLetter ?? i.letter);
                           },
                           child: Text(i.letter,
                               style: getSemiBoldStyle(

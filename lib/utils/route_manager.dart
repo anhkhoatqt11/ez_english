@@ -1,10 +1,12 @@
 import 'package:ez_english/dependency_injection.dart';
+import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/main/main_view.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
 
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
+import 'package:ez_english/presentation/result/result_page.dart';
 import 'package:ez_english/presentation/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,7 @@ class RoutesName {
   static const String readingPracticeRoute = "reading_practice";
   static const String writingPracticeRoute = "writing_practice";
   static const String skillPracticeRoute = "skill_practice";
+  static const String resultPracticeRoute = "result_practice";
 }
 
 class Routes {
@@ -50,6 +53,13 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const HomePage());
       case RoutesName.practiceRoute:
         return MaterialPageRoute(builder: (_) => const PracticePage());
+      case RoutesName.resultPracticeRoute:
+        List<Object> arguments = settings.arguments as List<Object>;
+        return MaterialPageRoute(
+            builder: (_) => ResultPage(
+                  answerMap: arguments[0] as Map<int, String>,
+                  part: arguments[1] as PartObject,
+                ));
       case RoutesName.skillPracticeRoute:
         return MaterialPageRoute(
             builder: (_) =>
@@ -58,13 +68,13 @@ class Routes {
         initQuestionPageModule();
         return MaterialPageRoute(
             builder: (_) => ListeningQuestionPage(
-                  part: settings.arguments as int,
+                  part: settings.arguments as PartObject,
                 ));
       case RoutesName.readingQuestionRoute:
         initQuestionPageModule();
         return MaterialPageRoute(
             builder: (_) => ReadingQuestionPage(
-                  part: settings.arguments as int,
+                  part: settings.arguments as PartObject,
                 ));
 
       default:

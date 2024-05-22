@@ -1,5 +1,6 @@
 import 'package:ez_english/config/style_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<T?> showAnimatedDialog1<T extends Object?>(
     BuildContext context, Widget dialog) {
@@ -38,4 +39,18 @@ void showExplanation(String explanation, BuildContext context) {
           ),
         );
       });
+}
+
+String getTranslatedSkill(String skill, BuildContext context) {
+  switch (skill) {
+    case "Listening":
+      return AppLocalizations.of(context)!.listening;
+    case "Reading":
+      return AppLocalizations.of(context)!.reading;
+    case "Writing":
+      return AppLocalizations.of(context)!.writing;
+    case "Speaking":
+      return AppLocalizations.of(context)!.speaking;
+  }
+  return "";
 }

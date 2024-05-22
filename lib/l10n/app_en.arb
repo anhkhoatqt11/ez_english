@@ -74,5 +74,13 @@
     "audio_volume": "Audio volume",
     "audio_rate": "Audio speed",
     "auto_next": "Auto next",
-    "display": "Display"
+    "display": "Display",
+    "complete_practice": "You have already completed the test",
+    "good_luck": "Good luck !",
+    "error_list": "Wrong questions list",
+    "see_all_answers": "See all answers",
+    "app_continue": "Continue",
+    "result": "Result",
+    "correct_answer": "Correct answer",
+    "submit": "Submit"
 }

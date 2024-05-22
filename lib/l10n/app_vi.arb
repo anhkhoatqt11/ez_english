@@ -74,5 +74,12 @@
     "audio_volume": "Âm lượng âm thanh",
     "audio_rate": "Tốc độ âm thanh",
     "auto_next": "Tự động chuyển câu",
-    "display": "Hiển thị"
+    "display": "Hiển thị",
+    "complete_practice": "Bạn đã hoàn thành bài luyện tập",
+    "good_luck": "Chúc bạn thành công !",
+    "error_list": "Danh sách những câu hỏi sai",
+    "app_continue": "Tiếp tục",
+    "see_all_answers": "Xem tất cả các câu trả lời",
+    "result": "Kết quả",
+    "submit": "Nộp bài"
 }

@@ -1,5 +1,6 @@
 import 'package:ez_english/domain/model/choice.dart';
 import 'package:ez_english/presentation/common/objects/get_questions_by_part_object.dart';
+import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:ez_english/presentation/main/practice/widgets/answer_bar.dart';
 import 'package:ez_english/presentation/main/practice/widgets/time_counter.dart';
@@ -16,12 +17,13 @@ import 'package:get_it/get_it.dart';
 import '../../../../app_prefs.dart';
 import '../../../../config/functions.dart';
 import '../../../../domain/model/question.dart';
+import '../../../../utils/route_manager.dart';
 import '../../../blocs/questions_by_part/questions_by_part_bloc.dart';
 import '../widgets/horizontal_answer_bar.dart';
 
 class ReadingQuestionPage extends StatefulWidget {
   const ReadingQuestionPage({super.key, required this.part});
-  final int part;
+  final PartObject part;
   @override
   State<ReadingQuestionPage> createState() => _ReadingQuestionPageState();
 }
@@ -35,8 +37,8 @@ class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    questionsByPartBloc
-        .add(LoadQuestions(GetQuestionsByPartObject(widget.part, "Reading")));
+    questionsByPartBloc.add(
+        LoadQuestions(GetQuestionsByPartObject(widget.part.index, "Reading")));
   }
 
   @override
@@ -44,7 +46,20 @@ class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
     return Scaffold(
       body: Column(children: <Widget>[
         GradientAppBar(
-          content: '',
+          content: widget.part.title,
+          suffixIcon: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, RoutesName.resultPracticeRoute,
+                  arguments: [answerMap, widget.part]);
+            },
+            child: Text(
+              AppLocalizations.of(context)!.submit,
+              style: getMediumStyle(color: Colors.white).copyWith(
+                  decoration: TextDecoration.underline,
+                  decorationColor: Colors.white,
+                  decorationThickness: 2),
+            ),
+          ),
           prefixIcon: InkWell(
               child: const Icon(
                 Icons.arrow_back_ios,
