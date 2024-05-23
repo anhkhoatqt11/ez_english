@@ -9,6 +9,7 @@ import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_ba
 import 'package:ez_english/presentation/main/practice/widgets/time_counter.dart';
 import 'package:ez_english/presentation/main/practice/widgets/track_bar.dart';
 import 'package:ez_english/main.dart';
+import 'package:ez_english/utils/route_manager.dart';
 
 class SpeakingQuestion {
   final int id;
@@ -25,6 +26,14 @@ class SpeakingQuestion {
     this.audioUrl,
     this.explanation,
     required this.part_id,
+  });
+}
+
+Future<void> insertHistoryRecord(String skill, int part) async {
+  supabase.from('history').insert({
+    'skill': skill,
+    'part': part,
+    'by_uuid': supabase.auth.currentUser?.id,
   });
 }
 
@@ -65,13 +74,18 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
               GradientAppBar(
                 content: '',
                 prefixIcon: InkWell(
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    }),
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                  onTap: () {
+                    insertHistoryRecord('Speaking', widget.part);
+                    Navigator.pushNamed(
+                      context, RoutesName.skillPracticeRoute, 
+                      arguments: 'Speaking'
+                    );
+                  }
+                ),
               ),
               const TimeCounter(timeLimit: Duration(minutes: 3)),
               Expanded(
@@ -196,7 +210,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
             Column(
               children: <Widget>[
                 questionContent,
-                Text(_speechToText.isListening ? '$_lastWords' : ''),
+                Text(_speechToText.isListening ? _lastWords : ''),
                 const SizedBox(height: 5),
                 RecordingAttribute(_currentRecordingIndex),
                 const SizedBox(height: 20),          

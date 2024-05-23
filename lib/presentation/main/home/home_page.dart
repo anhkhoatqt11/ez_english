@@ -2,9 +2,9 @@ import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ez_english/presentation/common/widgets/stateful/app_bottom_navigation_bar.dart';
 import 'package:ez_english/main.dart';
+import 'package:ez_english/utils/route_manager.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -30,12 +30,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final String uuid = "bbf3f15f-c9d4-4666-ba91-c08edd7af597";
+    final uuid = supabase.auth.currentUser?.id;
 
     return Scaffold(
       body: Column(
         children: <Widget>[
-          HomePageAppBar(uuid),
+          HomePageAppBar(uuid!),
           Expanded(
             child: HomePageBody(uuid),
           ),  
@@ -312,7 +312,26 @@ class Activity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        switch (skill) {
+          case "Listening":
+            Navigator.pushNamed(context, RoutesName.listeningQuestionRoute,
+                arguments: part);
+            break;
+          case "Reading":
+            Navigator.pushNamed(context, RoutesName.readingQuestionRoute,
+                arguments: part);
+            break;
+          case "Speaking":
+            Navigator.pushNamed(context, RoutesName.speakingQuestionRoute,
+                arguments: part);
+            break;
+          case "Writing":
+            Navigator.pushNamed(context, RoutesName.writingQuestionRoute,
+                arguments: part);
+            break;
+        }
+      },
       child: Container(
         height: 264,
         width: 190,
