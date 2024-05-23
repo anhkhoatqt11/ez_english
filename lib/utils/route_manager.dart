@@ -6,6 +6,7 @@ import 'package:ez_english/presentation/main/practice/reading/reading_question_p
 
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
+import 'package:ez_english/presentation/part_info/part_info_page.dart';
 import 'package:ez_english/presentation/result/result_page.dart';
 import 'package:ez_english/presentation/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,6 +35,7 @@ class RoutesName {
   static const String writingPracticeRoute = "writing_practice";
   static const String skillPracticeRoute = "skill_practice";
   static const String resultPracticeRoute = "result_practice";
+  static const String partInfoRoute = "part_info";
 }
 
 class Routes {
@@ -53,6 +55,11 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const HomePage());
       case RoutesName.practiceRoute:
         return MaterialPageRoute(builder: (_) => const PracticePage());
+      case RoutesName.partInfoRoute:
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => PartInfoPage(
+                isPractice: arguments[0], partObject: arguments[1]));
       case RoutesName.resultPracticeRoute:
         List<Object> arguments = settings.arguments as List<Object>;
         return MaterialPageRoute(
@@ -66,15 +73,19 @@ class Routes {
                 SkillPracticePage(skill: settings.arguments as String));
       case RoutesName.listeningQuestionRoute:
         initQuestionPageModule();
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
         return MaterialPageRoute(
             builder: (_) => ListeningQuestionPage(
-                  part: settings.arguments as PartObject,
+                  part: arguments[0],
+                  timeLimit: arguments[1],
                 ));
       case RoutesName.readingQuestionRoute:
         initQuestionPageModule();
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
         return MaterialPageRoute(
             builder: (_) => ReadingQuestionPage(
-                  part: settings.arguments as PartObject,
+                  part: arguments[0],
+                  timeLimit: arguments[1],
                 ));
 
       default:

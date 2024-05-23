@@ -21,7 +21,7 @@ class QuestionRemoteDateSouceImpl implements QuestionRemoteDataSouce {
     try {
       final response = await supabaseClient
           .from(QUESTION_TABLE)
-          .select('* , part!question_part_id_fkey!inner(*) , choice(*)')
+          .select('* , part!question_part_id_fkey!inner(*)')
           .eq('part.skill', request.skill)
           .eq('part.part_index', request.partIndex);
       /*final response =

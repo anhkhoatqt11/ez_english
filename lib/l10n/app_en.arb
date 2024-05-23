@@ -82,5 +82,8 @@
     "app_continue": "Continue",
     "result": "Result",
     "correct_answer": "Correct answer",
-    "submit": "Submit"
+    "submit": "Submit",
+    "test_mode": "Test mode",
+    "num_of_questions": "Number of questions",
+    "start_now" : "Start now"
 }

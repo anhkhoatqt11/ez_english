@@ -22,8 +22,10 @@ import '../../../../domain/model/question.dart';
 import '../../../blocs/questions_by_part/questions_by_part_bloc.dart';
 
 class ListeningQuestionPage extends StatefulWidget {
-  const ListeningQuestionPage({super.key, required this.part});
+  const ListeningQuestionPage(
+      {super.key, required this.part, required this.timeLimit});
   final PartObject part;
+  final Duration timeLimit;
   @override
   State<ListeningQuestionPage> createState() => _ListeningQuestionPageState();
 }
@@ -69,7 +71,9 @@ class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
                 Navigator.pop(context);
               }),
         ),
-        const TimeCounter(timeLimit: Duration(minutes: 3)),
+        (widget.timeLimit.inSeconds > 0)
+            ? TimeCounter(timeLimit: widget.timeLimit)
+            : Container(),
         Expanded(
           child: BlocBuilder<QuestionsByPartBloc, QuestionsByPartState>(
             bloc: questionsByPartBloc,
@@ -151,7 +155,7 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
                         FilledButton(
                           onPressed: () {
                             showExplanation(
-                                question.explanation ??
+                                question.answers.first.explanation ??
                                     AppLocalizations.of(context)!
                                         .not_update_yet,
                                 context);
@@ -161,15 +165,6 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
                           ),
                         )
                       ],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      question.title ?? '',
-                      maxLines: 100,
-                      style:
-                          getSemiBoldStyle(color: Colors.black, fontSize: 14),
                     ),
                     const SizedBox(
                       height: 8,
@@ -193,25 +188,63 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
                         : Container(),
                     isHorizontal
                         ? Container()
-                        : Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
-                            child: AnswerBar(
-                                question: question,
-                                questionIndex: index + 1,
-                                answerMap: widget.answerMap,
-                                pageController: _pageController),
+                        : Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (int i = 0;
+                                    i < question.questions.length;
+                                    i++)
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                            style: getSemiBoldStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                            children: [
+                                              TextSpan(
+                                                  text:
+                                                      "${AppLocalizations.of(context)!.question} ${i + 1} : "),
+                                              TextSpan(
+                                                text: question.questions[i],
+                                              )
+                                            ]),
+                                        maxLines: 100,
+                                      ),
+                                      AnswerBar(
+                                          answer: question.answers[i],
+                                          questionIndex: index + 1,
+                                          answerMap: widget.answerMap,
+                                          pageController: _pageController),
+                                      const Divider(
+                                        color: Colors.black,
+                                        thickness: 1,
+                                        indent: 4,
+                                        endIndent: 4,
+                                      )
+                                    ],
+                                  )
+                              ],
+                            ),
                           ),
                   ],
                 ),
               ),
             ),
-            isHorizontal
+            /*isHorizontal
                 ? HorizontalAnswerBar(
                     questionIndex: index + 1,
                     answerMap: widget.answerMap,
                     pageController: _pageController,
                     question: question)
-                : Container()
+                : Container()*/
           ],
         );
       },

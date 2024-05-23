@@ -1,15 +1,18 @@
-import 'choice.dart';
+import 'package:ez_english/domain/model/answer.dart';
 
 class Question {
   int id;
-  String? title;
-  String? correctLetter;
+  List<String> questions;
+  List<Answer> answers;
+
   String? imageUrl;
+
   String? audioUrl;
+
   int? testId;
-  String? explanation;
-  int? partId;
-  List<Choice> choices;
-  Question(this.id, this.title, this.correctLetter, this.imageUrl,
-      this.audioUrl, this.testId, this.explanation, this.partId , this.choices);
+
+  int partId;
+
+  Question(this.id, this.questions, this.answers, this.imageUrl, this.audioUrl,
+      this.testId, this.partId);
 }

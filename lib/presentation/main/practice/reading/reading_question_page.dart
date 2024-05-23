@@ -22,8 +22,11 @@ import '../../../blocs/questions_by_part/questions_by_part_bloc.dart';
 import '../widgets/horizontal_answer_bar.dart';
 
 class ReadingQuestionPage extends StatefulWidget {
-  const ReadingQuestionPage({super.key, required this.part});
+  const ReadingQuestionPage(
+      {super.key, required this.part, required this.timeLimit});
   final PartObject part;
+  final Duration timeLimit;
+
   @override
   State<ReadingQuestionPage> createState() => _ReadingQuestionPageState();
 }
@@ -69,7 +72,9 @@ class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
                 Navigator.pop(context);
               }),
         ),
-        const TimeCounter(timeLimit: Duration(minutes: 3)),
+        (widget.timeLimit.inSeconds > 0)
+            ? TimeCounter(timeLimit: widget.timeLimit)
+            : Container(),
         Expanded(
           child: BlocBuilder<QuestionsByPartBloc, QuestionsByPartState>(
             bloc: questionsByPartBloc,
@@ -147,7 +152,7 @@ class _ReadingQuestionPageBodyState extends State<ReadingQuestionPageBody> {
                         FilledButton(
                           onPressed: () {
                             showExplanation(
-                                question.explanation ??
+                                question.answers.first.explanation ??
                                     AppLocalizations.of(context)!
                                         .not_update_yet,
                                 context);
@@ -157,15 +162,6 @@ class _ReadingQuestionPageBodyState extends State<ReadingQuestionPageBody> {
                           ),
                         )
                       ],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      question.title ?? '',
-                      maxLines: 100,
-                      style:
-                          getSemiBoldStyle(color: Colors.black, fontSize: 14),
                     ),
                     const SizedBox(
                       height: 8,
@@ -184,14 +180,30 @@ class _ReadingQuestionPageBodyState extends State<ReadingQuestionPageBody> {
                     const SizedBox(
                       height: 32,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12.0),
-                      child: AnswerBar(
-                          question: question,
-                          questionIndex: index + 1,
-                          answerMap: widget.answerMap,
-                          pageController: _pageController),
-                    ),
+                    isHorizontal
+                        ? Container()
+                        : Column(
+                            children: [
+                              for (int i = 0;
+                                  i < question.questions.length;
+                                  i++)
+                                Column(
+                                  children: [
+                                    Text(
+                                      question.questions[i],
+                                      maxLines: 100,
+                                      style: getSemiBoldStyle(
+                                          color: Colors.black, fontSize: 14),
+                                    ),
+                                    AnswerBar(
+                                        answer: question.answers[i],
+                                        questionIndex: index + 1,
+                                        answerMap: widget.answerMap,
+                                        pageController: _pageController),
+                                  ],
+                                )
+                            ],
+                          ),
                     const SizedBox(
                       height: 32,
                     ),
@@ -199,13 +211,13 @@ class _ReadingQuestionPageBodyState extends State<ReadingQuestionPageBody> {
                 ),
               ),
             ),
-            isHorizontal
+            /*isHorizontal
                 ? HorizontalAnswerBar(
                     questionIndex: index + 1,
                     answerMap: widget.answerMap,
                     pageController: _pageController,
-                    question: question)
-                : Container()
+                    answer: null,)
+                : Container()*/
           ],
         );
       },
