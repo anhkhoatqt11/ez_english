@@ -74,5 +74,12 @@
     "audio_volume": "Audio volume",
     "audio_rate": "Audio speed",
     "auto_next": "Auto next",
-    "display": "Display"
+    "display": "Display",
+    "entry_test": "Entry Test",
+    "entry_test_description_1": "You will have to do a placement test to",
+    "entry_test_description_2": "determine your English level",
+    "entry_test_description_3": "If you ready, press Start",
+    "entry_test_result": "Entry Test Result",
+    "your_level": "Your level is",
+    "ok": "OK"
 }
