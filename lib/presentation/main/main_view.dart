@@ -1,3 +1,5 @@
+import 'package:ez_english/config/constants.dart';
+import 'package:ez_english/main.dart';
 import 'package:ez_english/presentation/common/widgets/stateful/app_bottom_navigation_bar.dart';
 import 'package:ez_english/presentation/main/home/home_page.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
@@ -5,6 +7,7 @@ import 'package:ez_english/presentation/main/profile/profile_page.dart';
 import 'package:ez_english/presentation/main/test/test_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});

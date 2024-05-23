@@ -1,4 +1,9 @@
+import 'package:ez_english/dependency_injection.dart';
 import 'package:ez_english/presentation/main/main_view.dart';
+import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
+import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
+
+import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
 import 'package:ez_english/presentation/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,11 +12,8 @@ import 'package:ez_english/presentation/login/login_page.dart';
 import 'package:ez_english/presentation/register/register_page.dart';
 import 'package:ez_english/presentation/main/home/home_page.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
-import 'package:ez_english/presentation/main/practice/listening/listening_practice_page.dart';
-import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
-import 'package:ez_english/presentation/main/practice/speaking/speaking_practice_page.dart';
-import 'package:ez_english/presentation/main/practice/speaking/speaking_question_page.dart';
 
+import 'package:ez_english/presentation/main/practice/speaking/speaking_question_page.dart';
 
 class RoutesName {
   static const String splashRoute = "splash";
@@ -23,8 +25,12 @@ class RoutesName {
   static const String practiceRoute = "practice";
   static const String listeningPracticeRoute = "listening_practice";
   static const String listeningQuestionRoute = "listening_question";
+  static const String readingQuestionRoute = "reading_question";
   static const String speakingPracticeRoute = "speaking_practice";
   static const String speakingQuestionRoute = "speaking_question";
+  static const String readingPracticeRoute = "reading_practice";
+  static const String writingPracticeRoute = "writing_practice";
+  static const String skillPracticeRoute = "skill_practice";
 }
 
 class Routes {
@@ -44,14 +50,23 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const HomePage());
       case RoutesName.practiceRoute:
         return MaterialPageRoute(builder: (_) => const PracticePage());
-      case RoutesName.listeningPracticeRoute:
-        return MaterialPageRoute(builder: (_) => const ListeningPage());
+      case RoutesName.skillPracticeRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                SkillPracticePage(skill: settings.arguments as String));
       case RoutesName.listeningQuestionRoute:
-        return MaterialPageRoute(builder: (_) => const ListeningQuestionPage());
-      case RoutesName.speakingPracticeRoute:
-        return MaterialPageRoute(builder: (_) => const SpeakingPage());
-      case RoutesName.speakingQuestionRoute:
-        return MaterialPageRoute(builder: (_) => const SpeakingQuestionPage());
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => ListeningQuestionPage(
+                  part: settings.arguments as int,
+                ));
+      case RoutesName.readingQuestionRoute:
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => ReadingQuestionPage(
+                  part: settings.arguments as int,
+                ));
+
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(
