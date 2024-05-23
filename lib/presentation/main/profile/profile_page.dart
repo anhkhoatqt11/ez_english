@@ -5,6 +5,7 @@ import 'package:ez_english/config/constants.dart';
 import 'package:ez_english/config/functions.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/presentation/blocs/app_language/language_changing_cubit.dart';
+import 'package:ez_english/presentation/blocs/user_profile/user_profile_bloc.dart';
 import 'package:ez_english/presentation/common/widgets/stateful/language_picker_dialog.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:ez_english/presentation/main/profile/widgets/answer_interface_dialog.dart';
@@ -54,14 +55,15 @@ class _ProfilePageState extends State<ProfilePage> {
   AppPrefs appPrefs = GetIt.instance<AppPrefs>();
   late String _selectedLanguage;
   late String username, email, avatarUrl;
+  late UserProfileBloc _userProfileBloc;
   @override
   void initState() {
     super.initState();
+    _userProfileBloc = GetIt.instance<UserProfileBloc>();
+    print(supabase.auth.currentUser!.id);
+    _userProfileBloc.add(LoadUserProfileById(supabase.auth.currentUser!.id));
     _selectedLanguage = appPrefs.getAppLanguage() ?? DEFAULT_LANG_CODE;
-    username =
-        supabase.auth.currentUser?.userMetadata?['username'] ?? "No name";
     email = supabase.auth.currentUser?.email ?? "No email";
-    avatarUrl = supabase.auth.currentUser?.userMetadata?['avatarUrl'] ?? '';
   }
 
   @override
@@ -84,18 +86,48 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(
                 height: 24,
               ),
-              CircleAvatar(
-                radius: 111 / 2,
-                backgroundImage: NetworkImage(avatarUrl),
-                onBackgroundImageError: (exception, stackTrace) =>
-                    const AssetImage(ImagePath.errorImagePath),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(username),
-              const SizedBox(
-                height: 4,
+              BlocConsumer<UserProfileBloc, UserProfileState>(
+                bloc: _userProfileBloc,
+                listener: (context, state) {
+                  if (state is UserProfileErrorState) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        state.failure.toString(),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ));
+                  }
+                },
+                builder: (context, state) {
+                  if (state is UserProfileLoadingState) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is UserProfileLoadedState) {
+                    return Column(
+                      children: [
+                        ClipOval(
+                          child: Image.network(
+                            state.profile.avatarUrl,
+                            fit: BoxFit.cover,
+                            width: 111,
+                            height: 111,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(ImagePath.emptyAvatarPath),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(state.profile.fullName.isEmpty
+                              ? "Error name"
+                              : state.profile.fullName),
+                        ),
+                      ],
+                    );
+                  }
+                  return Container();
+                },
               ),
               Text(
                 email,

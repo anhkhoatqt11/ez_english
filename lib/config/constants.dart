@@ -2,9 +2,10 @@ const String DEFAULT_LANG_CODE = 'en';
 const skillList = ["Listening", "Speaking", "Reading", "Writing"];
 const PART_TABLE = 'part';
 const QUESTION_TABLE = 'question';
+const PROFILE_TABLE = 'profiles';
 const String emptyError = 'No data';
 const String noInternetError = 'Internet connection error!';
-const List<String> answerLetter = ["A" , "B" , "C" , "D"];
+const List<String> answerLetter = ["A", "B", "C", "D"];
 const String ListeningPart1 =
     "In this part, test-takers will listen to four short statements about a photograph presented in the test booklet. They must choose the statement that best describes the photograph. This section assesses the ability to understand simple descriptions and identify key details.";
 const String ListeningPart2 =
