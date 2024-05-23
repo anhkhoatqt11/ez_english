@@ -28,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  late final StreamSubscription<AuthState> authStateSubscription;
+  // late final StreamSubscription<AuthState> authStateSubscription;
 
   Future<void> signUp() async {
     try {
@@ -46,14 +46,14 @@ class _RegisterPageState extends State<RegisterPage> {
         throw AuthException('Sign up failed: no user returned.');
       }
 
-      authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-        final session = data.session;
-        currentSession = session!;
-      });
+      // authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      //   final session = data.session;
+      //   currentSession = session!;
+      // });
 
       await supabase
           .from("profiles")
-          .update({"full_name": usernameController.text}).eq("id", user.id);
+          .update({"full_name": usernameController.text}).eq("uuid", user.id);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -94,21 +94,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void initState() {
-    authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (redirecting) return;
-      final session = data.session;
-      if (session != null) {
-        redirecting = true;
-        Navigator.of(context).pushReplacementNamed(RoutesName.mainRoute);
-      }
-    });
     super.initState();
   }
 
   @override
   void dispose() {
     emailController.dispose();
-    authStateSubscription.cancel();
+    // authStateSubscription.cancel();
     super.dispose();
   }
 

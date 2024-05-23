@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    authStateSubscription?.cancel();
+    authStateSubscription.cancel();
     super.dispose();
   }
 
