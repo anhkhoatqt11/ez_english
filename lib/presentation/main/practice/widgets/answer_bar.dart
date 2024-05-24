@@ -11,36 +11,34 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 class AnswerBar extends StatefulWidget {
-  final int questionIndex;
-  Map<int, String> answerMap;
-  AnswerBar(
+  const AnswerBar(
       {super.key,
       required this.questionIndex,
-      required this.answerMap,
-      required this.pageController,
-      required this.answer});
-  final PageController pageController;
+      required this.answer,
+      required this.onAnswerSelected,
+      required this.selectedAnswer});
   final Answer answer;
+  final int questionIndex;
+  final ValueChanged<String> onAnswerSelected;
+  final String? selectedAnswer;
+
   @override
   _AnswerBarState createState() => _AnswerBarState();
 }
 
 class _AnswerBarState extends State<AnswerBar> {
-  Future<void> chooseAnswer(String letter, String correctLetter) async {
-    setState(() {
-      widget.answerMap[widget.questionIndex] = "$letter:$correctLetter";
-    });
-    if (GetIt.instance<AppPrefs>().getAutoChangeQuestion() ?? true) {
-      await Future.delayed(const Duration(seconds: 1));
-      widget.pageController.nextPage(
-          duration: const Duration(milliseconds: 200), curve: Curves.linear);
-    }
+  late String? selectedLetter;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedLetter = widget.selectedAnswer;
   }
 
   Color setChoiceColor(String letter) {
     Color returnColor = ColorManager.defaultChoiceColor;
-    if (widget.answerMap[widget.questionIndex] != null) {
-      String selectedLetter = widget.answerMap[widget.questionIndex]!;
+    if (selectedLetter != null) {
       String correctLetter = answerLetter[widget.answer.correctAnswer];
       if (letter == correctLetter) {
         returnColor = ColorManager.errorColor;
@@ -48,8 +46,7 @@ class _AnswerBarState extends State<AnswerBar> {
       if (letter == selectedLetter) {
         returnColor = ColorManager.primaryColor;
       }
-      if (selectedLetter == correctLetter &&
-          letter == selectedLetter) {
+      if (selectedLetter == correctLetter && letter == selectedLetter) {
         returnColor = ColorManager.correctChoiceColor;
       }
     }
@@ -57,8 +54,7 @@ class _AnswerBarState extends State<AnswerBar> {
   }
 
   Color setBorderAndTextChoice(String letter) {
-    if (widget.answerMap[widget.questionIndex] != null) {
-      String selectedLetter = widget.answerMap[widget.questionIndex]!;
+    if (selectedLetter != null) {
       String correctLetter = answerLetter[widget.answer.correctAnswer];
       if (selectedLetter == letter || letter == correctLetter) {
         return Colors.white;
@@ -67,11 +63,10 @@ class _AnswerBarState extends State<AnswerBar> {
     return Colors.black;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-      ignoring: widget.answerMap[widget.questionIndex] != null,
+      ignoring: selectedLetter != null,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -95,12 +90,15 @@ class _AnswerBarState extends State<AnswerBar> {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            chooseAnswer(answerLetter[i],
-                                answerLetter[widget.answer.correctAnswer]);
+                            setState(() {
+                              widget.onAnswerSelected.call(answerLetter[i]);
+                              selectedLetter = answerLetter[i];
+                            });
                           },
                           child: Text(answerLetter[i],
                               style: getSemiBoldStyle(
-                                  color: setBorderAndTextChoice(answerLetter[i]),
+                                  color:
+                                      setBorderAndTextChoice(answerLetter[i]),
                                   fontSize: 14)),
                         ),
                       ),
@@ -109,10 +107,10 @@ class _AnswerBarState extends State<AnswerBar> {
                       ),
                       Expanded(
                           child: Text(
-                            widget.answer.answers[i],
-                            style: getRegularStyle(color: Colors.black)
-                                .copyWith(overflow: TextOverflow.clip),
-                          ))
+                        widget.answer.answers[i],
+                        style: getRegularStyle(color: Colors.black)
+                            .copyWith(overflow: TextOverflow.clip),
+                      ))
                     ],
                   ),
                   const SizedBox(

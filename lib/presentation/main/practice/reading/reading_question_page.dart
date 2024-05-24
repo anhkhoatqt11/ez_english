@@ -90,13 +90,13 @@ class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
                 );
               }
               if (state is QuestionsByPartSuccessState) {
-                return Padding(
+                /*return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ReadingQuestionPageBody(
                     answerMap: answerMap,
                     questionList: state.questionList,
                   ),
-                );
+                );*/
               }
               return Container();
             },
@@ -195,11 +195,6 @@ class _ReadingQuestionPageBodyState extends State<ReadingQuestionPageBody> {
                                       style: getSemiBoldStyle(
                                           color: Colors.black, fontSize: 14),
                                     ),
-                                    AnswerBar(
-                                        answer: question.answers[i],
-                                        questionIndex: index + 1,
-                                        answerMap: widget.answerMap,
-                                        pageController: _pageController),
                                   ],
                                 )
                             ],

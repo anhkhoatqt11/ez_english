@@ -5,6 +5,7 @@ import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:ez_english/presentation/main/practice/widgets/answer_bar.dart';
 import 'package:ez_english/presentation/main/practice/widgets/horizontal_answer_bar.dart';
+import 'package:ez_english/presentation/main/practice/widgets/question_container.dart';
 import 'package:ez_english/presentation/main/practice/widgets/time_counter.dart';
 import 'package:ez_english/presentation/main/practice/widgets/track_bar.dart';
 import 'package:ez_english/utils/route_manager.dart';
@@ -113,22 +114,61 @@ class ListeningQuestionPageBody extends StatefulWidget {
       _ListeningQuestionPageBodyState();
 }
 
-class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
+class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody>
+    with ChangeNotifier {
   final PageController _pageController = PageController();
   final appPrefs = GetIt.instance<AppPrefs>();
   late bool isHorizontal;
+  late Map<int, String> _answers;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _answers = widget.answerMap;
     isHorizontal = appPrefs.getHorizontalAnswerBarLayout() ?? false;
+    addListener(_checkCurrentPageAnswers);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _pageController.dispose();
+    removeListener(_checkCurrentPageAnswers);
     super.dispose();
+  }
+
+  Future<void> _checkCurrentPageAnswers() async {
+    print("I'm checking !");
+    int currentIndex = _pageController.page!.round();
+    List<String?> currentPageAnswers = widget
+        .questionList[currentIndex].questions
+        .asMap()
+        .entries
+        .map((entry) =>
+            _answers[entry.key + _getQuestionStartIndex(currentIndex)])
+        .toList();
+    if (currentPageAnswers.every((answer) => answer != null)) {
+      if (currentIndex < widget.questionList.length - 1) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+        );
+      }
+    }
+  }
+
+  void _updateAnswer(int questionIndex, String answer) {
+    _answers[questionIndex] = answer;
+    notifyListeners();
+  }
+
+  int _getQuestionStartIndex(int pageIndex) {
+    int startIndex = 0;
+    for (int i = 0; i < pageIndex; i++) {
+      startIndex += widget.questionList[i].questions.length;
+    }
+    return startIndex;
   }
 
   @override
@@ -138,6 +178,7 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
       itemCount: widget.questionList.length,
       itemBuilder: (context, index) {
         Question question = widget.questionList[index];
+        int questionStartIndex = _getQuestionStartIndex(index);
         return Column(
           children: [
             Expanded(
@@ -145,26 +186,16 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            '${AppLocalizations.of(context)!.question} ${index + 1}',
-                            style: getSemiBoldStyle(
-                                color: Colors.black, fontSize: 14)),
-                        FilledButton(
-                          onPressed: () {
-                            showExplanation(
-                                question.answers.first.explanation ??
-                                    AppLocalizations.of(context)!
-                                        .not_update_yet,
-                                context);
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.explanation,
-                          ),
-                        )
-                      ],
+                    FilledButton(
+                      onPressed: () {
+                        showExplanation(
+                            question.answers.first.explanation ??
+                                AppLocalizations.of(context)!.not_update_yet,
+                            context);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.explanation,
+                      ),
                     ),
                     const SizedBox(
                       height: 8,
@@ -195,45 +226,26 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody> {
                                 borderRadius: BorderRadius.circular(8)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                for (int i = 0;
-                                    i < question.questions.length;
-                                    i++)
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      RichText(
-                                        text: TextSpan(
-                                            style: getSemiBoldStyle(
-                                                color: Colors.black,
-                                                fontSize: 16),
-                                            children: [
-                                              TextSpan(
-                                                  text:
-                                                      "${AppLocalizations.of(context)!.question} ${i + 1} : "),
-                                              TextSpan(
-                                                text: question.questions[i],
-                                              )
-                                            ]),
-                                        maxLines: 100,
-                                      ),
-                                      AnswerBar(
-                                          answer: question.answers[i],
-                                          questionIndex: index + 1,
-                                          answerMap: widget.answerMap,
-                                          pageController: _pageController),
-                                      const Divider(
-                                        color: Colors.black,
-                                        thickness: 1,
-                                        indent: 4,
-                                        endIndent: 4,
-                                      )
-                                    ],
-                                  )
-                              ],
-                            ),
-                          ),
+                              children: question.questions
+                                  .asMap()
+                                  .entries
+                                  .map((entry) {
+                                int questionIndex =
+                                    entry.key + questionStartIndex;
+                                String questionText = entry.value;
+                                String? selectedAnswer =
+                                    _answers[questionIndex];
+                                return QuestionContainer(
+                                  answer: question.answers[entry.key],
+                                  questionText: questionText,
+                                  selectedAnswer: selectedAnswer,
+                                  questionIndex: questionIndex,
+                                  onAnswerSelected: (answer) {
+                                    _updateAnswer(questionIndex, answer);
+                                  },
+                                );
+                              }).toList(),
+                            )),
                   ],
                 ),
               ),

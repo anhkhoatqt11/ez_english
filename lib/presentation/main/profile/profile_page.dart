@@ -60,7 +60,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _userProfileBloc = GetIt.instance<UserProfileBloc>();
-    print(supabase.auth.currentUser!.id);
     _userProfileBloc.add(LoadUserProfileById(supabase.auth.currentUser!.id));
     _selectedLanguage = appPrefs.getAppLanguage() ?? DEFAULT_LANG_CODE;
     email = supabase.auth.currentUser?.email ?? "No email";
