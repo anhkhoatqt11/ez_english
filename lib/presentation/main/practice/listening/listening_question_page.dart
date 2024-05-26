@@ -231,7 +231,7 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody>
                                   .entries
                                   .map((entry) {
                                 int questionIndex =
-                                    entry.key + questionStartIndex;
+                                    entry.key + questionStartIndex + 1;
                                 String questionText = entry.value;
                                 String? selectedAnswer =
                                     _answers[questionIndex];
@@ -250,13 +250,12 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody>
                 ),
               ),
             ),
-            /*isHorizontal
-                ? HorizontalAnswerBar(
-                    questionIndex: index + 1,
-                    answerMap: widget.answerMap,
-                    pageController: _pageController,
-                    question: question)
-                : Container()*/
+            /*HorizontalAnswerBar(
+              questionIndex: index + 1,
+              answerMap: widget.answerMap,
+              pageController: _pageController,
+              question: question,
+            )*/
           ],
         );
       },

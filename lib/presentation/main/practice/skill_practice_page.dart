@@ -176,11 +176,9 @@ class SkillPracticeItem extends StatelessWidget {
       onTap: () {
         switch (part.skill) {
           case "Listening":
-            Navigator.pushNamed(context, RoutesName.partInfoRoute,
-                arguments: [false, part]);
           case "Reading":
-            Navigator.pushNamed(context, RoutesName.readingQuestionRoute,
-                arguments: part);
+            Navigator.pushNamed(context, RoutesName.partInfoRoute,
+                arguments: [true, part]);
           case "Speaking":
             break;
           case "Writing":
