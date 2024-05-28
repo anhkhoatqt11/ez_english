@@ -1,9 +1,11 @@
 import 'package:ez_english/dependency_injection.dart';
+import 'package:ez_english/presentation/entry_test/entry_test.dart';
+import 'package:ez_english/presentation/entry_test/entry_test_introduction.dart';
+import 'package:ez_english/presentation/entry_test/entry_test_result.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/main/main_view.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
-
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
 import 'package:ez_english/presentation/part_info/part_info_page.dart';
@@ -15,7 +17,6 @@ import 'package:ez_english/presentation/login/login_page.dart';
 import 'package:ez_english/presentation/register/register_page.dart';
 import 'package:ez_english/presentation/main/home/home_page.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
-
 import 'package:ez_english/presentation/main/practice/speaking/speaking_question_page.dart';
 
 class RoutesName {
@@ -34,6 +35,9 @@ class RoutesName {
   static const String readingPracticeRoute = "reading_practice";
   static const String writingPracticeRoute = "writing_practice";
   static const String skillPracticeRoute = "skill_practice";
+  static const String entryTestIntroductionRoute = "entry_test_introduction";
+  static const String entryTestRoute = "entry_test";
+  static const String entryTestResultRoute = "entry_test_result";
   static const String resultPracticeRoute = "result_practice";
   static const String partInfoRoute = "part_info";
 }
@@ -87,7 +91,15 @@ class Routes {
                   part: arguments[0],
                   timeLimit: arguments[1],
                 ));
-
+      case RoutesName.entryTestIntroductionRoute:
+        return MaterialPageRoute(
+            builder: (_) => const EntryTestIntroductionPage());
+      case RoutesName.entryTestRoute:
+        return MaterialPageRoute(builder: (_) => const EntryTestPage());
+      case RoutesName.entryTestResultRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                EntryTestResultPage(level: settings.arguments as String));
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

@@ -22,6 +22,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   bool redirecting = false;
+  late Session? currentSession;
+  int levelID = 0;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -37,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       );
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -47,10 +50,23 @@ class _LoginPageState extends State<LoginPage> {
         passwordController.clear();
       }
     } on AuthException catch (error) {
-      SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.message),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An unexpected error occurred: $error'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -65,17 +81,57 @@ class _LoginPageState extends State<LoginPage> {
     authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
       if (redirecting) return;
       final session = data.session;
+      currentSession = session;
+
       if (session != null) {
-        redirecting = true;
-        Navigator.of(context).pushReplacementNamed(RoutesName.mainRoute);
+        fetchUserLevelID();
       }
     });
     super.initState();
   }
 
+  Future<void> fetchUserLevelID() async {
+    try {
+      final response = await supabase
+          .from("profiles")
+          .select("level_id")
+          .eq("uuid", currentSession?.user?.id as Object);
+
+      if (response == null || response.isEmpty) {
+        // Handle case where response is null or empty
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed(RoutesName.entryTestIntroductionRoute);
+        }
+      } else {
+        final levelId = response[0]['level_id'];
+        if (levelId == null) {
+          if (mounted) {
+            Navigator.of(context)
+                .pushReplacementNamed(RoutesName.entryTestIntroductionRoute);
+          }
+        } else {
+          if (mounted) {
+            Navigator.of(context).pushReplacementNamed(RoutesName.mainRoute);
+          }
+        }
+      }
+    } catch (error) {
+      print('Error fetching user level ID: $error');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An error occurred while fetching user level ID.'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   void dispose() {
     emailController.dispose();
+    passwordController.dispose();
     authStateSubscription.cancel();
     super.dispose();
   }
