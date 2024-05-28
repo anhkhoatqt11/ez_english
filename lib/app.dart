@@ -1,6 +1,8 @@
 import 'package:ez_english/app_prefs.dart';
 import 'package:ez_english/config/constants.dart';
 import 'package:ez_english/config/theme.dart';
+import 'package:ez_english/data/data_source/profile_remote_datasource.dart';
+import 'package:ez_english/main.dart';
 import 'package:ez_english/presentation/blocs/app_language/language_changing_cubit.dart';
 import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter/material.dart';

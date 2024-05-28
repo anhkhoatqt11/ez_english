@@ -170,11 +170,9 @@ class SkillPracticeItem extends StatelessWidget {
       onTap: () {
         switch (part.skill) {
           case "Listening":
-            Navigator.pushNamed(context, RoutesName.listeningQuestionRoute,
-                arguments: part.index);
           case "Reading":
-            Navigator.pushNamed(context, RoutesName.readingQuestionRoute,
-                arguments: part.index);
+            Navigator.pushNamed(context, RoutesName.partInfoRoute,
+                arguments: [true, part]);
           case "Speaking":
             break;
           case "Writing":
@@ -232,33 +230,6 @@ class SkillPracticeItem extends StatelessWidget {
                       ),
                     ])
               ]),
-              const SizedBox(height: 17),
-              Row(
-                children: <Widget>[
-                  const SizedBox(width: 20),
-                  Text(
-                    AppLocalizations.of(context)!.progress,
-                    style: getLightStyle(color: Colors.black, fontSize: 8),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                      width: 246,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: ColorManager.secondaryColor,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: const LinearProgressIndicator(
-                          value: 0.5,
-                          backgroundColor: Colors.transparent,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              ColorManager.primaryColor),
-                        ),
-                      ))
-                ],
-              )
             ],
           ),
         ),

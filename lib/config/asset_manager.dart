@@ -21,4 +21,5 @@ class ImagePath {
   static const String horizontalAnswerPath = '$_imagePath/horizontal.png';
   static const String verticalAnswerPath = '$_imagePath/vertical.png';
   static const String errorImagePath = '$_imagePath/error_img.png';
+  static const String emptyAvatarPath = '$_imagePath/empty_avt.png';
 }
