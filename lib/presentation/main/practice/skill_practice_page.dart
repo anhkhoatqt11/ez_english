@@ -46,17 +46,11 @@ class _SkillPracticePageState extends State<SkillPracticePage> {
         titleAppBar = AppLocalizations.of(context)!.speaking;
         titlePage = AppLocalizations.of(context)!.speaking_practice;
         partList = [
-          PartObject(1, AppLocalizations.of(context)!.read_aloud, widget.skill),
+          PartObject(1, AppLocalizations.of(context)!.read_aloud_word, widget.skill),
           PartObject(
               2, AppLocalizations.of(context)!.describe_picture, widget.skill),
           PartObject(
-              3, AppLocalizations.of(context)!.respond_questions, widget.skill),
-          PartObject(
-              4,
-              AppLocalizations.of(context)!.respond_questions_infor_provided,
-              widget.skill),
-          PartObject(
-              5, AppLocalizations.of(context)!.express_opinion, widget.skill),
+              3, AppLocalizations.of(context)!.pronounce_audio, widget.skill),          
         ];
         break;
       case "Reading":
