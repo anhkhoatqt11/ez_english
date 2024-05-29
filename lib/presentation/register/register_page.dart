@@ -22,12 +22,13 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   bool isLoading = false;
   bool redirecting = false;
+  late Session currentSession;
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  late final StreamSubscription<AuthState> authStateSubscription;
+  // late final StreamSubscription<AuthState> authStateSubscription;
 
   Future<void> signUp() async {
     try {
@@ -35,10 +36,24 @@ class _RegisterPageState extends State<RegisterPage> {
         isLoading = true;
       });
 
-      await supabase.auth.signUp(
+      final response = await supabase.auth.signUp(
         email: emailController.text,
         password: passwordController.text,
       );
+
+      final user = response.user;
+      if (user == null) {
+        throw AuthException('Sign up failed: no user returned.');
+      }
+
+      // authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      //   final session = data.session;
+      //   currentSession = session!;
+      // });
+
+      await supabase
+          .from("profiles")
+          .update({"full_name": usernameController.text}).eq("uuid", user.id);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -51,10 +66,23 @@ class _RegisterPageState extends State<RegisterPage> {
         Navigator.of(context).pushReplacementNamed(RoutesName.loginRoute);
       }
     } on AuthException catch (error) {
-      SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.message),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An unexpected error occurred: $error'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -66,21 +94,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void initState() {
-    authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (redirecting) return;
-      final session = data.session;
-      if (session != null) {
-        redirecting = true;
-        Navigator.of(context).pushReplacementNamed(RoutesName.mainRoute);
-      }
-    });
     super.initState();
   }
 
   @override
   void dispose() {
     emailController.dispose();
-    authStateSubscription.cancel();
+    // authStateSubscription.cancel();
     super.dispose();
   }
 
@@ -140,13 +160,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 40), // Added SizedBox for spacing
-                // CommonTextInput(
-                //   controller: usernameController,
-                //   text: AppLocalizations.of(context)!.enter_username,
-                //   obsucure: false,
-                //   textInputType: TextInputType.text,
-                // ),
-                // const SizedBox(height: 20),
+                CommonTextInput(
+                  controller: usernameController,
+                  text: AppLocalizations.of(context)!.enter_username,
+                  obsucure: false,
+                  textInputType: TextInputType.text,
+                ),
+                const SizedBox(height: 20),
                 CommonTextInput(
                   controller: emailController,
                   text: AppLocalizations.of(context)!.enter_email,

@@ -1,9 +1,15 @@
 import 'package:ez_english/dependency_injection.dart';
+import 'package:ez_english/presentation/entry_test/entry_test.dart';
+import 'package:ez_english/presentation/entry_test/entry_test_introduction.dart';
+import 'package:ez_english/presentation/entry_test/entry_test_result.dart';
+import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/main/main_view.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
+import 'package:ez_english/presentation/part_info/part_info_page.dart';
+import 'package:ez_english/presentation/result/result_page.dart';
 import 'package:ez_english/presentation/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +39,11 @@ class RoutesName {
   static const String skillPracticeRoute = "skill_practice";
   static const String tipDetailRoute = "tip_detail";
   static const String newTipRoute = "new_tip";
+  static const String entryTestIntroductionRoute = "entry_test_introduction";
+  static const String entryTestRoute = "entry_test";
+  static const String entryTestResultRoute = "entry_test_result";
+  static const String resultPracticeRoute = "result_practice";
+  static const String partInfoRoute = "part_info";
 }
 
 class Routes {
@@ -52,21 +63,37 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const HomePage());
       case RoutesName.practiceRoute:
         return MaterialPageRoute(builder: (_) => const PracticePage());
+      case RoutesName.partInfoRoute:
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => PartInfoPage(
+                isPractice: arguments[0], partObject: arguments[1]));
+      case RoutesName.resultPracticeRoute:
+        List<Object> arguments = settings.arguments as List<Object>;
+        return MaterialPageRoute(
+            builder: (_) => ResultPage(
+                  answerMap: arguments[0] as Map<int, String>,
+                  part: arguments[1] as PartObject,
+                ));
       case RoutesName.skillPracticeRoute:
         return MaterialPageRoute(
             builder: (_) =>
                 SkillPracticePage(skill: settings.arguments as String));
       case RoutesName.listeningQuestionRoute:
         initQuestionPageModule();
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
         return MaterialPageRoute(
             builder: (_) => ListeningQuestionPage(
-                  part: settings.arguments as int,
+                  part: arguments[0],
+                  timeLimit: arguments[1],
                 ));
       case RoutesName.readingQuestionRoute:
         initQuestionPageModule();
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
         return MaterialPageRoute(
             builder: (_) => ReadingQuestionPage(
-                  part: settings.arguments as int,
+                  part: arguments[0],
+                  timeLimit: arguments[1],
                 ));
       case RoutesName.speakingQuestionRoute:
         initQuestionPageModule();
@@ -83,6 +110,15 @@ class Routes {
                 ));
       case RoutesName.newTipRoute:
         return MaterialPageRoute(builder: (_) => const NewTipPage());
+      case RoutesName.entryTestIntroductionRoute:
+        return MaterialPageRoute(
+            builder: (_) => const EntryTestIntroductionPage());
+      case RoutesName.entryTestRoute:
+        return MaterialPageRoute(builder: (_) => const EntryTestPage());
+      case RoutesName.entryTestResultRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                EntryTestResultPage(level: settings.arguments as String));
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(
