@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:ez_english/presentation/login/login_page.dart';
 import 'package:ez_english/presentation/register/register_page.dart';
 import 'package:ez_english/presentation/main/home/home_page.dart';
+import 'package:ez_english/presentation/main/home/tip/tip_detail.dart';
+import 'package:ez_english/presentation/main/home/tip/new_tip_page.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
 import 'package:ez_english/presentation/main/practice/speaking/speaking_question_page.dart';
 
@@ -35,6 +37,8 @@ class RoutesName {
   static const String readingPracticeRoute = "reading_practice";
   static const String writingPracticeRoute = "writing_practice";
   static const String skillPracticeRoute = "skill_practice";
+  static const String tipDetailRoute = "tip_detail";
+  static const String newTipRoute = "new_tip";
   static const String entryTestIntroductionRoute = "entry_test_introduction";
   static const String entryTestRoute = "entry_test";
   static const String entryTestResultRoute = "entry_test_result";
@@ -91,6 +95,21 @@ class Routes {
                   part: arguments[0],
                   timeLimit: arguments[1],
                 ));
+      case RoutesName.speakingQuestionRoute:
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => SpeakingQuestionPage(
+                  part: settings.arguments as int,
+                ));
+      case RoutesName.tipDetailRoute:
+        initQuestionPageModule();
+        return MaterialPageRoute(
+            builder: (_) => TipDetail(
+                title: (settings.arguments as Map)['title'],
+                content: (settings.arguments as Map)['content']
+                ));
+      case RoutesName.newTipRoute:
+        return MaterialPageRoute(builder: (_) => const NewTipPage());
       case RoutesName.entryTestIntroductionRoute:
         return MaterialPageRoute(
             builder: (_) => const EntryTestIntroductionPage());

@@ -10,6 +10,7 @@ import 'package:ez_english/presentation/main/practice/widgets/time_counter.dart'
 import 'package:ez_english/presentation/main/practice/widgets/track_bar.dart';
 import 'package:ez_english/main.dart';
 import 'package:ez_english/utils/route_manager.dart';
+import 'package:flutter_tts/flutter_tts.dart';  
 
 class SpeakingQuestion {
   final int id;
@@ -30,11 +31,21 @@ class SpeakingQuestion {
 }
 
 Future<void> insertHistoryRecord(String skill, int part) async {
-  supabase.from('history').insert({
-    'skill': skill,
-    'part': part,
-    'by_uuid': supabase.auth.currentUser?.id,
-  });
+
+  final response = 
+    await supabase.
+    from('history').
+    select().
+    match({'skill': skill, 'part': part, 'by_uuid': supabase.auth.currentUser!.id});
+
+  if (response.isEmpty) {
+    await supabase.
+    from('history').
+    insert({
+      'skill': skill,
+      'part': part,
+    });
+  } 
 }
 
 class SpeakingQuestionPage extends StatefulWidget {
@@ -60,10 +71,8 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _future = supabase.from("speaking_question").select().eq("part_id", widget.part);
-
     return FutureBuilder(
-      future: _future,
+      future: supabase.from("speaking_question").select().eq("part_id", widget.part),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
@@ -78,8 +87,8 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
                     Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
-                  onTap: () {
-                    insertHistoryRecord('Speaking', widget.part);
+                  onTap: () async {
+                    await insertHistoryRecord('Speaking', widget.part);
                     Navigator.pushNamed(
                       context, RoutesName.skillPracticeRoute, 
                       arguments: 'Speaking'
@@ -113,17 +122,27 @@ class SpeakingQuestionPageBody extends StatefulWidget {
   _SpeakingQuestionPageBodyState createState() => _SpeakingQuestionPageBodyState();
 }
 
+
 class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
-  int _currentRecordingIndex = 0;
+  int _currentRecordingState = 0;
   final SpeechToText _speechToText = SpeechToText();
   String _lastWords = '';
   final PageController _pageController = PageController();
-  String _answer = '';
+  String _answer = ''; 
+  List<bool> isCorrectList = [];
+  FlutterTts flutterTts = FlutterTts();
 
   @override
   void initState() {
     super.initState();
-    _initSpeech();
+    for (int i = 0; i < widget.questionList.length; i++) {
+      isCorrectList.add(false);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _initSpeech() async {   
@@ -137,13 +156,22 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
     setState(() {});
   }
 
+  String simplifyText(String text) {
+    return text.toLowerCase().replaceAll('-', ' ').replaceAll(RegExp(r'[^\w\s]'), '');
+  }
+
   void _stopListening() async {
     await _speechToText.stop();
     setState(() {
-      if (_lastWords.toLowerCase() == _answer.toLowerCase()) {
-        _currentRecordingIndex = 3;
-      } else {
-        _currentRecordingIndex = 2;
+
+      if (simplifyText(_lastWords) == simplifyText(_answer)) {
+        _currentRecordingState = 3;
+        isCorrectList[_pageController.page!.round()] = true;
+      } 
+      else 
+      {
+        _lastWords = '';
+        _currentRecordingState = 2;
       }
     });
   }
@@ -207,18 +235,33 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
             const SizedBox(
               height: 8,
             ),
+            FilledButton(
+              onPressed: () {
+                flutterTts.speak(_answer);
+              },
+              style: FilledButton.styleFrom(
+                fixedSize: const Size(40, 30), 
+              ),
+              child: const Icon(
+                Icons.volume_up_sharp,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             Column(
               children: <Widget>[
                 questionContent,
                 Text(_speechToText.isListening ? _lastWords : ''),
                 const SizedBox(height: 5),
-                RecordingAttribute(_currentRecordingIndex),
+                RecordingAttribute(_currentRecordingState),
                 const SizedBox(height: 20),          
                 ElevatedButton(
                   onPressed: () {
                     if (_speechToText.isNotListening) 
                     {
-                      _currentRecordingIndex = 1;
+                      _currentRecordingState = 1;
                       _startListening();
                     } 
                     else
