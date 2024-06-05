@@ -188,10 +188,7 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody>
                   children: <Widget>[
                     FilledButton(
                       onPressed: () {
-                        showExplanation(
-                            question.answers.first.explanation ??
-                                AppLocalizations.of(context)!.not_update_yet,
-                            context);
+                        showExplanation(question.answers, context);
                       },
                       child: Text(
                         AppLocalizations.of(context)!.explanation,
