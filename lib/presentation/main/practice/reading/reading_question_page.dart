@@ -24,9 +24,13 @@ import '../widgets/question_container.dart';
 
 class ReadingQuestionPage extends StatefulWidget {
   const ReadingQuestionPage(
-      {super.key, required this.part, required this.timeLimit});
+      {super.key,
+      required this.part,
+      required this.timeLimit,
+      required this.limit});
   final PartObject part;
   final Duration timeLimit;
+  final int limit;
 
   @override
   State<ReadingQuestionPage> createState() => _ReadingQuestionPageState();
@@ -41,8 +45,8 @@ class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    questionsByPartBloc.add(
-        LoadQuestions(GetQuestionsByPartObject(widget.part.index, "Reading")));
+    questionsByPartBloc.add(LoadQuestions(
+        GetQuestionsByPartObject(widget.part.index, "Reading", widget.limit)));
   }
 
   @override
@@ -135,9 +139,9 @@ class _ReadingQuestionBodyState extends State<ReadingQuestionBody>
   @override
   void dispose() {
     // TODO: implement dispose
+    super.dispose();
     _pageController.dispose();
     removeListener(_checkCurrentPageAnswers);
-    super.dispose();
   }
 
   Future<void> _checkCurrentPageAnswers() async {
