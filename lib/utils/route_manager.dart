@@ -99,15 +99,18 @@ class Routes {
                 ));
       case RoutesName.speakingQuestionRoute:
         initQuestionPageModule();
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
         return MaterialPageRoute(
             builder: (_) => SpeakingQuestionPage(
-                  part: settings.arguments as int,
+                  part: arguments[0],
+                  timeLimit: arguments[1],
+                  numOfQuestion: arguments[2],
                 ));
       case RoutesName.speakingResultRoute:
         List<dynamic> arguments = settings.arguments as List<dynamic>;
         return MaterialPageRoute(
             builder: (_) => SpeakingResultPage(
-                  isCorrectList: arguments[0] as List<bool>,
+                  isCorrectList: arguments[0] as List<Map<bool, String>>,
                   part: arguments[1] as int,
                 ));
       case RoutesName.tipDetailRoute:

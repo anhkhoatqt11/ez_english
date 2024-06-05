@@ -104,6 +104,8 @@ int getSecondEachQuestion({required String skill, int part = 0}) {
       return 27;
     case "Reading":
       return 45;
+    case "Speaking":
+      return 45;
     default:
       return 0;
   }
