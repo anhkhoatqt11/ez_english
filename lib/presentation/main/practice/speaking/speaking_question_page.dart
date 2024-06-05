@@ -11,42 +11,7 @@ import 'package:ez_english/presentation/main/practice/widgets/track_bar.dart';
 import 'package:ez_english/main.dart';
 import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter_tts/flutter_tts.dart';  
-
-class SpeakingQuestion {
-  final int id;
-  final String? answer;
-  final String? imageUrl;
-  final String? audioUrl;
-  final String? explanation;
-  final int part_id;
-
-  SpeakingQuestion({
-    required this.id,
-    this.answer,
-    this.imageUrl,
-    this.audioUrl,
-    this.explanation,
-    required this.part_id,
-  });
-}
-
-Future<void> insertHistoryRecord(String skill, int part) async {
-
-  final response = 
-    await supabase.
-    from('history').
-    select().
-    match({'skill': skill, 'part': part, 'by_uuid': supabase.auth.currentUser!.id});
-
-  if (response.isEmpty) {
-    await supabase.
-    from('history').
-    insert({
-      'skill': skill,
-      'part': part,
-    });
-  } 
-}
+import '../../../../config/functions.dart';
 
 class SpeakingQuestionPage extends StatefulWidget {
   final int part;
@@ -87,8 +52,7 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
                     Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
-                  onTap: () async {
-                    await insertHistoryRecord('Speaking', widget.part);
+                  onTap: () {
                     Navigator.pushNamed(
                       context, RoutesName.skillPracticeRoute, 
                       arguments: 'Speaking'
@@ -102,6 +66,7 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: SpeakingQuestionPageBody(
                     questionList: snapshot.data!,
+                    part: widget.part,
                   ),
                 ),
               ),
@@ -115,13 +80,13 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
 
 class SpeakingQuestionPageBody extends StatefulWidget {
   List<Map<String, dynamic>> questionList;
+  int part;
 
-  SpeakingQuestionPageBody({super.key, required this.questionList});
+  SpeakingQuestionPageBody({super.key, required this.questionList, required this.part});
 
   @override
   _SpeakingQuestionPageBodyState createState() => _SpeakingQuestionPageBodyState();
 }
-
 
 class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
   int _currentRecordingState = 0;
@@ -135,6 +100,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
   @override
   void initState() {
     super.initState();
+    _initSpeech();
     for (int i = 0; i < widget.questionList.length; i++) {
       isCorrectList.add(false);
     }
@@ -142,6 +108,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
 
   @override
   void dispose() {
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -162,8 +129,8 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
 
   void _stopListening() async {
     await _speechToText.stop();
-    setState(() {
 
+    setState(() {
       if (simplifyText(_lastWords) == simplifyText(_answer)) {
         _currentRecordingState = 3;
         isCorrectList[_pageController.page!.round()] = true;
@@ -172,6 +139,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
       {
         _lastWords = '';
         _currentRecordingState = 2;
+        isCorrectList[_pageController.page!.round()] = false;
       }
     });
   }
@@ -182,26 +150,6 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
     });
   }
 
-  void showExplanation(String explanation) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: FractionallySizedBox(
-            widthFactor: 1,
-            heightFactor: 0.6,
-            child: Text(
-              explanation,
-              style: getRegularStyle(color: Colors.black),
-              maxLines: 100,
-            ),
-          ),
-        );
-      }
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
@@ -209,7 +157,8 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
       itemCount: widget.questionList.length,
       itemBuilder: (context, index) {
         late Widget questionContent;
-        final question = widget.questionList[index];
+        Map<String, dynamic> question = widget.questionList[index];
+
         _answer = question['answer'] ?? '';
 
         if (question['imageUrl'] != null)
@@ -292,17 +241,22 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
             const SizedBox(height: 10),
             FilledButton(
               onPressed: () {
-                showExplanation(question['explanation'] ??
-                    AppLocalizations.of(context)!.not_update_yet);
+                showExplanation(
+                      question['explanation'] ??
+                        AppLocalizations.of(context)!.not_update_yet,
+                        context);
               },
-              child: Text(AppLocalizations.of(context)!.explanation)
+              child: Text(
+                AppLocalizations.of(context)!.explanation,
+              ),
             ),
             const SizedBox(height: 10),
             CommonButton(
               text: AppLocalizations.of(context)!.next, 
               action: () {
                 if (index == widget.questionList.length - 1) {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, RoutesName.speakingResultRoute,
+                  arguments: [isCorrectList, widget.part]);
                 } else {
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

@@ -20,6 +20,7 @@ import 'package:ez_english/presentation/main/home/tip/tip_detail.dart';
 import 'package:ez_english/presentation/main/home/tip/new_tip_page.dart';
 import 'package:ez_english/presentation/main/practice/practice_page.dart';
 import 'package:ez_english/presentation/main/practice/speaking/speaking_question_page.dart';
+import 'package:ez_english/presentation/main/practice/speaking/speaking_result_page.dart';
 
 class RoutesName {
   static const String splashRoute = "splash";
@@ -44,6 +45,7 @@ class RoutesName {
   static const String entryTestResultRoute = "entry_test_result";
   static const String resultPracticeRoute = "result_practice";
   static const String partInfoRoute = "part_info";
+  static const String speakingResultRoute = "speaking_result";
 }
 
 class Routes {
@@ -100,6 +102,13 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) => SpeakingQuestionPage(
                   part: settings.arguments as int,
+                ));
+      case RoutesName.speakingResultRoute:
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => SpeakingResultPage(
+                  isCorrectList: arguments[0] as List<bool>,
+                  part: arguments[1] as int,
                 ));
       case RoutesName.tipDetailRoute:
         initQuestionPageModule();
