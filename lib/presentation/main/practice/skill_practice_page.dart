@@ -46,11 +46,12 @@ class _SkillPracticePageState extends State<SkillPracticePage> {
         titleAppBar = AppLocalizations.of(context)!.speaking;
         titlePage = AppLocalizations.of(context)!.speaking_practice;
         partList = [
-          PartObject(1, AppLocalizations.of(context)!.read_aloud_word, widget.skill),
+          PartObject(
+              1, AppLocalizations.of(context)!.read_aloud_word, widget.skill),
           PartObject(
               2, AppLocalizations.of(context)!.describe_picture, widget.skill),
           PartObject(
-              3, AppLocalizations.of(context)!.pronounce_audio, widget.skill),          
+              3, AppLocalizations.of(context)!.pronounce_audio, widget.skill),
         ];
         break;
       case "Reading":
@@ -171,12 +172,12 @@ class SkillPracticeItem extends StatelessWidget {
         switch (part.skill) {
           case "Listening":
           case "Reading":
+          case "Speaking":
             Navigator.pushNamed(context, RoutesName.partInfoRoute,
                 arguments: [true, part]);
           case "Speaking":
             Navigator.pushNamed(context, RoutesName.partInfoRoute,
                 arguments: [true, part]);
-            break;
           case "Writing":
             break;
         }

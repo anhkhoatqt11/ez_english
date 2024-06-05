@@ -113,7 +113,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 111,
                             height: 111,
                             errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(ImagePath.emptyAvatarPath),
+                                Image.asset(
+                              ImagePath.emptyAvatarPath,
+                              width: 111,
+                              height: 111,
+                            ),
                           ),
                         ),
                         Padding(

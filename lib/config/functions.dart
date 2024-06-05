@@ -1,5 +1,7 @@
 import 'package:ez_english/config/constants.dart';
 import 'package:ez_english/config/style_manager.dart';
+import 'package:ez_english/domain/model/answer.dart';
+import 'package:ez_english/presentation/main/practice/widgets/explanation_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -23,22 +25,11 @@ Future<T?> showAnimatedDialog1<T extends Object?>(
   );
 }
 
-void showExplanation(String explanation, BuildContext context) {
+void showExplanation(List<Answer> answerList, BuildContext context) {
   showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: FractionallySizedBox(
-            widthFactor: 1,
-            heightFactor: 0.6,
-            child: Text(
-              explanation,
-              style: getRegularStyle(color: Colors.black),
-              maxLines: 100,
-            ),
-          ),
-        );
+        return ExplanationBottomSheet(answerList);
       });
 }
 

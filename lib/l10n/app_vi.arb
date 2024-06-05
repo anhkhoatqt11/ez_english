@@ -81,13 +81,12 @@
     "title": "Tiêu đề",
     "content": "Nội dung",
     "entry_test": "Kiểm tra đầu vào",
-    "entry_test_description_1" : "Bạn sẽ cần phải thực hiện bài kiểm tra đầu vào để",
-    "entry_test_description_2" : "đánh giá trình độ tiếng Anh của bạn",
-    "entry_test_description_3" : "Nếu bạn đã sẵn sàng, hãy ấn Bắt đầu",
+    "entry_test_description_1": "Bạn sẽ cần phải thực hiện bài kiểm tra đầu vào để",
+    "entry_test_description_2": "đánh giá trình độ tiếng Anh của bạn",
+    "entry_test_description_3": "Nếu bạn đã sẵn sàng, hãy ấn Bắt đầu",
     "entry_test_result": "Kết quả kiểm tra đầu vào",
     "your_level": "Trình độ tiếng Anh của bạn là",
     "ok": "OK",
-    "display": "Hiển thị",
     "complete_practice": "Bạn đã hoàn thành bài luyện tập",
     "good_luck": "Chúc bạn thành công !",
     "error_list": "Danh sách những câu hỏi sai",
@@ -97,5 +96,7 @@
     "submit": "Nộp bài",
     "test_mode": "Kiểm tra",
     "num_of_questions": "Số câu hỏi",
-    "start_now" : "Bắt đầu ngay"
+    "start_now": "Bắt đầu ngay",
+    "forget_password": "Quên mật khẩu",
+    "forget_password_description": "Nhập email của bạn để lấy lại mật khẩu"
 }

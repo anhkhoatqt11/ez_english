@@ -1,20 +1,25 @@
-import 'package:json_annotation/json_annotation.dart';
-part 'answer_response.g.dart';
-
-
-
-@JsonSerializable()
 class AnswerResponse {
   List<String> answers;
   String? explanation;
-  @JsonKey(name: "correct_answer")
   int correctAnswer;
 
   AnswerResponse(this.answers, this.explanation, this.correctAnswer);
 
+  factory AnswerResponse.fromJson(Map<String, dynamic> json) {
+    return AnswerResponse(
+      (json['answers'] as List<dynamic>).map((e) {
+        return e as String;
+      }).toList(),
+      json['explanation'] as String?,
+      (json['correct_answer'] as num).toInt(),
+    );
+  }
 
-  factory AnswerResponse.fromJson(Map<String, dynamic> json) => _$AnswerResponseFromJson(json);
-
-
-  Map<String, dynamic> toJson() => _$AnswerResponseToJson(this);
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'answers': answers,
+      'explanation': explanation,
+      'correct_answer': correctAnswer,
+    };
+  }
 }

@@ -1,37 +1,54 @@
-import 'package:json_annotation/json_annotation.dart';
-part 'profile_response.g.dart';
-
-@JsonSerializable()
 class ProfileResponse {
   String uuid;
-  @JsonKey(name: "updated_at")
   DateTime updateAt;
-  @JsonKey(name: "full_name")
   String fullName;
-  @JsonKey(name: "avatar_url")
   String avatarUrl;
-  @JsonKey(name: "level")
   LevelResponse levelResponse;
 
   ProfileResponse(this.uuid, this.updateAt, this.fullName, this.avatarUrl,
       this.levelResponse);
 
-  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProfileResponseFromJson(json);
+  factory ProfileResponse.fromJson(Map<String, dynamic> json) {
+    return ProfileResponse(
+      json['uuid'] as String,
+      DateTime.parse(json['updated_at'] as String),
+      json['full_name'] as String,
+      json['avatar_url'] as String,
+      LevelResponse.fromJson(json['level']),
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$ProfileResponseToJson(this);
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'uuid': uuid,
+      'updated_at': updateAt.toIso8601String(),
+      'full_name': fullName,
+      'avatar_url': avatarUrl,
+      'level': levelResponse.toJson(),
+    };
+  }
 }
 
-@JsonSerializable()
 class LevelResponse {
-  @JsonKey(name: "level_name")
+  int levelId;
   String levelName;
   int value;
 
-  LevelResponse(this.levelName, this.value);
+  LevelResponse(this.levelId, this.levelName, this.value);
 
-  factory LevelResponse.fromJson(Map<String, dynamic> json) =>
-      _$LevelResponseFromJson(json);
+  factory LevelResponse.fromJson(Map<String, dynamic> json) {
+    return LevelResponse(
+      (json['level_id'] as num).toInt(),
+      json['level_name'] as String,
+      (json['value'] as num).toInt(),
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$LevelResponseToJson(this);
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'level_id': levelId,
+      'level_name': levelName,
+      'value': value,
+    };
+  }
 }
