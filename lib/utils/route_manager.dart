@@ -9,6 +9,7 @@ import 'package:ez_english/presentation/main/practice/reading/reading_question_p
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
 import 'package:ez_english/presentation/part_info/part_info_page.dart';
+import 'package:ez_english/presentation/password_reset/password_reset_page.dart';
 import 'package:ez_english/presentation/result/result_page.dart';
 import 'package:ez_english/presentation/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,7 @@ class RoutesName {
   static const String splashRoute = "splash";
   static const String loginRoute = "login";
   static const String registerRoute = "register";
+  static const String passwordRecoveryRoute = "password_recovery";
   static const String mainRoute = "main";
   static const String testInformation = "testInformation";
   static const String homeRoute = "home";
@@ -55,6 +57,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case RoutesName.registerRoute:
         return MaterialPageRoute(builder: (_) => const RegisterPage());
+      case RoutesName.passwordRecoveryRoute:
+        return MaterialPageRoute(builder: (_) => const PasswordResetPage());
       case RoutesName.mainRoute:
         return MaterialPageRoute(builder: (_) => const MainView());
       case RoutesName.testInformation:
@@ -106,8 +110,7 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) => TipDetail(
                 title: (settings.arguments as Map)['title'],
-                content: (settings.arguments as Map)['content']
-                ));
+                content: (settings.arguments as Map)['content']));
       case RoutesName.newTipRoute:
         return MaterialPageRoute(builder: (_) => const NewTipPage());
       case RoutesName.entryTestIntroductionRoute:

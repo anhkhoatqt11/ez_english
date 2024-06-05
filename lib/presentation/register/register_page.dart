@@ -51,9 +51,11 @@ class _RegisterPageState extends State<RegisterPage> {
       //   currentSession = session!;
       // });
 
-      await supabase
-          .from("profiles")
-          .update({"full_name": usernameController.text}).eq("uuid", user.id);
+      await supabase.from("profiles").update({
+        "full_name": usernameController.text,
+        "avatar_url":
+            "https://txtkdxqiihbhcqrhippj.supabase.co/storage/v1/object/sign/avatars/2.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzLzIuanBnIiwiaWF0IjoxNzE3NTkzOTYwLCJleHAiOjIwMzI5NTM5NjB9.bDS1r_BnRuLDKdo5_YGhRre-pdc8aN4E_abOTwdomAA"
+      }).eq("uuid", user.id);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -182,9 +184,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 30),
                 // CommonButton(text: AppLocalizations.of(context)!.register),
-                ElevatedButton(
-                    onPressed: isLoading ? null : signUp,
-                    child: Text(AppLocalizations.of(context)!.register))
+                // ElevatedButton(
+                //     onPressed: isLoading ? null : signUp,
+                //     child: Text(AppLocalizations.of(context)!.register))
+                CommonButton(
+                  text: AppLocalizations.of(context)!.register,
+                  action: isLoading ? null : signUp,
+                )
               ],
             ),
           ),
