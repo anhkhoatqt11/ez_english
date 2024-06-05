@@ -98,5 +98,7 @@
     "submit": "Submit",
     "test_mode": "Test mode",
     "num_of_questions": "Number of questions",
-    "start_now" : "Start now"
+    "start_now" : "Start now",
+    "forget_password": "Forget Password",
+    "forget_password_description": "Enter your email to reset your password"
 }

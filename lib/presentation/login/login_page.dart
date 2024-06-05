@@ -100,7 +100,8 @@ class _LoginPageState extends State<LoginPage> {
       if (response == null || response.isEmpty) {
         // Handle case where response is null or empty
         if (mounted) {
-          Navigator.of(context).pushReplacementNamed(RoutesName.entryTestIntroductionRoute);
+          Navigator.of(context)
+              .pushReplacementNamed(RoutesName.entryTestIntroductionRoute);
         }
       } else {
         final levelId = response[0]['level_id'];
@@ -206,9 +207,13 @@ class _LoginPageState extends State<LoginPage> {
                   textInputType: TextInputType.visiblePassword,
                 ),
                 const SizedBox(height: 30),
-                ElevatedButton(
-                    onPressed: isLoading ? null : signIn,
-                    child: Text(AppLocalizations.of(context)!.login)),
+                // ElevatedButton(
+                //     onPressed: isLoading ? null : signIn,
+                //     child: Text(AppLocalizations.of(context)!.login)),
+                CommonButton(
+                  text: AppLocalizations.of(context)!.login,
+                  action: isLoading ? null : signIn,
+                )
               ],
             ),
           ),
