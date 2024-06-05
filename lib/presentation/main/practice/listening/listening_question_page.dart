@@ -24,9 +24,13 @@ import '../../../blocs/questions_by_part/questions_by_part_bloc.dart';
 
 class ListeningQuestionPage extends StatefulWidget {
   const ListeningQuestionPage(
-      {super.key, required this.part, required this.timeLimit});
+      {super.key,
+      required this.part,
+      required this.timeLimit,
+      required this.limit});
   final PartObject part;
   final Duration timeLimit;
+  final int limit;
   @override
   State<ListeningQuestionPage> createState() => _ListeningQuestionPageState();
 }
@@ -40,8 +44,8 @@ class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    questionsByPartBloc.add(LoadQuestions(
-        GetQuestionsByPartObject(widget.part.index, "Listening")));
+    questionsByPartBloc.add(LoadQuestions(GetQuestionsByPartObject(
+        widget.part.index, "Listening", widget.limit)));
   }
 
   @override

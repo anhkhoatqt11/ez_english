@@ -90,17 +90,17 @@ class Routes {
         List<dynamic> arguments = settings.arguments as List<dynamic>;
         return MaterialPageRoute(
             builder: (_) => ListeningQuestionPage(
-                  part: arguments[0],
-                  timeLimit: arguments[1],
-                ));
+                part: arguments[0],
+                timeLimit: arguments[1],
+                limit: arguments[2]));
       case RoutesName.readingQuestionRoute:
         initQuestionPageModule();
         List<dynamic> arguments = settings.arguments as List<dynamic>;
         return MaterialPageRoute(
             builder: (_) => ReadingQuestionPage(
-                  part: arguments[0],
-                  timeLimit: arguments[1],
-                ));
+                part: arguments[0],
+                timeLimit: arguments[1],
+                limit: arguments[2]));
       case RoutesName.speakingQuestionRoute:
         initQuestionPageModule();
         return MaterialPageRoute(

@@ -17,13 +17,14 @@ class QuestionRepositoryImpl implements QuestionRepository {
 
   @override
   Future<Either<Failure, List<Question>>> getQuestionByPart(
-      int part, String skill) async {
+      int part, String skill, int limit) async {
     try {
       if (await networkInfo.isConnected) {
-        List<Question> questionList = (await questionRemoteDataSouce
-                .getQuestionByPart(GetQuestionByPartRequest(part, skill)))
-            .map((e) => e.toQuestion())
-            .toList();
+        List<Question> questionList =
+            (await questionRemoteDataSouce.getQuestionByPart(
+                    GetQuestionByPartRequest(part, skill, limit)))
+                .map((e) => e.toQuestion())
+                .toList();
         return Right(questionList);
       } else {
         return Left(Failure(noInternetError));
