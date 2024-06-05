@@ -24,7 +24,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
           .eq('uuid', uuid);
       /*final response =
           await supabaseClient.from(QUESTION_TABLE).select('* ,choice(*)');*/
-      debugPrint(response.toString());
+      debugPrint(response.first.toString());
       ProfileResponse profileResponse =
           ProfileResponse.fromJson(response.first);
       return profileResponse;

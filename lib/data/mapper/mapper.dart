@@ -7,7 +7,6 @@ import 'package:ez_english/domain/model/choice.dart';
 import 'package:ez_english/domain/model/profile.dart';
 import 'package:ez_english/domain/model/question.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logging/logging.dart';
 
 import '../../domain/model/part.dart';
 
@@ -39,6 +38,6 @@ extension ProfileResponseMapper on ProfileResponse {
 
 extension LevelResponseMapper on LevelResponse {
   toLevel() {
-    return Level(levelName, value);
+    return Level(levelId, levelName, value);
   }
 }
