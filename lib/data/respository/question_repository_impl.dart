@@ -18,12 +18,6 @@ class QuestionRepositoryImpl implements QuestionRepository {
   @override
   Future<Either<Failure, List<Question>>> getQuestionByPart(
       int part, String skill) async {
-    List<Question> questionList = (await questionRemoteDataSouce
-            .getQuestionByPart(GetQuestionByPartRequest(part, skill)))
-        .map((e) => e.toQuestion())
-        .toList();
-    return Right(questionList);
-
     try {
       if (await networkInfo.isConnected) {
         List<Question> questionList = (await questionRemoteDataSouce

@@ -10,17 +10,15 @@ import 'package:get_it/get_it.dart';
 import '../../../../app_prefs.dart';
 import '../../../../config/constants.dart';
 
-class HorizontalAnswerBar extends StatefulWidget {
+/*class HorizontalAnswerBar extends StatefulWidget {
   final int questionStartIndex;
-  HorizontalAnswerBar(
+  const HorizontalAnswerBar(
       {super.key,
       required this.questionStartIndex,
-      required this.answers,
       required this.onAnswerSelected,
       required this.question});
+  final ValueChanged<int,String> onAnswerSelected;
   final Question question;
-  final ValueChanged<String> onAnswerSelected;
-  final Map<int, String> answers;
 
   @override
   _HorizontalAnswerBarState createState() => _HorizontalAnswerBarState();
@@ -141,4 +139,4 @@ class _HorizontalAnswerBarState extends State<HorizontalAnswerBar> {
       ),
     );
   }
-}
+}*/

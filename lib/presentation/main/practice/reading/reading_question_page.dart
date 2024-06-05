@@ -248,10 +248,7 @@ class _ReadingQuestionBodyState extends State<ReadingQuestionBody>
               ),
             ),
             /*HorizontalAnswerBar(
-              questionIndex: index + 1,
-              answerMap: widget.answerMap,
-              pageController: _pageController,
-              question: question,
+              onAnswerSelected: _updateAnswer,
             )*/
           ],
         );
