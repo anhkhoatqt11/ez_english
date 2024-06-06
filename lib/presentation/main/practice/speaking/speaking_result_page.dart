@@ -5,7 +5,7 @@ import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_ba
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SpeakingResultPage extends StatelessWidget {
-  final List<bool> isCorrectList;
+  final List<Map<bool, String>> isCorrectList;
   final int part;
 
   const SpeakingResultPage({required this.isCorrectList, required this.part});
@@ -35,7 +35,11 @@ class SpeakingResultPage extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   for (var i = 0; i < isCorrectList.length; i++)
-                    SpeakingResultItem(isCorrectList[i], i + 1),
+                    SpeakingResultItem(
+                      isCorrectList[i].keys.first,
+                      isCorrectList[i].values.first,
+                      i + 1
+                    ),
                 ],
               ),
             ),
@@ -47,37 +51,46 @@ class SpeakingResultPage extends StatelessWidget {
 }
 
 class SpeakingResultItem extends StatelessWidget {
-  final bool isCorrect;
-  final int questionNumber;
+  final bool _isCorrect;
+  final String _lastWords;
+  final int _questionNumber;
 
-  const SpeakingResultItem(this.isCorrect, this.questionNumber);
+  const SpeakingResultItem(this._isCorrect, this._lastWords, this._questionNumber);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(top: 16),
+      margin: const EdgeInsets.only(top: 10),
       decoration: const BoxDecoration(
         color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       child: Row(
         children: <Widget>[
-          Text(
-            '${AppLocalizations.of(context)!.question} $questionNumber',
-            style: getRegularStyle(color: Colors.black, fontSize: 14)
-          ),
-          const SizedBox(width: 8),
-          isCorrect ? 
+          _isCorrect ? 
             const Icon(
               Icons.check,
               color: Colors.green, 
-              size: 20,      
+              size: 25,      
             ) :
             const Icon(
               Icons.close,
               color: Colors.red,
-              size: 20,
+              size: 25,
             ),
+          const SizedBox(width: 8),
+          Text(
+            '${AppLocalizations.of(context)!.question} $_questionNumber',
+            style: getRegularStyle(color: Colors.black, fontSize: 18)
+          ),
+          const SizedBox(width: 20),
+          Text(
+            _lastWords,
+            style: getRegularStyle(color: Colors.black, fontSize: 18),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );

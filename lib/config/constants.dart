@@ -31,4 +31,4 @@ const String SpeakingPart1 =
 const String SpeakingPart2 =
     "Participants see a picture and have 30 seconds to prepare before describing it. This part evaluates the ability to produce spontaneous speech and describe visual information clearly and accurately.";
 const String SpeakingPart3 =
-    "Test-takers respond to three questions about familiar topics. This part assesses the ability to speak about everyday topics fluently and coherently.";
+    "Test-takers are given an audio and listen. Then repeat what they heard.";

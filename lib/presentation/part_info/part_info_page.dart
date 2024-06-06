@@ -159,7 +159,7 @@ class _PartInfoPageState extends State<PartInfoPage> {
             arguments: [widget.partObject, timeLimit, numOfQuestion]);
       case "Speaking":
         Navigator.pushNamed(context, RoutesName.speakingQuestionRoute,
-            arguments: widget.partObject.index);
+            arguments: [widget.partObject, timeLimit, numOfQuestion]);
       default:
         return;
     }

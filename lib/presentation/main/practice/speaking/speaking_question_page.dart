@@ -12,11 +12,19 @@ import 'package:ez_english/main.dart';
 import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter_tts/flutter_tts.dart';  
 import '../../../../config/functions.dart';
+import 'package:ez_english/presentation/common/objects/part_object.dart';
 
 class SpeakingQuestionPage extends StatefulWidget {
-  final int part;
+  final PartObject part;
+  final Duration timeLimit;
+  final int numOfQuestion;
 
-  const SpeakingQuestionPage({super.key, required this.part});
+  const SpeakingQuestionPage({
+    super.key, 
+    required this.part, 
+    required this.timeLimit, 
+    required this.numOfQuestion
+    });
 
   @override
   _SpeakingQuestionPageState createState() => _SpeakingQuestionPageState();
@@ -35,13 +43,27 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return FutureBuilder(
-      future: supabase.from("speaking_question").select().eq("part_id", widget.part),
+      future: supabase.from("speaking_question").select().eq('part_id', widget.part.index + 7),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }    
+        
+        if(snapshot.data!.length < widget.numOfQuestion) {
+          return Center(
+            child: Text(
+              'Not enough questions', 
+              style: getBoldStyle(color: Colors.black, fontSize: 20)
+              ));
+        }
+        
+        List<Map<String, dynamic>> questionList = [];
+        for (int i = 0; i < widget.numOfQuestion; i++) {
+          questionList.add(snapshot.data![i]);
+        }
+
         return Scaffold(
           body: Column(
             children: <Widget>[
@@ -60,13 +82,15 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
                   }
                 ),
               ),
-              const TimeCounter(timeLimit: Duration(minutes: 3)),
+              (widget.timeLimit.inSeconds > 0)
+                ? TimeCounter(timeLimit: widget.timeLimit)
+                : Container(),           
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SpeakingQuestionPageBody(
-                    questionList: snapshot.data!,
-                    part: widget.part,
+                    questionList: questionList,
+                    partIndex: widget.part.index,
                   ),
                 ),
               ),
@@ -80,9 +104,13 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
 
 class SpeakingQuestionPageBody extends StatefulWidget {
   List<Map<String, dynamic>> questionList;
-  int part;
+  int partIndex;
 
-  SpeakingQuestionPageBody({super.key, required this.questionList, required this.part});
+  SpeakingQuestionPageBody({
+    super.key, 
+    required this.questionList, 
+    required this.partIndex
+    });
 
   @override
   _SpeakingQuestionPageBodyState createState() => _SpeakingQuestionPageBodyState();
@@ -94,7 +122,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
   String _lastWords = '';
   final PageController _pageController = PageController();
   String _answer = ''; 
-  List<bool> isCorrectList = [];
+  List<Map<bool, String>> isCorrectList = [];
   FlutterTts flutterTts = FlutterTts();
 
   @override
@@ -102,7 +130,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
     super.initState();
     _initSpeech();
     for (int i = 0; i < widget.questionList.length; i++) {
-      isCorrectList.add(false);
+      isCorrectList.add({false: '...'});
     }
   }
 
@@ -133,13 +161,13 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
     setState(() {
       if (simplifyText(_lastWords) == simplifyText(_answer)) {
         _currentRecordingState = 3;
-        isCorrectList[_pageController.page!.round()] = true;
+        isCorrectList[_pageController.page!.round()] = {true: _lastWords};
       } 
       else 
       {
+        isCorrectList[_pageController.page!.round()] = {false: _lastWords};
         _lastWords = '';
         _currentRecordingState = 2;
-        isCorrectList[_pageController.page!.round()] = false;
       }
     });
   }
@@ -157,9 +185,9 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
       itemCount: widget.questionList.length,
       itemBuilder: (context, index) {
         late Widget questionContent;
-        Map<String, dynamic> question = widget.questionList[index];
+        final question = widget.questionList[index];
 
-        _answer = question['answer'] ?? '';
+        _answer = question['answer'];
 
         if (question['imageUrl'] != null)
         {
@@ -254,10 +282,14 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
             CommonButton(
               text: AppLocalizations.of(context)!.next, 
               action: () {
+                _currentRecordingState = 0;
+                _lastWords = '';
                 if (index == widget.questionList.length - 1) {
                   Navigator.pushNamed(context, RoutesName.speakingResultRoute,
-                  arguments: [isCorrectList, widget.part]);
+                  arguments: [isCorrectList, widget.partIndex]);
                 } else {
+                  _currentRecordingState = 0;
+                  _lastWords = '';
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
