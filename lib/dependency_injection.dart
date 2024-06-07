@@ -12,6 +12,7 @@ import 'package:ez_english/domain/respository/question_repository.dart';
 import 'package:ez_english/domain/respository/test_repository.dart';
 import 'package:ez_english/domain/usecase/get_all_test_categories_usecase.dart';
 import 'package:ez_english/domain/usecase/get_questions_by_part_usecase.dart';
+import 'package:ez_english/domain/usecase/get_test_questions_by_part_usecase.dart';
 import 'package:ez_english/domain/usecase/get_tests_by_category_usecase.dart';
 import 'package:ez_english/domain/usecase/get_user_profile_usecase.dart';
 import 'package:ez_english/main.dart';
@@ -90,9 +91,14 @@ initTestInfoModule() {
       () => GetTestsByCategoryUseCase(_instance()),
     );
   }
+  if (!_instance.isRegistered<GetTestQuestionsByPartUseCase>()) {
+    _instance.registerLazySingleton<GetTestQuestionsByPartUseCase>(
+      () => GetTestQuestionsByPartUseCase(_instance()),
+    );
+  }
   if (!_instance.isRegistered<TestBloc>()) {
     _instance.registerLazySingleton(
-      () => TestBloc(_instance(), _instance()),
+      () => TestBloc(_instance(), _instance(), _instance()),
     );
   }
 }

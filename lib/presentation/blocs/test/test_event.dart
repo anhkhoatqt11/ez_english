@@ -13,7 +13,8 @@ class LoadTestsByCategory extends TestEvent {
 
 class LoadTestQuestionsByPartTest extends TestEvent {
   int testId;
-  int partId;
+  int partIndex;
+  String skill;
 
-  LoadTestQuestionsByPartTest(this.testId, this.partId);
+  LoadTestQuestionsByPartTest(this.testId, this.partIndex , this.skill);
 }

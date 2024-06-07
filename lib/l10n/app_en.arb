@@ -101,5 +101,6 @@
     "start_now" : "Start now",
     "forget_password": "Forget Password",
     "forget_password_description": "Enter your email to reset your password",
-    "something_wrong": "Something wrong happened , Try again !"
+    "something_wrong": "Something wrong happened , Try again !",
+    "got_it" : "Got it !"
 }

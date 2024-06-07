@@ -60,11 +60,11 @@ class TestRepositoryImpl implements TestRepository {
 
   @override
   Future<Either<Failure, List<TestQuestion>>> getQuestionsByPartTest(
-      int testId, int partId) async {
+      int testId, int partIndex , String skill) async {
     try {
       if (await networkInfo.isConnected) {
         List<TestQuestionResponse> data =
-            (await testRemoteDatasource.getQuestionsByPartTest(testId, partId));
+            (await testRemoteDatasource.getQuestionsByPartTest(testId, partIndex , skill));
         return Right(data
             .map(
               (e) => e.toTestQuestion(),

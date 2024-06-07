@@ -4,6 +4,7 @@ import 'package:ez_english/domain/model/test.dart';
 import 'package:ez_english/domain/model/test_category.dart';
 import 'package:ez_english/presentation/blocs/test/test_bloc.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
+import 'package:ez_english/presentation/main/test/widgets/test_inherited_widget.dart';
 import 'package:ez_english/presentation/main/test/widgets/test_item.dart';
 import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,7 +66,7 @@ class _TestPageState extends State<TestPage> {
                             const SizedBox(
                               height: 8,
                             ),
-                            _buildTestList(e.testList),
+                            _buildTestList(e),
                           ],
                         ),
                       )
@@ -73,19 +74,17 @@ class _TestPageState extends State<TestPage> {
                   ),
                 );
               }
-
-              switch (state.runtimeType) {
-                case TestLoadingState:
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                case TestErrorState:
-                  return Center(
-                    child: Text(AppLocalizations.of(context)!.something_wrong),
-                  );
-                default:
-                  return Container();
+              if (state is TestCategoryLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
+              if (state is TestCategoryErrorState) {
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.something_wrong),
+                );
+              }
+              return Container();
             },
           ),
         ))
@@ -93,15 +92,17 @@ class _TestPageState extends State<TestPage> {
     );
   }
 
-  Widget _buildTestList(List<Test> testList) {
+  Widget _buildTestList(TestCategory testCategory) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       padding: EdgeInsets.zero,
-      itemCount: testList.length,
+      itemCount: testCategory.testList.length,
       itemBuilder: (context, index) {
-        return TestItem(
-          testItem: testList[index],
+        return TestInheritedWidget(
+          test: testCategory.testList[index],
+          skills: testCategory.skills,
+          child: const TestItem(),
         );
       },
     );

@@ -9,6 +9,7 @@ import 'package:ez_english/presentation/main/main_view.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
+import 'package:ez_english/presentation/main/test/taking_test_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
 import 'package:ez_english/presentation/main/test/test_list_page.dart';
 import 'package:ez_english/presentation/main/test/widgets/test_item.dart';
@@ -53,6 +54,7 @@ class RoutesName {
   static const String partInfoRoute = "part_info";
   static const String speakingResultRoute = "speaking_result";
   static const String testListRoute = "test_list";
+  static const String takingTestRoute = "taking_test";
 }
 
 class Routes {
@@ -68,6 +70,12 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const PasswordResetPage());
       case RoutesName.mainRoute:
         return MaterialPageRoute(builder: (_) => const MainView());
+      case RoutesName.takingTestRoute:
+        return MaterialPageRoute(
+            builder: (_) => TakingTestPage(
+                  testItem: (settings.arguments as List<dynamic>)[0],
+                  skills: (settings.arguments as List<dynamic>)[1],
+                ));
       case RoutesName.testListRoute:
         return MaterialPageRoute(
             builder: (_) =>
@@ -75,7 +83,8 @@ class Routes {
       case RoutesName.testInformation:
         return MaterialPageRoute(
             builder: (_) => TestInformationPage(
-                  testItem: settings.arguments as Test,
+                  testItem: (settings.arguments as List<dynamic>)[0],
+                  skills: (settings.arguments as List<dynamic>)[1],
                 ));
       case RoutesName.homeRoute:
         return MaterialPageRoute(builder: (_) => const HomePage());

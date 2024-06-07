@@ -5,6 +5,7 @@ class TestCategory {
   DateTime createdAt;
   String name;
   List<Test> testList;
+  List<String?> skills;
 
-  TestCategory(this.id, this.createdAt, this.name, this.testList);
+  TestCategory(this.id, this.createdAt, this.name, this.testList , this.skills);
 }

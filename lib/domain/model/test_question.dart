@@ -12,4 +12,11 @@ class TestQuestion {
 
   TestQuestion(this.id, this.createdAt, this.question, this.answer,
       this.imageUrl, this.audioUrl, this.testId, this.partId);
+
+  TestQuestion.empty()
+      : id = 0,
+        createdAt = DateTime.now(),
+        question = [],
+        answer = [],
+        partId = 0;
 }

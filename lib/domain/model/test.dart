@@ -12,4 +12,12 @@ class Test {
 
   Test(this.id, this.createdAt, this.name, this.description, this.time,
       this.numOfQuestions, this.levelRequirement);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Test && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

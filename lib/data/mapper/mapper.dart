@@ -44,7 +44,7 @@ extension ProfileResponseMapper on ProfileResponse {
 
 extension LevelResponseMapper on LevelResponse {
   toLevel() {
-    return Level(levelId, levelName, value);
+    return Level(levelId, levelName);
   }
 }
 
@@ -55,7 +55,7 @@ extension TestCategoryResponseMapper on TestCategoryResponse {
           (e) => e.toTest(),
         )
         .toList();
-    return TestCategory(id, createdAt, name, tests);
+    return TestCategory(id, createdAt, name, tests , [skill1?.skillType , skill2?.skillType]);
   }
 }
 

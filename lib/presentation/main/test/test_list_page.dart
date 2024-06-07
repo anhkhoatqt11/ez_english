@@ -1,6 +1,7 @@
 import 'package:ez_english/domain/model/test_category.dart';
 import 'package:ez_english/presentation/blocs/test/test_bloc.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
+import 'package:ez_english/presentation/main/test/widgets/test_inherited_widget.dart';
 import 'package:ez_english/presentation/main/test/widgets/test_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,8 +68,11 @@ class _TestListPageState extends State<TestListPage> {
                   padding: EdgeInsets.zero,
                   itemCount: state.testList.length,
                   itemBuilder: (context, index) {
-                    return TestItem(
-                      testItem: state.testList[index],
+                    return TestInheritedWidget(
+                      skills: widget.testCategory.skills,
+                      test: state.testList[index],
+                      child: const TestItem(
+                      ),
                     );
                   },
                 );

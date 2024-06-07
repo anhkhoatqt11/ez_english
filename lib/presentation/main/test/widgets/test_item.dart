@@ -1,4 +1,5 @@
 import 'package:ez_english/domain/model/test.dart';
+import 'package:ez_english/presentation/main/test/widgets/test_inherited_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../config/color_manager.dart';
@@ -6,15 +7,17 @@ import '../../../../config/style_manager.dart';
 import '../../../../utils/route_manager.dart';
 
 class TestItem extends StatelessWidget {
-  const TestItem({super.key, required this.testItem});
-  final Test testItem;
+  const TestItem({super.key});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    final testInherited = TestInheritedWidget.of(context);
+    Test testItem = testInherited!.test;
     return InkWell(
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(RoutesName.testInformation, arguments: testItem);
+        Navigator.of(context).pushNamed(RoutesName.testInformation,
+            arguments: [testItem, testInherited.skills]);
       },
       child: Card(
         surfaceTintColor: Colors.white70,

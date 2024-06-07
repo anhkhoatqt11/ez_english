@@ -13,7 +13,7 @@ abstract class TestRemoteDatasource {
   Future<List<TestCategoryResponse>> getAllTestCategories();
   Future<List<TestResponse>> getAllTestByCategory(int categoryId);
   Future<List<TestQuestionResponse>> getQuestionsByPartTest(
-      int testId, int partId);
+      int testId, int partIndex, String skill);
 }
 
 class TestRemoteDatasourceImpl implements TestRemoteDatasource {
@@ -24,9 +24,9 @@ class TestRemoteDatasourceImpl implements TestRemoteDatasource {
   @override
   Future<List<TestCategoryResponse>> getAllTestCategories() async {
     try {
-      final testCategoryResponse =
-          await supabaseClient.from('test_category').select('*');
-
+      final testCategoryResponse = await supabaseClient
+          .from('test_category')
+          .select('* , skill1:skill_id_1(*) , skill2:skill_id_2(*)');
       // Fetch tests for each category
       List<TestCategoryResponse> testCategoryList = [];
       for (final category in testCategoryResponse) {
@@ -73,13 +73,18 @@ class TestRemoteDatasourceImpl implements TestRemoteDatasource {
 
   @override
   Future<List<TestQuestionResponse>> getQuestionsByPartTest(
-      int testId, int partId) async {
+      int testId, int partIndex, String skill) async {
+    print("partIndex : $partIndex} , Skil : $skill , ${testId}");
     try {
       final response = await supabaseClient
           .from("test_question")
-          .select('*')
-          .eq('id', testId)
-          .eq('part_id', partId);
+          .select('* , part(*)')
+          .eq('test_id', testId)
+          .eq('part.part_index', partIndex)
+          .eq('part.skill', skill);
+      /*final response =
+          await supabaseClient.from("test_question").select('* , part(*)');*/
+      print(response);
       List<TestQuestionResponse> questionList = response
           .map(
             (e) => TestQuestionResponse.fromJson(e),

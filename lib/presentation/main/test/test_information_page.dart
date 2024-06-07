@@ -3,6 +3,8 @@ import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/domain/model/test.dart';
 import 'package:ez_english/presentation/blocs/test/test_bloc.dart';
+import 'package:ez_english/presentation/main/test/widgets/test_inherited_widget.dart';
+import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,8 +12,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 class TestInformationPage extends StatefulWidget {
-  const TestInformationPage({super.key, required this.testItem});
+  const TestInformationPage(
+      {super.key, required this.testItem, required this.skills});
   final Test testItem;
+  final List<String?> skills;
   @override
   _TestInformationPageState createState() {
     return _TestInformationPageState();
@@ -22,6 +26,7 @@ class _TestInformationPageState extends State<TestInformationPage> {
   @override
   void initState() {
     super.initState();
+    testItem = widget.testItem;
   }
 
   @override
@@ -29,12 +34,14 @@ class _TestInformationPageState extends State<TestInformationPage> {
     super.dispose();
   }
 
+  late Test testItem;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.testItem.name),
+        title: Text(testItem.name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -68,7 +75,10 @@ class _TestInformationPageState extends State<TestInformationPage> {
 
   InkWell _buildTakeTestButton(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, RoutesName.takingTestRoute,
+            arguments: [widget.testItem, widget.skills]);
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 4),
         height: 48,
@@ -98,14 +108,14 @@ class _TestInformationPageState extends State<TestInformationPage> {
         children: [
           _buildIconText(
               content:
-                  '${widget.testItem.numOfQuestions} ${AppLocalizations.of(context)!.questions}',
+                  '${testItem.numOfQuestions} ${AppLocalizations.of(context)!.questions}',
               iconPath: ImagePath.timerSvgPath),
           _buildIconText(
-              content: widget.testItem.levelRequirement.levelName,
+              content: testItem.levelRequirement.levelName,
               iconPath: ImagePath.testLevelSvgPath),
           _buildIconText(
               content:
-                  '${widget.testItem.time} ${AppLocalizations.of(context)!.minutes}',
+                  '${testItem.time} ${AppLocalizations.of(context)!.minutes}',
               iconPath: ImagePath.questionSvgPath),
         ],
       ),
@@ -128,7 +138,7 @@ class _TestInformationPageState extends State<TestInformationPage> {
               height: 12,
             ),
             Text(
-              widget.testItem.description,
+              testItem.description,
               maxLines: 50,
               style: getLightStyle(color: Colors.black),
             ),

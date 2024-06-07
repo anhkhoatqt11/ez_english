@@ -8,5 +8,5 @@ abstract class TestRepository {
   Future<Either<Failure, List<TestCategory>>> getAllTestCategories();
   Future<Either<Failure, List<Test>>> getAllTestByCategory(int categoryId);
   Future<Either<Failure, List<TestQuestion>>> getQuestionsByPartTest(
-      int testId, int partId);
+      int testId, int partIndex , String skill);
 }

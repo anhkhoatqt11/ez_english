@@ -40,4 +40,9 @@ class TestQuestionResponse {
       'part_id': partId,
     };
   }
+
+  @override
+  String toString() {
+    return 'TestQuestionResponse{id: $id, createdAt: $createdAt, question: $question, answer: $answer, imageUrl: $imageUrl, audioUrl: $audioUrl, testId: $testId, partId: $partId}';
+  }
 }

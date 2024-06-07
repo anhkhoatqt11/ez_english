@@ -29,15 +29,4 @@ class TestResponse {
   String toString() {
     return 'TestResponse{id: $id, createdAt: $createdAt, name: $name, description: $description, time: $time, numOfQuestions: $numOfQuestions, levelRequirement: $levelRequirement}';
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'created_at': createdAt.toIso8601String(),
-      'name': name,
-      'description': description,
-      'time': time,
-      'level_requirement': levelRequirement.toJson(),
-    };
-  }
 }

@@ -7,6 +7,8 @@ final class TestInitial extends TestState {}
 
 class CategoryState extends TestState {}
 
+class QuestionState extends TestState {}
+
 class TestLoadingState extends TestState {}
 
 class TestLoadedState extends TestState {
@@ -34,3 +36,17 @@ class TestCategoryErrorState extends CategoryState {
 }
 
 class TestCategoryLoadingState extends CategoryState {}
+
+class TestQuestionLoadingState extends QuestionState {}
+
+class TestQuestionLoadedState extends QuestionState {
+  List<TestQuestion> questionList;
+
+  TestQuestionLoadedState(this.questionList);
+}
+
+class TestQuestionErrorState extends QuestionState {
+  Failure failure;
+
+  TestQuestionErrorState(this.failure);
+}
