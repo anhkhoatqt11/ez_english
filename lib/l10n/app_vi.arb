@@ -98,5 +98,7 @@
     "num_of_questions": "Số câu hỏi",
     "start_now": "Bắt đầu ngay",
     "forget_password": "Quên mật khẩu",
-    "forget_password_description": "Nhập email của bạn để lấy lại mật khẩu"
+    "forget_password_description": "Nhập email của bạn để lấy lại mật khẩu",
+    "something_wrong": "Có lỗi xảy ra , Xin hãy thử lại sau !",
+    "got_it" : "Đã hiểu !"
 }

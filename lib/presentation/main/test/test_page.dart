@@ -1,9 +1,16 @@
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
+import 'package:ez_english/domain/model/test.dart';
+import 'package:ez_english/domain/model/test_category.dart';
+import 'package:ez_english/presentation/blocs/test/test_bloc.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
+import 'package:ez_english/presentation/main/test/widgets/test_inherited_widget.dart';
+import 'package:ez_english/presentation/main/test/widgets/test_item.dart';
 import 'package:ez_english/utils/route_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -15,9 +22,12 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+  TestBloc testBloc = GetIt.instance<TestBloc>();
+
   @override
   void initState() {
     super.initState();
+    testBloc.add(LoadTestCategory());
   }
 
   @override
@@ -34,84 +44,95 @@ class _TestPageState extends State<TestPage> {
         Expanded(
             child: Container(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 12),
-          child: Column(
-            children: [
-              _buildTestTitle(context),
-              const SizedBox(
-                height: 8,
-              ),
-              _buildTestList(),
-            ],
+          child: BlocConsumer<TestBloc, TestState>(
+            bloc: testBloc,
+            buildWhen: (previous, current) => current is CategoryState,
+            listener: (context, state) {
+              if (state is TestErrorState) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    content: Text(state.failure.toString())));
+              }
+            },
+            builder: (context, state) {
+              if (state is TestCategoryLoadedState) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ...state.testCategoryList.map(
+                        (e) => Column(
+                          children: [
+                            _buildTestTitle(context, e),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            _buildTestList(e),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }
+              if (state is TestCategoryLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is TestCategoryErrorState) {
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.something_wrong),
+                );
+              }
+              return Container();
+            },
           ),
         ))
       ],
     );
   }
 
-  Widget _buildTestList() {
-    return Expanded(
-      child: SizedBox(
-        child: ListView.builder(
-          padding: EdgeInsets.zero,
-          itemCount: 15,
-          itemBuilder: (context, index) {
-            return _buildTestItem(context);
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTestItem(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(RoutesName.testInformation);
+  Widget _buildTestList(TestCategory testCategory) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      itemCount: testCategory.testList.length,
+      itemBuilder: (context, index) {
+        return TestInheritedWidget(
+          test: testCategory.testList[index],
+          skills: testCategory.skills,
+          child: const TestItem(),
+        );
       },
-      child: Card(
-        surfaceTintColor: Colors.white70,
-        elevation: 4,
-        child: Container(
-          padding: const EdgeInsets.all(14),
-          width: MediaQuery.of(context).size.width,
-          height: 105,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Title'),
-              Text('description'),
-              const Spacer(),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: '${AppLocalizations.of(context)!.status}: ',
-                    style: getLightStyle(color: Colors.black)),
-                TextSpan(
-                    text: 'Not started',
-                    style: getLightStyle(color: ColorManager.errorColor))
-              ]))
-            ],
-          ),
-        ),
-      ),
     );
   }
 
-  Row _buildTestTitle(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          child: Text(
-            'TOEIC Listening & Reading Fulltest | 50',
-            style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
+  Widget _buildTestTitle(BuildContext context, TestCategory testCategory) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Text(
+              testCategory.name,
+              style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
+            ),
           ),
-        ),
-        Text(AppLocalizations.of(context)!.see_more,
-            style:
-                getSemiBoldStyle(color: ColorManager.primaryColor, fontSize: 10)
-                    .copyWith(decoration: TextDecoration.underline))
-      ],
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, RoutesName.testListRoute,
+                  arguments: testCategory);
+            },
+            child: Text(AppLocalizations.of(context)!.see_more,
+                style: getSemiBoldStyle(
+                        color: ColorManager.primaryColor, fontSize: 10)
+                    .copyWith(decoration: TextDecoration.underline)),
+          )
+        ],
+      ),
     );
   }
 }

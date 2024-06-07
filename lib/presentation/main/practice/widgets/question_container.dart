@@ -13,12 +13,13 @@ class QuestionContainer extends StatelessWidget {
       required this.questionIndex,
       required this.onAnswerSelected,
       required this.answer,
-      this.selectedAnswer});
+      this.selectedAnswer , this.isTest});
   final String questionText;
   final int questionIndex;
   final ValueChanged<String> onAnswerSelected;
   final Answer answer;
   final String? selectedAnswer;
+  final bool? isTest;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -39,6 +40,7 @@ class QuestionContainer extends StatelessWidget {
           maxLines: 100,
         ),
         AnswerBar(
+          isTest: isTest,
           onAnswerSelected: onAnswerSelected,
           answer: answer,
           selectedAnswer: selectedAnswer,

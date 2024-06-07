@@ -1,6 +1,7 @@
 import 'package:ez_english/config/constants.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/domain/model/answer.dart';
+import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/main/practice/widgets/explanation_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -87,6 +88,55 @@ String getPartIntroduction(int part, String skill) {
     }
   }
   return "";
+}
+
+List<PartObject> getPartByTest(List<String?> skills, BuildContext context) {
+  List<PartObject> partList = [];
+  for (String? skillItem in skills) {
+    if (skillItem != null) {
+      switch (skillItem) {
+        case "Listening":
+          partList.addAll([
+            PartObject(1, AppLocalizations.of(context)!.photographs, skillItem),
+            PartObject(
+                2, AppLocalizations.of(context)!.question_response, skillItem),
+            PartObject(
+                3, AppLocalizations.of(context)!.conversations, skillItem),
+            PartObject(4, AppLocalizations.of(context)!.talks, skillItem),
+          ]);
+        case "Reading":
+          partList.addAll([
+            PartObject(5, AppLocalizations.of(context)!.incomplete_sentences,
+                skillItem),
+            PartObject(
+                6, AppLocalizations.of(context)!.text_completion, skillItem),
+            PartObject(7, AppLocalizations.of(context)!.reading_comprehension,
+                skillItem),
+          ]);
+        case "Writing":
+          partList.addAll([
+            PartObject(
+                1,
+                AppLocalizations.of(context)!.write_sentence_based_on_picture,
+                skillItem),
+            PartObject(2, AppLocalizations.of(context)!.respond_written_request,
+                skillItem),
+            PartObject(3, AppLocalizations.of(context)!.write_opinion_essay,
+                skillItem),
+          ]);
+        case "Speaking":
+          partList.addAll([
+            PartObject(
+                1, AppLocalizations.of(context)!.read_aloud_word, skillItem),
+            PartObject(
+                2, AppLocalizations.of(context)!.describe_picture, skillItem),
+            PartObject(
+                3, AppLocalizations.of(context)!.pronounce_audio, skillItem),
+          ]);
+      }
+    }
+  }
+  return partList;
 }
 
 int getSecondEachQuestion({required String skill, int part = 0}) {

@@ -17,38 +17,18 @@ class ProfileResponse {
       LevelResponse.fromJson(json['level']),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'uuid': uuid,
-      'updated_at': updateAt.toIso8601String(),
-      'full_name': fullName,
-      'avatar_url': avatarUrl,
-      'level': levelResponse.toJson(),
-    };
-  }
 }
 
 class LevelResponse {
   int levelId;
   String levelName;
-  int value;
 
-  LevelResponse(this.levelId, this.levelName, this.value);
+  LevelResponse(this.levelId, this.levelName);
 
   factory LevelResponse.fromJson(Map<String, dynamic> json) {
     return LevelResponse(
       (json['level_id'] as num).toInt(),
       json['level_name'] as String,
-      (json['value'] as num).toInt(),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'level_id': levelId,
-      'level_name': levelName,
-      'value': value,
-    };
   }
 }

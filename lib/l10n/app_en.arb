@@ -100,5 +100,7 @@
     "num_of_questions": "Number of questions",
     "start_now" : "Start now",
     "forget_password": "Forget Password",
-    "forget_password_description": "Enter your email to reset your password"
+    "forget_password_description": "Enter your email to reset your password",
+    "something_wrong": "Something wrong happened , Try again !",
+    "got_it" : "Got it !"
 }
