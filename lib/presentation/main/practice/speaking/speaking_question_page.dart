@@ -12,6 +12,7 @@ import 'package:ez_english/main.dart';
 import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter_tts/flutter_tts.dart';  
 import 'package:ez_english/presentation/common/objects/part_object.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class SpeakingQuestionPage extends StatefulWidget {
   final PartObject part;
@@ -225,11 +226,11 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
 
         _answer = question['answer'];
 
-        if (question['imageUrl'] != null)
+        if (question['imageUrl'] != "")
         {
           questionContent = ImageBox(question['imageUrl']);
         }
-        else if (question['audioUrl'] != null)
+        else if (question['audioUrl'] != "")
         {
           questionContent = TrackBarBox(question['audioUrl']);
           _isAudio = true;
@@ -382,18 +383,28 @@ class ImageBox extends StatelessWidget {
     return Column(
       children: <Widget>[
         const SizedBox(height: 30),
-        Container(
-          height: 255,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            image: DecorationImage(
+        CachedNetworkImage(
+          imageUrl: imageUrl,
+          imageBuilder: (context, imageProvider) => Container(
+            height: 255,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image: imageProvider,
                 fit: BoxFit.scaleDown,
-                image: NetworkImage(imageUrl)),
+              ),
+            ),
           ),
+          placeholder: (context, url) => Container(
+            height: 255,
+            width: double.infinity,
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
         const SizedBox(height: 30),
-      ]
+      ],
     );
   }
 }
