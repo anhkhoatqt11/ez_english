@@ -166,6 +166,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               ),
               _buildProfleItem(
+                content: AppLocalizations.of(context)!.progress,
+                prefixIconPath: ImagePath.statSvgPath,
+                function: () {
+                  Navigator.of(context).pushNamed(RoutesName.progressRoute);
+                },
+              ),
+              _buildProfleItem(
                 content: AppLocalizations.of(context)!.settings,
                 prefixIconPath: ImagePath.settingsSvgPath,
                 function: () {
@@ -174,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               _buildProfleItem(
                 content: AppLocalizations.of(context)!.answer_interface,
-                prefixIconPath: ImagePath.settingsSvgPath,
+                prefixIconPath: ImagePath.answerSvgPath,
                 function: () {
                   showAnimatedDialog1(context, const AnswerInterfaceDialog());
                 },
