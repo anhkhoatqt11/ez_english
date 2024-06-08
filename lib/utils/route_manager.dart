@@ -9,6 +9,7 @@ import 'package:ez_english/presentation/main/main_view.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
+import 'package:ez_english/presentation/main/profile/progress/progress_page.dart';
 import 'package:ez_english/presentation/main/test/taking_test_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
 import 'package:ez_english/presentation/main/test/test_list_page.dart';
@@ -55,6 +56,7 @@ class RoutesName {
   static const String speakingResultRoute = "speaking_result";
   static const String testListRoute = "test_list";
   static const String takingTestRoute = "taking_test";
+  static const String progressRoute = "progress";
 }
 
 class Routes {
@@ -155,6 +157,8 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) =>
                 EntryTestResultPage(level: settings.arguments as String));
+      case RoutesName.progressRoute:
+        return MaterialPageRoute(builder: (_) => const ProgressPage());
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

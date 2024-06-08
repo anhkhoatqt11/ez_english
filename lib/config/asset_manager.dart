@@ -13,13 +13,15 @@ class ImagePath {
   static const String testLevelSvgPath = '$_imagePath/test_level_ic.svg';
   static const String timerSvgPath = '$_imagePath/timer_ic.svg';
   static const String testPath = '$_imagePath/test_img.png';
-  static const String listeningSkillsPath = '$_imagePath/listening-skills.jpg';
-  static const String speakingSkillsPath = '$_imagePath/speaking-skills.jpg';
-  static const String readingSkillsPath = '$_imagePath/reading-skills.jpg';
-  static const String writingSkillsPath = '$_imagePath/writing-skills.jpg';
+  static const String listeningSkillsPath = '$_imagePath/ListeningIcon.png';
+  static const String speakingSkillsPath = '$_imagePath/SpeakingIcon.png';
+  static const String readingSkillsPath = '$_imagePath/ReadingIcon.png';
+  static const String writingSkillsPath = '$_imagePath/WritingIcon.png';
   static const String forward5Path = '$_imagePath/forward_5_ic.svg';
   static const String horizontalAnswerPath = '$_imagePath/horizontal.png';
   static const String verticalAnswerPath = '$_imagePath/vertical.png';
   static const String errorImagePath = '$_imagePath/error_img.png';
   static const String emptyAvatarPath = '$_imagePath/empty_avt.png';
+  static const String statSvgPath = '$_imagePath/stats_ic.svg';
+  static const String answerSvgPath = '$_imagePath/ans_ic.svg';
 }

@@ -68,13 +68,13 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
         }
         final userInfor = snapshot.data!;
         switch (userInfor['level_id']) {
-          case 0:
+          case 1:
             userLevel = "Beginner";
             break;
-          case 1:
+          case 3:
             userLevel = "Intermediate";
             break;
-          case 2:
+          case 4:
             userLevel = "Advanced";
             break;
         }

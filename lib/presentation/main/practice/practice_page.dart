@@ -142,5 +142,3 @@ class _PracticeListState extends State<PracticeList> {
     );
   }
 }
-
-

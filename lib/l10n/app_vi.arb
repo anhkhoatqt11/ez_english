@@ -100,5 +100,14 @@
     "forget_password": "Quên mật khẩu",
     "forget_password_description": "Nhập email của bạn để lấy lại mật khẩu",
     "something_wrong": "Có lỗi xảy ra , Xin hãy thử lại sau !",
-    "got_it" : "Đã hiểu !"
+    "got_it": "Đã hiểu !",
+    "progress_title": "Tiến độ của bạn",
+    "progress_subtitle": "Tiến độ từ việc học của bạn",
+    "upgrade_level": "Tăng bậc mới",
+    "about_progress": "Về tiến độ",
+    "about_progress_description": "Tiến độ giúp chúng tôi đánh giá được mức độ tiến bộ của bạn trong việc học tiếng Anh. Bạn có thể tăng tiến độ bằng cách hoàn thành các bài học và bài kiểm tra.\nMốc 0 sẽ là mốc Beginner, Mốc 500 sẽ là Intermidate và Mốc 1000 sẽ là Advanced",
+    "confirm_upgrade": "Xác nhận tăng bậc",
+    "cancel": "Huỷ bỏ",
+    "confirm": "Xác nhận",
+    "upgrade_success": "Tăng bậc thành công"
 }
