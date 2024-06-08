@@ -11,7 +11,6 @@ import 'package:ez_english/presentation/main/practice/widgets/track_bar.dart';
 import 'package:ez_english/main.dart';
 import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter_tts/flutter_tts.dart';  
-import '../../../../config/functions.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 
 class SpeakingQuestionPage extends StatefulWidget {
@@ -31,9 +30,11 @@ class SpeakingQuestionPage extends StatefulWidget {
 }
 
 class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
+  late GlobalKey<_SpeakingQuestionPageBodyState> _pageBodyKey;
 
   @override
-  void initState() {
+  void initState() { // tắt phát âm khi thoát khỏi màn hình
+    _pageBodyKey = GlobalKey<_SpeakingQuestionPageBodyState>();
     super.initState();
   }
 
@@ -50,20 +51,19 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }    
-        
         if(snapshot.data!.length < widget.numOfQuestion) {
           return Center(
             child: Text(
               'Not enough questions', 
               style: getBoldStyle(color: Colors.black, fontSize: 20)
-              ));
+            )
+          );
         }
-        
+        snapshot.data!.shuffle();
         List<Map<String, dynamic>> questionList = [];
         for (int i = 0; i < widget.numOfQuestion; i++) {
           questionList.add(snapshot.data![i]);
         }
-
         return Scaffold(
           body: Column(
             children: <Widget>[
@@ -74,7 +74,8 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
                     Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
-                  onTap: () {
+                  onTap: () {           
+                    _pageBodyKey.currentState?.reset();  // tắt phát âm khi thoát khỏi màn hình
                     Navigator.pushNamed(
                       context, RoutesName.skillPracticeRoute, 
                       arguments: 'Speaking'
@@ -89,6 +90,7 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SpeakingQuestionPageBody(
+                    key: _pageBodyKey,
                     questionList: questionList,
                     partIndex: widget.part.index,
                   ),
@@ -124,6 +126,8 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
   String _answer = ''; 
   List<Map<bool, String>> isCorrectList = [];
   FlutterTts flutterTts = FlutterTts();
+  bool _isTTSSpeaking = false;
+  bool _isAudio = false;
 
   @override
   void initState() {
@@ -136,6 +140,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
 
   @override
   void dispose() {
+    _speechToText.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -178,6 +183,37 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
     });
   }
 
+  void showExplanation(String explanation) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Text(
+                AppLocalizations.of(context)!.explanation,
+                style: getBoldStyle(color: Colors.black, fontSize: 20),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                explanation,
+                style: getMediumStyle(color: Colors.black, fontSize: 16),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void reset() {
+    _currentRecordingState = 0;
+    _lastWords = '';
+    _isTTSSpeaking = false;
+    flutterTts.stop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
@@ -196,6 +232,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
         else if (question['audioUrl'] != null)
         {
           questionContent = TrackBarBox(question['audioUrl']);
+          _isAudio = true;
         }
         else
         {
@@ -212,9 +249,16 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
             const SizedBox(
               height: 8,
             ),
-            FilledButton(
+            _isAudio == false
+            ? FilledButton(
               onPressed: () {
-                flutterTts.speak(_answer);
+                if (_isTTSSpeaking) {
+                  flutterTts.stop();
+                  _isTTSSpeaking = false;
+                } else {
+                  flutterTts.speak(_answer);
+                  _isTTSSpeaking = true;
+                }
               },
               style: FilledButton.styleFrom(
                 fixedSize: const Size(40, 30), 
@@ -223,7 +267,8 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
                 Icons.volume_up_sharp,
                 color: Colors.white,
               ),
-            ),
+            )
+            : const SizedBox(height: 0),
             const SizedBox(
               height: 8,
             ),
@@ -247,12 +292,12 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
                     }
                   },        
                   style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(100, 100),
+                    fixedSize: const Size(60, 60),
                     padding: const EdgeInsets.all(0),    
                   ),
                   child: Container(
-                    height: 100,
-                    width: 100,
+                    height: 60,
+                    width: 60,
                     decoration: BoxDecoration(
                       gradient: ColorManager.linearGradientPrimary,
                       borderRadius: BorderRadius.circular(100),
@@ -260,7 +305,7 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
                     child: const Icon(
                       Icons.mic,
                       color: Colors.white,
-                      size: 80,
+                      size: 48,
                     )
                   )
                 ),
@@ -269,10 +314,9 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
             const SizedBox(height: 10),
             FilledButton(
               onPressed: () {
-                showExplanation(
-                      question['explanation'] ??
-                        AppLocalizations.of(context)!.not_update_yet,
-                        context);
+                question['explanation'] != null
+                  ? showExplanation(question['explanation'])
+                  : showExplanation(AppLocalizations.of(context)!.not_update_yet);
               },
               child: Text(
                 AppLocalizations.of(context)!.explanation,
@@ -282,14 +326,11 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
             CommonButton(
               text: AppLocalizations.of(context)!.next, 
               action: () {
-                _currentRecordingState = 0;
-                _lastWords = '';
+                reset();
                 if (index == widget.questionList.length - 1) {
                   Navigator.pushNamed(context, RoutesName.speakingResultRoute,
                   arguments: [isCorrectList, widget.partIndex]);
                 } else {
-                  _currentRecordingState = 0;
-                  _lastWords = '';
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
@@ -305,20 +346,27 @@ class _SpeakingQuestionPageBodyState extends State<SpeakingQuestionPageBody> {
 }
 
 class TextBox extends StatelessWidget {
-  final String wordsToPronounce;
+  final String text;
 
-  TextBox(this.wordsToPronounce);
+  TextBox(this.text);
 
   @override
   Widget build(BuildContext context) {
+    print(text);
     return Column(
       children: <Widget>[
-        const SizedBox(height: 150),
-        Text(
-          wordsToPronounce,
-          style: getSemiBoldStyle(color: Colors.black, fontSize: 30),
+        const SizedBox(height: 60),
+        Container(
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: Center(
+            child: Text(
+              text,
+              style: getMediumStyle(color: Colors.black, fontSize: 12),   
+              maxLines: 20,             
+            ),
+          ),
         ),
-        const SizedBox(height: 135),
+        const SizedBox(height: 60),
       ]
     );
   }
@@ -338,6 +386,7 @@ class ImageBox extends StatelessWidget {
           height: 255,
           width: double.infinity,
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
                 fit: BoxFit.scaleDown,
                 image: NetworkImage(imageUrl)),
@@ -349,18 +398,23 @@ class ImageBox extends StatelessWidget {
   }
 }
 
-class TrackBarBox extends StatelessWidget {
+class TrackBarBox extends StatefulWidget {
   final String audioUrl;
 
   TrackBarBox(this.audioUrl);
 
   @override
+  _TrackBarBoxState createState() => _TrackBarBoxState();
+}
+
+class _TrackBarBoxState extends State<TrackBarBox> {
+   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const SizedBox(height: 142),
-        TrackBar(audioUrl: audioUrl),
-        const SizedBox(height: 142),
+        const SizedBox(height: 60),
+        TrackBar(audioUrl: widget.audioUrl),
+        const SizedBox(height: 60),
       ]
     );
   }
