@@ -1,4 +1,4 @@
-const String DEFAULT_LANG_CODE = 'en';
+const String DEFAULT_LANG_CODE = 'vi';
 const skillList = ["Listening", "Speaking", "Reading", "Writing"];
 const PART_TABLE = 'part';
 const QUESTION_TABLE = 'question';

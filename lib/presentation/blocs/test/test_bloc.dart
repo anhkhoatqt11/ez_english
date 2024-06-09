@@ -26,6 +26,8 @@ class TestBloc extends Bloc<TestEvent, TestState> {
     on<LoadTestCategory>(_onLoadTestCategory);
     on<LoadTestsByCategory>(_onLoadTestByCategory);
     on<LoadTestQuestionsByPartTest>(_onLoadTestQuestionByPartTest);
+    on<PauseCounter>(_onPauseTime);
+    on<ContinueCounter>(_onContinueCounter);
   }
 
   Future<FutureOr<void>> _onLoadTestCategory(
@@ -52,5 +54,14 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       (l) => emit(TestQuestionErrorState(l)),
       (r) => emit(TestQuestionLoadedState(r)),
     );
+  }
+
+  FutureOr<void> _onPauseTime(PauseCounter event, Emitter<TestState> emit) {
+    emit(TestPauseTimeState());
+  }
+
+  FutureOr<void> _onContinueCounter(
+      ContinueCounter event, Emitter<TestState> emit) {
+    emit(TestContinueTimeState());
   }
 }

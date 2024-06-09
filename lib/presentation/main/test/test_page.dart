@@ -3,6 +3,7 @@ import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/domain/model/test.dart';
 import 'package:ez_english/domain/model/test_category.dart';
 import 'package:ez_english/presentation/blocs/test/test_bloc.dart';
+import 'package:ez_english/presentation/blocs/user_profile/user_profile_bloc.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:ez_english/presentation/main/test/widgets/test_inherited_widget.dart';
 import 'package:ez_english/presentation/main/test/widgets/test_item.dart';
@@ -23,7 +24,6 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   TestBloc testBloc = GetIt.instance<TestBloc>();
-
   @override
   void initState() {
     super.initState();

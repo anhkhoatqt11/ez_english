@@ -226,10 +226,6 @@ class SkillPracticeItem extends StatelessWidget {
                               .copyWith(overflow: TextOverflow.clip),
                         ),
                       ),
-                      Text(
-                        'correctAnswer / totalQuestion',
-                        style: getLightStyle(color: Colors.black, fontSize: 8),
-                      ),
                     ])
               ]),
             ],
