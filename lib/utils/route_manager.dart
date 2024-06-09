@@ -16,7 +16,8 @@ import 'package:ez_english/presentation/main/test/test_list_page.dart';
 import 'package:ez_english/presentation/main/test/widgets/test_item.dart';
 import 'package:ez_english/presentation/part_info/part_info_page.dart';
 import 'package:ez_english/presentation/password_reset/password_reset_page.dart';
-import 'package:ez_english/presentation/result/result_page.dart';
+import 'package:ez_english/presentation/result/result_practice_page.dart';
+import 'package:ez_english/presentation/result/result_test_page.dart';
 import 'package:ez_english/presentation/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class RoutesName {
   static const String testListRoute = "test_list";
   static const String takingTestRoute = "taking_test";
   static const String progressRoute = "progress";
+  static const String resultTestRoute = "test_result";
 }
 
 class Routes {
@@ -100,9 +102,17 @@ class Routes {
       case RoutesName.resultPracticeRoute:
         List<Object> arguments = settings.arguments as List<Object>;
         return MaterialPageRoute(
-            builder: (_) => ResultPage(
+            builder: (_) => ResultPracticePage(
+                answerMap: arguments[0] as Map<int, String>,
+                part: arguments[1] as PartObject,
+                limit: arguments[2] as int));
+      case RoutesName.resultTestRoute:
+        List<Object> arguments = settings.arguments as List<Object>;
+        return MaterialPageRoute<bool?>(
+            builder: (_) => ResultTestPage(
                   answerMap: arguments[0] as Map<int, String>,
-                  part: arguments[1] as PartObject,
+                  skills: arguments[1] as List<String?>,
+                  testItem: arguments[2] as Test,
                 ));
       case RoutesName.skillPracticeRoute:
         return MaterialPageRoute(

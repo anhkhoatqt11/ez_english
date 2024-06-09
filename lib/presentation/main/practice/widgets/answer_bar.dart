@@ -46,14 +46,14 @@ class _AnswerBarState extends State<AnswerBar> {
         if (letter == correctLetter) {
           returnColor = ColorManager.errorColor;
         }
+        if (selectedLetter == correctLetter && letter == selectedLetter) {
+          returnColor = ColorManager.correctChoiceColor;
+        }
       } else {
         returnColor = ColorManager.defaultChoiceColor;
       }
       if (letter == selectedLetter) {
         returnColor = ColorManager.primaryColor;
-      }
-      if (selectedLetter == correctLetter && letter == selectedLetter) {
-        returnColor = ColorManager.correctChoiceColor;
       }
     }
     return returnColor;
@@ -98,7 +98,9 @@ class _AnswerBarState extends State<AnswerBar> {
                         child: TextButton(
                           onPressed: () {
                             setState(() {
-                              widget.onAnswerSelected.call(answerLetter[i]);
+                              String value =
+                                  "${answerLetter[i]}:${answerLetter[widget.answer.correctAnswer]}";
+                              widget.onAnswerSelected.call(value);
                               selectedLetter = answerLetter[i];
                             });
                           },

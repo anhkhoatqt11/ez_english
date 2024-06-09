@@ -175,9 +175,6 @@ class SkillPracticeItem extends StatelessWidget {
           case "Speaking":
             Navigator.pushNamed(context, RoutesName.partInfoRoute,
                 arguments: [true, part]);
-          case "Speaking":
-            Navigator.pushNamed(context, RoutesName.partInfoRoute,
-                arguments: [true, part]);
           case "Writing":
             break;
         }
@@ -226,10 +223,6 @@ class SkillPracticeItem extends StatelessWidget {
                                   color: Colors.black, fontSize: 12)
                               .copyWith(overflow: TextOverflow.clip),
                         ),
-                      ),
-                      Text(
-                        'correctAnswer / totalQuestion',
-                        style: getLightStyle(color: Colors.black, fontSize: 8),
                       ),
                     ])
               ]),

@@ -111,5 +111,8 @@
     "confirm_upgrade": "Confirm upgrade",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "upgrade_success": "Upgrade level success"
+    "upgrade_success": "Upgrade level success",
+    "time_out": "Time out ! \n You will be moved to result page then",
+    "complete_test" : "You have completed a real test",
+    "return_home" : "Return home"
 }

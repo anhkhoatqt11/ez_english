@@ -165,3 +165,31 @@ String formatDuration(Duration duration) {
     return '${minutes.toString()}m${seconds.toString().padLeft(2, '0')}s';
   }
 }
+
+int convertRawScoreToScaledScore(
+    int correctAnswers, int maxRawScore, int minScore, int maxScore) {
+  if (correctAnswers < 0) correctAnswers = 0;
+  if (correctAnswers > maxRawScore) correctAnswers = maxRawScore;
+
+  double scalingFactor = (maxScore - minScore) / maxRawScore;
+  return (correctAnswers * scalingFactor + minScore).round();
+}
+
+// Calculate TOEIC score
+Map<String, int> calculateToeicScore(
+    List<String?> skills, int listeningCorrect, int readingCorrect) {
+  const int maxRawScore = 100;
+  const int minScore = 5;
+  const int maxScore = 495;
+
+  int skill1 = convertRawScoreToScaledScore(
+      listeningCorrect, maxRawScore, minScore, maxScore);
+  int skill2 = convertRawScoreToScaledScore(
+      readingCorrect, maxRawScore, minScore, maxScore);
+
+  return {
+    skills[0]!: skill1,
+    skills[1]!: skill2,
+    'Total': skill1 + skill2,
+  };
+}

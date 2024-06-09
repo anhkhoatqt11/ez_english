@@ -16,5 +16,9 @@ class LoadTestQuestionsByPartTest extends TestEvent {
   int partIndex;
   String skill;
 
-  LoadTestQuestionsByPartTest(this.testId, this.partIndex , this.skill);
+  LoadTestQuestionsByPartTest(this.testId, this.partIndex, this.skill);
 }
+
+class PauseCounter extends TestEvent {}
+
+class ContinueCounter extends TestEvent {}

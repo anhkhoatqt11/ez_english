@@ -109,5 +109,8 @@
     "confirm_upgrade": "Xác nhận tăng bậc",
     "cancel": "Huỷ bỏ",
     "confirm": "Xác nhận",
-    "upgrade_success": "Tăng bậc thành công"
+    "upgrade_success": "Tăng bậc thành công",
+    "time_out": "Hết giờ ! \n Bạn sẽ được chuyển đến trang Kết quả sau đó",
+    "complete_test" : "Bạn đã thực sự hoàn thành 1 bài thi !",
+    "return_home" : "Trờ về trang chủ"
 }
