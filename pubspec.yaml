@@ -52,6 +52,7 @@ dependencies:
   flutter_tts: ^4.0.2
   dropdown_button2: ^2.3.9
   google_sign_in: ^6.2.1
+  flutter_gemini: ^2.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

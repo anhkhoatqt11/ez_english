@@ -175,10 +175,9 @@ class SkillPracticeItem extends StatelessWidget {
           case "Speaking":
             Navigator.pushNamed(context, RoutesName.partInfoRoute,
                 arguments: [true, part]);
-          case "Speaking":
+          case "Writing":
             Navigator.pushNamed(context, RoutesName.partInfoRoute,
                 arguments: [true, part]);
-          case "Writing":
             break;
         }
       },

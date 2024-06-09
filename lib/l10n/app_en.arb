@@ -111,5 +111,9 @@
     "confirm_upgrade": "Confirm upgrade",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "upgrade_success": "Upgrade level success"
+    "upgrade_success": "Upgrade level success",
+    "enter_answer": "Enter your answer here",
+    "error": "Error",
+    "please_enter_answer": "Please enter your answer",
+    "answer_correction": "Answer & Correction"
 }
