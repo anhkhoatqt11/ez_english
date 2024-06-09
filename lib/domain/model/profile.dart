@@ -12,7 +12,6 @@ class Profile {
 class Level {
   int levelId;
   String levelName;
-  int value;
 
-  Level(this.levelId, this.levelName, this.value);
+  Level(this.levelId, this.levelName);
 }

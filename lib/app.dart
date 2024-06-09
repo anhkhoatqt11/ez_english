@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
               debugShowCheckedModeBanner: false,
-              initialRoute: RoutesName.passwordRecoveryRoute,
+              initialRoute: RoutesName.loginRoute,
               onGenerateRoute: Routes.generateRoute,
               theme: getAppTheme(),
               supportedLocales: L10n.all,

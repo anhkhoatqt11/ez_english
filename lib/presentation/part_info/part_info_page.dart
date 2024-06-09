@@ -11,9 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PartInfoPage extends StatefulWidget {
-  PartInfoPage({super.key, required this.isPractice, required this.partObject});
+  PartInfoPage(
+      {super.key,
+      required this.isPractice,
+      required this.partObject,
+      this.nextButton});
   final bool isPractice;
   final PartObject partObject;
+  Widget? nextButton;
 
   @override
   State<PartInfoPage> createState() => _PartInfoPageState();
@@ -32,15 +37,25 @@ class _PartInfoPageState extends State<PartInfoPage> {
     return Scaffold(
         body: Column(
       children: [
-        GradientAppBar(
-          content: widget.partObject.title,
-          prefixIcon: InkWell(
-            child: const Icon(Icons.arrow_back_ios),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        widget.isPractice
+            ? GradientAppBar(
+                content: widget.partObject.title,
+                prefixIcon: InkWell(
+                  child: const Icon(Icons.arrow_back_ios),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              )
+            : Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.partObject.title,
+                    style: getBoldStyle(color: Colors.black, fontSize: 18),
+                  ),
+                ),
+              ),
         Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -140,11 +155,13 @@ class _PartInfoPageState extends State<PartInfoPage> {
                 );
               })
             : Container(),
-        FilledButton(
-            onPressed: () {
-              navigateToQuestionPage();
-            },
-            child: Text(AppLocalizations.of(context)!.start_now))
+        !widget.isPractice
+            ? widget.nextButton ?? Container()
+            : FilledButton(
+                onPressed: () {
+                  navigateToQuestionPage();
+                },
+                child: Text(AppLocalizations.of(context)!.start_now))
       ],
     ));
   }
@@ -160,6 +177,9 @@ class _PartInfoPageState extends State<PartInfoPage> {
       case "Speaking":
         Navigator.pushNamed(context, RoutesName.speakingQuestionRoute,
             arguments: [widget.partObject, timeLimit, numOfQuestion]);
+      case "Writing":
+        Navigator.pushNamed(context, RoutesName.writingQuestionRoute,
+            arguments: [widget.partObject, numOfQuestion]);
       default:
         return;
     }

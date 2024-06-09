@@ -16,11 +16,13 @@ class AnswerBar extends StatefulWidget {
       required this.questionIndex,
       required this.answer,
       required this.onAnswerSelected,
-      required this.selectedAnswer});
+      required this.selectedAnswer,
+      this.isTest});
   final Answer answer;
   final int questionIndex;
   final ValueChanged<String> onAnswerSelected;
   final String? selectedAnswer;
+  final bool? isTest;
 
   @override
   _AnswerBarState createState() => _AnswerBarState();
@@ -40,8 +42,12 @@ class _AnswerBarState extends State<AnswerBar> {
     Color returnColor = ColorManager.defaultChoiceColor;
     if (selectedLetter != null) {
       String correctLetter = answerLetter[widget.answer.correctAnswer];
-      if (letter == correctLetter) {
-        returnColor = ColorManager.errorColor;
+      if (widget.isTest == null) {
+        if (letter == correctLetter) {
+          returnColor = ColorManager.errorColor;
+        }
+      } else {
+        returnColor = ColorManager.defaultChoiceColor;
       }
       if (letter == selectedLetter) {
         returnColor = ColorManager.primaryColor;
@@ -54,6 +60,7 @@ class _AnswerBarState extends State<AnswerBar> {
   }
 
   Color setBorderAndTextChoice(String letter) {
+    if (widget.isTest ?? false) return Colors.black;
     if (selectedLetter != null) {
       String correctLetter = answerLetter[widget.answer.correctAnswer];
       if (selectedLetter == letter || letter == correctLetter) {
@@ -66,7 +73,7 @@ class _AnswerBarState extends State<AnswerBar> {
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-      ignoring: selectedLetter != null,
+      ignoring: selectedLetter != null && widget.isTest == null,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

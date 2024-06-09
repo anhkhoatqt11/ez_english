@@ -1,4 +1,6 @@
 import 'package:ez_english/dependency_injection.dart';
+import 'package:ez_english/domain/model/test.dart';
+import 'package:ez_english/domain/model/test_category.dart';
 import 'package:ez_english/presentation/entry_test/entry_test.dart';
 import 'package:ez_english/presentation/entry_test/entry_test_introduction.dart';
 import 'package:ez_english/presentation/entry_test/entry_test_result.dart';
@@ -7,7 +9,12 @@ import 'package:ez_english/presentation/main/main_view.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
+import 'package:ez_english/presentation/main/practice/writing/writing_question_page.dart';
+import 'package:ez_english/presentation/main/profile/progress/progress_page.dart';
+import 'package:ez_english/presentation/main/test/taking_test_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
+import 'package:ez_english/presentation/main/test/test_list_page.dart';
+import 'package:ez_english/presentation/main/test/widgets/test_item.dart';
 import 'package:ez_english/presentation/part_info/part_info_page.dart';
 import 'package:ez_english/presentation/password_reset/password_reset_page.dart';
 import 'package:ez_english/presentation/result/result_page.dart';
@@ -48,6 +55,10 @@ class RoutesName {
   static const String resultPracticeRoute = "result_practice";
   static const String partInfoRoute = "part_info";
   static const String speakingResultRoute = "speaking_result";
+  static const String testListRoute = "test_list";
+  static const String takingTestRoute = "taking_test";
+  static const String progressRoute = "progress";
+  static const String writingQuestionRoute = "writing_question";
 }
 
 class Routes {
@@ -63,8 +74,22 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const PasswordResetPage());
       case RoutesName.mainRoute:
         return MaterialPageRoute(builder: (_) => const MainView());
+      case RoutesName.takingTestRoute:
+        return MaterialPageRoute(
+            builder: (_) => TakingTestPage(
+                  testItem: (settings.arguments as List<dynamic>)[0],
+                  skills: (settings.arguments as List<dynamic>)[1],
+                ));
+      case RoutesName.testListRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                TestListPage(testCategory: settings.arguments as TestCategory));
       case RoutesName.testInformation:
-        return MaterialPageRoute(builder: (_) => const TestInformationPage());
+        return MaterialPageRoute(
+            builder: (_) => TestInformationPage(
+                  testItem: (settings.arguments as List<dynamic>)[0],
+                  skills: (settings.arguments as List<dynamic>)[1],
+                ));
       case RoutesName.homeRoute:
         return MaterialPageRoute(builder: (_) => const HomePage());
       case RoutesName.practiceRoute:
@@ -134,6 +159,15 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) =>
                 EntryTestResultPage(level: settings.arguments as String));
+      case RoutesName.progressRoute:
+        return MaterialPageRoute(builder: (_) => const ProgressPage());
+      case RoutesName.writingQuestionRoute:
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => WritingQuestionPage(
+                  part: arguments[0],
+                  limit: arguments[1],
+                ));
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(
