@@ -1,10 +1,16 @@
+import 'package:ez_english/app_prefs.dart';
 import 'package:ez_english/domain/model/choice.dart';
+import 'package:ez_english/presentation/blocs/questions_by_part/questions_by_part_bloc.dart';
 import 'package:ez_english/presentation/common/objects/get_questions_by_part_object.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:ez_english/presentation/main/practice/widgets/answer_bar.dart';
+import 'package:ez_english/presentation/main/practice/widgets/answer_preview_bar.dart';
+import 'package:ez_english/presentation/main/practice/widgets/horizontal_answer_bar.dart';
+import 'package:ez_english/presentation/main/practice/widgets/question_container.dart';
 import 'package:ez_english/presentation/main/practice/widgets/time_counter.dart';
 import 'package:ez_english/presentation/main/practice/widgets/track_bar.dart';
+import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/style_manager.dart';
@@ -14,39 +20,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../app_prefs.dart';
 import '../../../../config/functions.dart';
 import '../../../../domain/model/question.dart';
-import '../../../../utils/route_manager.dart';
-import '../../../blocs/questions_by_part/questions_by_part_bloc.dart';
-import '../widgets/horizontal_answer_bar.dart';
-import '../widgets/question_container.dart';
 
-class ReadingQuestionPage extends StatefulWidget {
-  const ReadingQuestionPage(
+class AnswerPreviewPage extends StatefulWidget {
+  const AnswerPreviewPage(
       {super.key,
+      required this.questionList,
       required this.part,
-      required this.timeLimit,
-      required this.limit});
+      required this.answerMap});
+  final List<Question> questionList;
   final PartObject part;
-  final Duration timeLimit;
-  final int limit;
-
+  final Map<int, String> answerMap;
   @override
-  State<ReadingQuestionPage> createState() => _ReadingQuestionPageState();
+  State<AnswerPreviewPage> createState() => _AnswerPreviewPageState();
 }
 
-class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
-  Map<int, String> answerMap = {};
-  List<Question> questionList = [];
-  QuestionsByPartBloc questionsByPartBloc =
-      GetIt.instance<QuestionsByPartBloc>();
+class _AnswerPreviewPageState extends State<AnswerPreviewPage> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    questionsByPartBloc.add(LoadQuestions(
-        GetQuestionsByPartObject(widget.part.index, "Reading", widget.limit)));
   }
 
   @override
@@ -57,13 +51,10 @@ class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
           content: widget.part.title,
           suffixIcon: InkWell(
             onTap: () {
-              Navigator.popAndPushNamed(context, RoutesName.resultPracticeRoute,
-                  arguments: [
-                    answerMap,
-                    widget.part,
-                    widget.limit,
-                    questionList
-                  ]);
+              Navigator.popUntil(
+                context,
+                (route) => route.settings.name == RoutesName.mainRoute,
+              );
             },
             child: Text(
               AppLocalizations.of(context)!.submit,
@@ -82,109 +73,48 @@ class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
                 Navigator.pop(context);
               }),
         ),
-        (widget.timeLimit.inSeconds > 0)
-            ? TimeCounter(
-                timeLimit: widget.timeLimit,
-                navigateToNextPage: () {
-                  Navigator.pushNamed(context, RoutesName.resultPracticeRoute,
-                      arguments: [
-                        answerMap,
-                        widget.part,
-                        widget.limit,
-                        questionList
-                      ]);
-                },
-              )
-            : Container(),
         Expanded(
-          child: BlocBuilder<QuestionsByPartBloc, QuestionsByPartState>(
-            bloc: questionsByPartBloc,
-            builder: (context, state) {
-              if (state is QuestionsByPartLoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (state is QuestionsByPartErrorState) {
-                return Center(
-                  child: Text(state.failure.toString()),
-                );
-              }
-              if (state is QuestionsByPartSuccessState) {
-                questionList = state.questionList;
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ReadingQuestionBody(
-                    answerMap: answerMap,
-                    questionList: state.questionList,
-                  ),
-                );
-              }
-              return Container();
-            },
-          ),
-        ),
+            child: AnswerPreviewBody(
+          questionList: widget.questionList,
+          answerMap: widget.answerMap,
+        )),
       ]),
     );
   }
 }
 
-class ReadingQuestionBody extends StatefulWidget {
-  ReadingQuestionBody(
-      {super.key, required this.answerMap, required this.questionList});
-  Map<int, String> answerMap;
+class AnswerPreviewBody extends StatefulWidget {
+  AnswerPreviewBody(
+      {super.key, required this.questionList, required this.answerMap});
   List<Question> questionList;
+  Map<int, String> answerMap;
   @override
-  _ReadingQuestionBodyState createState() => _ReadingQuestionBodyState();
+  _AnswerPreviewBodyState createState() => _AnswerPreviewBodyState();
 }
 
-class _ReadingQuestionBodyState extends State<ReadingQuestionBody>
-    with ChangeNotifier {
+class _AnswerPreviewBodyState extends State<AnswerPreviewBody> {
   final PageController _pageController = PageController();
   final appPrefs = GetIt.instance<AppPrefs>();
   late bool isHorizontal;
-  late Map<int, String> _answers;
+  Map<int, String> _answers = {};
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     _answers = widget.answerMap;
+    super.initState();
     isHorizontal = appPrefs.getHorizontalAnswerBarLayout() ?? false;
-    addListener(_checkCurrentPageAnswers);
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _pageController.dispose();
-    removeListener(_checkCurrentPageAnswers);
-  }
-
-  Future<void> _checkCurrentPageAnswers() async {
-    print("I'm checking !");
-    int currentIndex = _pageController.page!.round();
-    List<String?> currentPageAnswers = widget
-        .questionList[currentIndex].questions
-        .asMap()
-        .entries
-        .map((entry) =>
-            _answers[entry.key + 1 + _getQuestionStartIndex(currentIndex)])
-        .toList();
-    if (currentPageAnswers.every((answer) => answer != null)) {
-      if (currentIndex < widget.questionList.length - 1) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeIn,
-        );
-      }
-    }
-  }
-
-  void _updateAnswer(int questionIndex, String answer) {
-    _answers[questionIndex] = answer;
-    notifyListeners();
+    super.dispose();
   }
 
   int _getQuestionStartIndex(int pageIndex) {
@@ -235,6 +165,9 @@ class _ReadingQuestionBodyState extends State<ReadingQuestionBody>
                     const SizedBox(
                       height: 32,
                     ),
+                    question.audioUrl != null
+                        ? TrackBar(audioUrl: question.audioUrl!)
+                        : Container(),
                     isHorizontal
                         ? Container()
                         : Container(
@@ -253,14 +186,13 @@ class _ReadingQuestionBodyState extends State<ReadingQuestionBody>
                                 String questionText = entry.value;
                                 String? selectedAnswer =
                                     _answers[questionIndex];
-                                return QuestionContainer(
+                                print(questionIndex);
+                                return AnswerPreviewBar(
+                                  answerMap: widget.answerMap,
                                   answer: question.answers[entry.key],
                                   questionText: questionText,
                                   selectedAnswer: selectedAnswer,
                                   questionIndex: questionIndex,
-                                  onAnswerSelected: (answer) {
-                                    _updateAnswer(questionIndex, answer);
-                                  },
                                 );
                               }).toList(),
                             )),
@@ -269,7 +201,10 @@ class _ReadingQuestionBodyState extends State<ReadingQuestionBody>
               ),
             ),
             /*HorizontalAnswerBar(
-              onAnswerSelected: _updateAnswer,
+              questionIndex: index + 1,
+              answerMap: widget.answerMap,
+              pageController: _pageController,
+              question: question,
             )*/
           ],
         );

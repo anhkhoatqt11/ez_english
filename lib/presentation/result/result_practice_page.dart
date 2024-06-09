@@ -2,8 +2,11 @@ import 'package:ez_english/config/asset_manager.dart';
 import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/functions.dart';
 import 'package:ez_english/config/style_manager.dart';
+import 'package:ez_english/domain/model/question.dart';
+import 'package:ez_english/domain/model/test.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
+import 'package:ez_english/presentation/main/practice/answer_preview_page.dart';
 import 'package:ez_english/presentation/result/widgets/result_item.dart';
 import 'package:ez_english/presentation/result/widgets/result_list_view_item.dart';
 import 'package:ez_english/utils/route_manager.dart';
@@ -15,10 +18,12 @@ class ResultPracticePage extends StatefulWidget {
       {super.key,
       required this.answerMap,
       required this.part,
-      required this.limit});
+      required this.limit,
+      required this.questionList});
   final Map<int, String> answerMap;
   final PartObject part;
   final int limit;
+  final List<Question> questionList;
   @override
   _ResultPracticePageState createState() {
     return _ResultPracticePageState();
@@ -35,6 +40,7 @@ class _ResultPracticePageState extends State<ResultPracticePage> {
     numOfQuestion = widget.limit;
     widget.answerMap.forEach(
       (key, value) {
+        print(value);
         if (value[0] == value[2]) {
           numOfCorrect++;
         } else {
@@ -152,7 +158,14 @@ class _ResultPracticePageState extends State<ResultPracticePage> {
                   child: FilledButton(
                       onPressed: () {
                         canPop = true;
-                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AnswerPreviewPage(
+                                  questionList: widget.questionList,
+                                  part: widget.part,
+                                  answerMap: widget.answerMap),
+                            ));
                       },
                       child:
                           Text(AppLocalizations.of(context)!.see_all_answers)),
@@ -166,7 +179,14 @@ class _ResultPracticePageState extends State<ResultPracticePage> {
               style: FilledButton.styleFrom(
                   fixedSize:
                       Size.fromWidth(MediaQuery.of(context).size.width * 0.7)),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  RoutesName.skillPracticeRoute,
+                  (route) =>
+                      route.settings.name == RoutesName.skillPracticeRoute,
+                );
+              },
               child: Text(AppLocalizations.of(context)!.app_continue),
             ),
             const SizedBox(

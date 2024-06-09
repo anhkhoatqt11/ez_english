@@ -1,5 +1,6 @@
 import 'package:ez_english/app_prefs.dart';
 import 'package:ez_english/domain/model/choice.dart';
+import 'package:ez_english/domain/model/test.dart';
 import 'package:ez_english/presentation/common/objects/get_questions_by_part_object.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
@@ -37,6 +38,7 @@ class ListeningQuestionPage extends StatefulWidget {
 
 class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
   Map<int, String> answerMap = {};
+  List<Question> questionList = [];
 
   QuestionsByPartBloc questionsByPartBloc =
       GetIt.instance<QuestionsByPartBloc>();
@@ -56,8 +58,13 @@ class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
           content: widget.part.title,
           suffixIcon: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, RoutesName.resultPracticeRoute,
-                  arguments: [answerMap, widget.part]);
+              Navigator.popAndPushNamed(context, RoutesName.resultPracticeRoute,
+                  arguments: [
+                    answerMap,
+                    widget.part,
+                    widget.limit,
+                    questionList
+                  ]);
             },
             child: Text(
               AppLocalizations.of(context)!.submit,
@@ -81,7 +88,12 @@ class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
                 timeLimit: widget.timeLimit,
                 navigateToNextPage: () {
                   Navigator.pushNamed(context, RoutesName.resultPracticeRoute,
-                      arguments: [answerMap, widget.part, widget.limit]);
+                      arguments: [
+                        answerMap,
+                        widget.part,
+                        widget.limit,
+                        questionList
+                      ]);
                 },
               )
             : Container(),
@@ -100,6 +112,7 @@ class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
                 );
               }
               if (state is QuestionsByPartSuccessState) {
+                questionList = state.questionList;
                 return ListeningQuestionPageBody(
                   answerMap: answerMap,
                   questionList: state.questionList,

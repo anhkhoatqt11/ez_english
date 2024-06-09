@@ -1,4 +1,5 @@
 import 'package:ez_english/dependency_injection.dart';
+import 'package:ez_english/domain/model/question.dart';
 import 'package:ez_english/domain/model/test.dart';
 import 'package:ez_english/domain/model/test_category.dart';
 import 'package:ez_english/presentation/entry_test/entry_test.dart';
@@ -105,9 +106,11 @@ class Routes {
         List<Object> arguments = settings.arguments as List<Object>;
         return MaterialPageRoute(
             builder: (_) => ResultPracticePage(
-                answerMap: arguments[0] as Map<int, String>,
-                part: arguments[1] as PartObject,
-                limit: arguments[2] as int));
+                  answerMap: arguments[0] as Map<int, String>,
+                  part: arguments[1] as PartObject,
+                  limit: arguments[2] as int,
+                  questionList: arguments[3] as List<Question>,
+                ));
       case RoutesName.resultTestRoute:
         List<Object> arguments = settings.arguments as List<Object>;
         return MaterialPageRoute<bool?>(
