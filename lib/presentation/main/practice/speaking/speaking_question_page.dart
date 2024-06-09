@@ -75,14 +75,11 @@ class _SpeakingQuestionPageState extends State<SpeakingQuestionPage> {
                     Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
-                  onTap: () {           
-                    _pageBodyKey.currentState?.reset();  // tắt phát âm khi thoát khỏi màn hình
-                    Navigator.pushNamed(
-                      context, RoutesName.skillPracticeRoute, 
-                      arguments: 'Speaking'
-                    );
-                  }
-                ),
+                  onTap: () {
+                    _pageBodyKey.currentState
+                        ?.reset(); // tắt phát âm khi thoát khỏi màn hình
+                    Navigator.pop(context);
+                  }),
               ),
               (widget.timeLimit.inSeconds > 0)
                 ? TimeCounter(timeLimit: widget.timeLimit)
