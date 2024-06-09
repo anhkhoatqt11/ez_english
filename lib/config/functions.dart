@@ -193,3 +193,8 @@ Map<String, int> calculateToeicScore(
     'Total': skill1 + skill2,
   };
 }
+
+bool compareLevel(String userLevel, String requiredLevel) {
+  List<String> levels = ["Beginner", "Intermediate", "Advanced"];
+  return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
+}

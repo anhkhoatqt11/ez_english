@@ -3,6 +3,9 @@ import 'package:ez_english/config/color_manager.dart';
 import 'package:ez_english/config/functions.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/domain/model/test.dart';
+import 'package:ez_english/domain/usecase/save_in_history_usecase.dart';
+import 'package:ez_english/main.dart';
+import 'package:ez_english/presentation/common/objects/history_object.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:ez_english/presentation/result/widgets/result_item.dart';
@@ -10,6 +13,7 @@ import 'package:ez_english/presentation/result/widgets/result_list_view_item.dar
 import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class ResultTestPage extends StatefulWidget {
   const ResultTestPage(
@@ -33,6 +37,7 @@ class _ResultTestPageState extends State<ResultTestPage> {
   @override
   void initState() {
     super.initState();
+
     widget.answerMap.forEach(
       (key, value) {
         if (value[0] == value[2]) {
@@ -46,6 +51,9 @@ class _ResultTestPageState extends State<ResultTestPage> {
     );
     resultMap = calculateToeicScore(
         widget.skills, numOfSkill1Correct, numOfSkill2Correct);
+    Test i = widget.testItem;
+    GetIt.instance<SaveInHistoryUseCase>().execute(HistoryObject(DateTime.now(),
+        i.id, resultMap["Total"] as int, true, supabase.auth.currentUser!.id));
   }
 
   @override
