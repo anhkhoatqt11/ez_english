@@ -109,5 +109,9 @@
     "confirm_upgrade": "Xác nhận tăng bậc",
     "cancel": "Huỷ bỏ",
     "confirm": "Xác nhận",
-    "upgrade_success": "Tăng bậc thành công"
+    "upgrade_success": "Tăng bậc thành công",
+    "enter_answer": "Nhâp câu trả lời của bạn",
+    "error": "Lỗi",
+    "please_enter_answer": "Hãy nhập câu trả lời của bạn",
+    "answer_correction": "Đáp án & Sửa lỗi"
 }
