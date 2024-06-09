@@ -145,7 +145,7 @@ class _EntryTestPageState extends State<EntryTestPage> {
       case 'Beginner':
         await supabase.from('profiles').update({"level_id": 1}).eq(
             "uuid", currentSession?.user?.id as Object);
-        await supabase.from("level_progress").insert({
+        await supabase.from("level_progress").update({
           "listening_point": 0,
           "reading_point": 0,
           "speaking_point": 0,
@@ -155,17 +155,17 @@ class _EntryTestPageState extends State<EntryTestPage> {
       case 'Intermediate':
         await supabase.from('profiles').update({"level_id": 3}).eq(
             "uuid", currentSession?.user?.id as Object);
-        await supabase.from("level_progress").insert({
+        await supabase.from("level_progress").update({
           "listening_point": 500,
           "reading_point": 500,
           "speaking_point": 500,
-          "writing_point": 500
+          "writing_point": 500,
         }).eq("uuid", currentSession?.user?.id as Object);
         break;
       case 'Advanced':
         await supabase.from('profiles').update({"level_id": 4}).eq(
             "uuid", currentSession?.user?.id as Object);
-        await supabase.from("level_progress").insert({
+        await supabase.from("level_progress").update({
           "listening_point": 1000,
           "reading_point": 1000,
           "speaking_point": 1000,
