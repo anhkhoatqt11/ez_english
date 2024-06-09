@@ -22,7 +22,7 @@ class TipDetail extends StatelessWidget {
                 color: Colors.white,
               ),
               onTap: () {
-                Navigator.pushNamed(context, RoutesName.homeRoute);
+                Navigator.pop(context);
               }
             ),
           ),
