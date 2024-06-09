@@ -35,6 +35,7 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
+    getTest();
     return FutureBuilder(
       future: supabase.
               from("history").

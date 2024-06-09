@@ -23,10 +23,7 @@ class SpeakingResultPage extends StatelessWidget {
                 color: Colors.white,
               ),
               onTap: () {
-                Navigator.pushNamed(
-                  context, RoutesName.skillPracticeRoute, 
-                  arguments: 'Speaking'
-                );
+                Navigator.pop(context);
               }
             ),
           ),
