@@ -15,58 +15,59 @@ class HistoryList extends StatefulWidget {
 }
 
 class _HistoryListState extends State<HistoryList> {
-  Future<List<Map<String, dynamic>>> getTest() async {
-    final response = await supabase.from("test").select();
-    return response as List<Map<String, dynamic>>;
+  late Future<List<Map<String, dynamic>>> testFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    testFuture = getTest();
   }
 
-  Future<Map<String, int>> testNameAndScore(int test_id) async {
-    final testResponse = await getTest();
-    for (var test in testResponse) {
-      if (test['id'] == test_id) {
-        return {
-          'test_name': test['test_name'],
-          'score': test['score']
-        };
+  Future<List<Map<String, dynamic>>> getTest() async {
+    return await supabase.from("test").select();
+  }
+
+  String getTestName(int testId, List<Map<String, dynamic>> test) {
+    for (var t in test) {
+      if (t['id'] == testId) {
+        return t['name'];
       }
     }
-    return {}; 
+    return '';
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return FutureBuilder(
-      future: supabase.
-              from("history").
-              select().
-              eq('by_uuid', widget.uuid),
+      future: supabase
+              .from("history")
+              .select()
+              .eq('by_uuid', widget.uuid),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
         final activities = snapshot.data!;
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: <Widget>[
-              for (var activity in activities)
-                FutureBuilder(
-                  future: testNameAndScore(activity['test_id']),
-                  builder: (context, testSnapshot) {
-                    if (!testSnapshot.hasData) {
-                      return const CircularProgressIndicator();
-                    }
-                    final testInfo = testSnapshot.data!;
-                    return Activity(
-                      testInfo,
+        return FutureBuilder(
+          future: testFuture,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final testItems = snapshot.data!;
+            return SingleChildScrollView(
+              child: Row(
+                children: <Widget>[
+                  for (var activity in activities)
+                    Activity(
+                      getTestName(activity['test_id'], testItems),
                       activity['score'],
                       activity['is_complete']
-                    );
-                  },
-                )
-            ],
-          ),
+                    )
+                ],
+              ),
+            );
+          }
         );
       }
     );
@@ -74,11 +75,11 @@ class _HistoryListState extends State<HistoryList> {
 }
 
 class Activity extends StatelessWidget {
-  final Map<String, dynamic> test;
+  final String testName;
   final int score;
   final bool isComplete;
 
-  const Activity(this.test, this.score, this.isComplete);
+  const Activity(this.testName, this.score, this.isComplete);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -94,14 +95,14 @@ class Activity extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            test['test_name'],
+            testName,
             style: getSemiBoldStyle(color: Colors.black, fontSize: 14),
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 8),
           isComplete ?
           Text(
-            '$score / ${test['score']}',
+            '$score / 990',
             style: getSemiBoldStyle(color: Colors.black, fontSize: 10)
           ) :
           Text(
