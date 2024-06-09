@@ -15,27 +15,27 @@ class HistoryList extends StatefulWidget {
 }
 
 class _HistoryListState extends State<HistoryList> {
-  late List<Map<String, dynamic>> testResponse;
-
-  Future<void> getTest() async {
-    final testResponse = await supabase.from("test").select();
+  Future<List<Map<String, dynamic>>> getTest() async {
+    final response = await supabase.from("test").select();
+    return response as List<Map<String, dynamic>>;
   }
 
-  Map<String, int> testNameAndScore(int test_id) {
+  Future<Map<String, int>> testNameAndScore(int test_id) async {
+    final testResponse = await getTest();
     for (var test in testResponse) {
-      if (test['test_id'] == test_id) {
+      if (test['id'] == test_id) {
         return {
           'test_name': test['test_name'],
           'score': test['score']
         };
       }
     }
-    return {};
+    return {}; 
   }
 
   @override
   Widget build(BuildContext context) {
-    getTest();
+    
     return FutureBuilder(
       future: supabase.
               from("history").
@@ -51,10 +51,19 @@ class _HistoryListState extends State<HistoryList> {
           child: Row(
             children: <Widget>[
               for (var activity in activities)
-                Activity(
-                  testNameAndScore(activity['test_id']),
-                  activity['score'],
-                  activity['is_complete']
+                FutureBuilder(
+                  future: testNameAndScore(activity['test_id']),
+                  builder: (context, testSnapshot) {
+                    if (!testSnapshot.hasData) {
+                      return const CircularProgressIndicator();
+                    }
+                    final testInfo = testSnapshot.data!;
+                    return Activity(
+                      testInfo,
+                      activity['score'],
+                      activity['is_complete']
+                    );
+                  },
                 )
             ],
           ),
