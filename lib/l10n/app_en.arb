@@ -118,4 +118,8 @@
     "taking_test_fail" : "Your level doesn't meet the requirement level !",
     "taking_test_fail_description" : "Please comeback after you reach requirement level of the test !",
     "requirement_level" : "Requirement Level"
+    "enter_answer": "Enter your answer here",
+    "error": "Error",
+    "please_enter_answer": "Please enter your answer",
+    "answer_correction": "Answer & Correction"
 }

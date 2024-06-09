@@ -9,6 +9,7 @@ import 'package:ez_english/presentation/main/main_view.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
+import 'package:ez_english/presentation/main/practice/writing/writing_question_page.dart';
 import 'package:ez_english/presentation/main/profile/progress/progress_page.dart';
 import 'package:ez_english/presentation/main/test/taking_test_page.dart';
 import 'package:ez_english/presentation/main/test/test_information_page.dart';
@@ -59,6 +60,7 @@ class RoutesName {
   static const String takingTestRoute = "taking_test";
   static const String progressRoute = "progress";
   static const String resultTestRoute = "test_result";
+  static const String writingQuestionRoute = "writing_question";
 }
 
 class Routes {
@@ -169,6 +171,13 @@ class Routes {
                 EntryTestResultPage(level: settings.arguments as String));
       case RoutesName.progressRoute:
         return MaterialPageRoute(builder: (_) => const ProgressPage());
+      case RoutesName.writingQuestionRoute:
+        List<dynamic> arguments = settings.arguments as List<dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => WritingQuestionPage(
+                  part: arguments[0],
+                  limit: arguments[1],
+                ));
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

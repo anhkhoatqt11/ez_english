@@ -13,7 +13,8 @@ class QuestionContainer extends StatelessWidget {
       required this.questionIndex,
       required this.onAnswerSelected,
       required this.answer,
-      this.selectedAnswer , this.isTest});
+      this.selectedAnswer,
+      this.isTest});
   final String questionText;
   final int questionIndex;
   final ValueChanged<String> onAnswerSelected;
