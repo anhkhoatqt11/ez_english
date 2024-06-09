@@ -78,7 +78,13 @@ class _ReadingQuestionPageState extends State<ReadingQuestionPage> {
               }),
         ),
         (widget.timeLimit.inSeconds > 0)
-            ? TimeCounter(timeLimit: widget.timeLimit)
+            ? TimeCounter(
+                timeLimit: widget.timeLimit,
+                navigateToNextPage: () {
+                  Navigator.pushNamed(context, RoutesName.resultPracticeRoute,
+                      arguments: [answerMap, widget.part]);
+                },
+              )
             : Container(),
         Expanded(
           child: BlocBuilder<QuestionsByPartBloc, QuestionsByPartState>(
@@ -152,7 +158,7 @@ class _ReadingQuestionBodyState extends State<ReadingQuestionBody>
         .asMap()
         .entries
         .map((entry) =>
-            _answers[entry.key + _getQuestionStartIndex(currentIndex)])
+            _answers[entry.key + 1 + _getQuestionStartIndex(currentIndex)])
         .toList();
     if (currentPageAnswers.every((answer) => answer != null)) {
       if (currentIndex < widget.questionList.length - 1) {

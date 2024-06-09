@@ -14,10 +14,12 @@ class TestQuestionPage extends StatefulWidget {
       {super.key,
       required this.pagePartController,
       required this.part,
-      required this.test});
+      required this.test,
+      required this.answerMap});
   final PageController pagePartController;
   final PartObject part;
   final Test test;
+  final Map<int, String> answerMap;
   @override
   State<TestQuestionPage> createState() => _TestQuestionPageState();
 }
@@ -31,8 +33,10 @@ class _TestQuestionPageState extends State<TestQuestionPage> {
     super.initState();
     navigate = navigateToNextQuestion;
     pageController.addListener(changeFunction);
+    testBloc.add(PauseCounter());
     testBloc.add(LoadTestQuestionsByPartTest(
         widget.test.id, widget.part.index, widget.part.skill));
+    answerMap = widget.answerMap;
   }
 
   @override
@@ -56,6 +60,7 @@ class _TestQuestionPageState extends State<TestQuestionPage> {
   }
 
   void navigateToNextQuestion() {
+    testBloc.add(ContinueCounter());
     pageController.nextPage(
         duration: const Duration(milliseconds: 200), curve: Curves.linear);
   }

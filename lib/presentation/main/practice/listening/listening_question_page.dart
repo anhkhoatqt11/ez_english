@@ -77,7 +77,13 @@ class _ListeningQuestionPageState extends State<ListeningQuestionPage> {
               }),
         ),
         (widget.timeLimit.inSeconds > 0)
-            ? TimeCounter(timeLimit: widget.timeLimit)
+            ? TimeCounter(
+                timeLimit: widget.timeLimit,
+                navigateToNextPage: () {
+                  Navigator.pushNamed(context, RoutesName.resultPracticeRoute,
+                      arguments: [answerMap, widget.part, widget.limit]);
+                },
+              )
             : Container(),
         Expanded(
           child: BlocBuilder<QuestionsByPartBloc, QuestionsByPartState>(
@@ -134,6 +140,11 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody>
   }
 
   @override
+  void deactivate() {
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
     // TODO: implement dispose
     _pageController.dispose();
@@ -148,9 +159,9 @@ class _ListeningQuestionPageBodyState extends State<ListeningQuestionPageBody>
         .questionList[currentIndex].questions
         .asMap()
         .entries
-        .map((entry) =>
-            _answers[entry.key + _getQuestionStartIndex(currentIndex)])
-        .toList();
+        .map((entry) {
+      return _answers[entry.key + 1 + _getQuestionStartIndex(currentIndex)];
+    }).toList();
     if (currentPageAnswers.every((answer) => answer != null)) {
       if (currentIndex < widget.questionList.length - 1) {
         await Future.delayed(const Duration(milliseconds: 500));

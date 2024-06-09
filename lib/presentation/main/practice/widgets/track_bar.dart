@@ -59,7 +59,7 @@ class _TrackBarState extends State<TrackBar> {
     });
   }
 
-  void disposeAudioPlayer() {
+  Future<void> disposeAudioPlayer() async {
     onPlayerStateStream.cancel();
     onDurationStream.cancel();
     onPositionStream.cancel();

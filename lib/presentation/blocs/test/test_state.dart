@@ -50,3 +50,9 @@ class TestQuestionErrorState extends QuestionState {
 
   TestQuestionErrorState(this.failure);
 }
+
+class TestTimeState extends TestState {}
+
+class TestPauseTimeState extends TestTimeState {}
+
+class TestContinueTimeState extends TestTimeState {}

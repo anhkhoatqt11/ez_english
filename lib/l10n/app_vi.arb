@@ -110,6 +110,12 @@
     "cancel": "Huỷ bỏ",
     "confirm": "Xác nhận",
     "upgrade_success": "Tăng bậc thành công",
+    "time_out": "Hết giờ ! \n Bạn sẽ được chuyển đến trang Kết quả sau đó",
+    "complete_test" : "Bạn đã thực sự hoàn thành 1 bài thi !",
+    "return_home" : "Trờ về trang chủ",
+    "taking_test_fail" : "Cấp độ của bạn không đủ !",
+    "taking_test_fail_description" : "Vui lòng quay trở lại sau khi đạt đủ cập độ !",
+    "requirement_level" : "Cấp độ yêu cầu"
     "enter_answer": "Nhâp câu trả lời của bạn",
     "error": "Lỗi",
     "please_enter_answer": "Hãy nhập câu trả lời của bạn",
