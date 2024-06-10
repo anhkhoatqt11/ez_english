@@ -76,7 +76,11 @@ class SpeakingResultPage extends StatelessWidget {
           CommonButton(
             text: "OK", 
             action: () {
-              Navigator.pushNamed(context, RoutesName.practiceRoute);
+              Navigator.pushNamedAndRemoveUntil(
+                context, 
+                RoutesName.mainRoute, 
+                (route) => route.settings.name == RoutesName.mainRoute
+              );
             }
           ),
           const SizedBox(height: 20),
