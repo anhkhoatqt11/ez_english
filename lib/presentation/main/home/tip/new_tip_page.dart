@@ -90,7 +90,7 @@ class NewTipPage extends StatelessWidget {
           ),
           CommonButton(
             text: "OK", 
-            action: () async{
+            action: () async {
               await updateTip(title, content);
               Navigator.pushNamed(context, RoutesName.homeRoute);
             }
