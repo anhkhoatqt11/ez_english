@@ -43,30 +43,52 @@ class _HistoryListState extends State<HistoryList> {
               .from("history")
               .select()
               .eq('by_uuid', widget.uuid),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+      builder: (context, snapshotHistory) {
+        if (!snapshotHistory.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
-        final activities = snapshot.data!;
+        final activities = snapshotHistory.data!;
         return FutureBuilder(
           future: testFuture,
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+            if (!snapshotHistory.hasData) {
               return const Center(child: CircularProgressIndicator());
             }
-            final testItems = snapshot.data!;
-            return SingleChildScrollView(
-              child: Row(
+            if (snapshotHistory.data!.isNotEmpty) {        
+              final testItems = snapshot.data!;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  for (var activity in activities)
-                    Activity(
-                      getTestName(activity['test_id'], testItems),
-                      activity['score'],
-                      activity['is_complete']
-                    )
+                  Container(
+                    width: 393,
+                    padding: const EdgeInsets.only(left: 36),
+                    child: Text(
+                      AppLocalizations.of(context)!.continue_where_you_left_off,
+                      style: getSemiBoldStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const SizedBox(
+                    width: 36,
+                  ),
+                  SingleChildScrollView(
+                    child: Row(
+                      children: <Widget>[
+                        for (var activity in activities)
+                          Activity(
+                            getTestName(activity['test_id'], testItems),
+                            activity['score'],
+                            activity['is_complete']
+                          )
+                      ],
+                    ),
+                  )
                 ],
-              ),
-            );
+              );
+            }
+            return Container();
           }
         );
       }

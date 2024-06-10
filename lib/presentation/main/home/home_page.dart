@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ez_english/main.dart';
 import 'package:ez_english/utils/route_manager.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'package:ez_english/presentation/main/home/banner.dart';
 import 'package:ez_english/presentation/main/home/history.dart';
@@ -60,66 +61,92 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: supabase.from("profiles").select().eq("uuid", widget.uuid).single(), 
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final userInfor = snapshot.data!;
-        switch (userInfor['level_id']) {
-          case 1:
-            userLevel = "Beginner";
-            break;
-          case 3:
-            userLevel = "Intermediate";
-            break;
-          case 4:
-            userLevel = "Advanced";
-            break;
-        }
-        return Container(
-          height: 154,
-          decoration: const BoxDecoration(
-            gradient: ColorManager.linearGradientPrimary,
-          ),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 66),
-              Row(
+    return Container(
+      height: 154,
+      decoration: const BoxDecoration(
+        gradient: ColorManager.linearGradientPrimary,
+      ),
+      child: FutureBuilder(
+        future: supabase.from("profiles").select().eq("uuid", widget.uuid).single(), 
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Shimmer.fromColors(
+              baseColor: Colors.white,
+              highlightColor: Colors.grey[300]!,
+              child: Row(
                 children: <Widget>[
-                  const SizedBox(width: 28),
-                  SizedBox(
+                  SizedBox(width: 28),
+                  Container(
                     width: 62,
-                    height: 62,
-                    child: ClipOval(
-                      child: Image.network(
-                        userInfor['avatar_url'],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    height: 62,                                    
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        userInfor['full_name'],
-                        style: getSemiBoldStyle(color: Colors.white, fontSize: 20)
+                      Container(
+                        width: 100,
+                        height: 20,                      
                       ),
-                      Text(
-                        userLevel,
-                        style: getRegularStyle(color: Colors.white, fontSize: 14)
-                      ),
-                    ]
-                  )
-                ]
+                      Container(
+                        width: 100,
+                        height: 20,
+                      )
+                    ],
+                  ),
+                ],
               ),
-            ]
-          ),
-        );
-      }
-    );
+            );
+          }
+          final userInfor = snapshot.data!;
+          switch (userInfor['level_id']) {
+            case 1:
+              userLevel = "Beginner";
+              break;
+            case 3:
+              userLevel = "Intermediate";
+              break;
+            case 4:
+              userLevel = "Advanced";
+              break;
+          }
+          return Column(
+            children: <Widget>[
+              const SizedBox(height: 66),
+              Row(
+                  children: <Widget>[
+                    const SizedBox(width: 28),
+                    SizedBox(
+                      width: 62,
+                      height: 62,
+                      child: ClipOval(
+                        child: Image.network(
+                          userInfor['avatar_url'],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          userInfor['full_name'],
+                          style: getSemiBoldStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        Text(
+                          userLevel,
+                          style: getRegularStyle(color: Colors.white, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+            ],
+          );
+        },
+      ),
+    );   
   }
 }    
 
@@ -139,27 +166,8 @@ class _HomePageBodyState extends State<HomePageBody> {
       children: <Widget>[
         const SizedBox(height: 30),
         BannerList(),
-        Container(
-          width: 393,
-          padding: const EdgeInsets.only(left: 36),
-          child: Text(
-            AppLocalizations.of(context)!.continue_where_you_left_off,
-            style: getSemiBoldStyle(color: Colors.black, fontSize: 20),
-          ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const SizedBox(
-              width: 36,
-            ),
-            Expanded(
-              child: HistoryList(widget.uuid),
-            )
-          ],
+        Expanded(
+          child: HistoryList(widget.uuid),
         ),
         const SizedBox(height: 16),
         Container(
