@@ -198,3 +198,13 @@ bool compareLevel(String userLevel, String requiredLevel) {
   List<String> levels = ["Beginner", "Intermediate", "Advanced"];
   return levels.indexOf(userLevel) >= levels.indexOf(requiredLevel);
 }
+
+String getSKillProgressColumn(String skill) {
+  switch (skill) {
+    case "Listening":
+      return "listening_point";
+    case "Reading":
+      return "reading_point";
+  }
+  return '';
+}

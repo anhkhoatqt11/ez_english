@@ -95,8 +95,8 @@ class _PartInfoPageState extends State<PartInfoPage> {
                       child: DropdownButton2(
                         items: [
                           ...List.generate(
-                            30,
-                            (index) => index + 1,
+                            25,
+                            (index) => index + 5,
                           ).map(
                             (e) => DropdownMenuItem(
                               value: e,
