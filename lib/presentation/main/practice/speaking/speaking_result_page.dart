@@ -1,8 +1,8 @@
 import 'package:ez_english/config/style_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:ez_english/utils/route_manager.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/gradient_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ez_english/main.dart';
 
 class SpeakingResultPage extends StatelessWidget {
   final List<Map<bool, String>> isCorrectList;
@@ -10,8 +10,33 @@ class SpeakingResultPage extends StatelessWidget {
 
   const SpeakingResultPage({required this.isCorrectList, required this.part});
 
+  int totalScore() {
+    final uuid = supabase.auth.currentUser!.id;
+    int score = 0;
+    supabase.from('level_progress')
+      .select('speaking_point')
+      .eq('uuid', uuid)
+      .single().then((value) {
+        score = value['speaking_point'] as int;
+      });
+    for (var i = 0; i < isCorrectList.length; i++) {
+      if (isCorrectList[i].keys.first) {
+        score += 10;
+      }
+    }
+    return score;
+  }
+
+  void updateScore() {
+    final uuid = supabase.auth.currentUser!.id;
+    final score = totalScore();
+    supabase.from('level_progress')
+      .update({'speaking_point': score})
+      .eq('uuid', uuid);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   
     return Scaffold(
       body: Column(
         children: <Widget>[

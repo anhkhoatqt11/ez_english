@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ez_english/main.dart';
 import 'package:ez_english/utils/route_manager.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TipList extends StatefulWidget {
   @override
@@ -16,7 +17,14 @@ class _TipListState extends State<TipList> {
       future: supabase.from("tip").select(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
+          return SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                for (var i = 0; i < 5; i++)
+                  ShimmerItem()
+              ],
+            ),
+          );
         }
         final tipItems = snapshot.data!;
         return SingleChildScrollView(
@@ -283,6 +291,93 @@ class _TipItemState extends State<TipItem> {
           )  
         );
       }
+    );
+  }
+}
+// ShimmerItem when TipItem not load yet
+class ShimmerItem extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 200,
+        padding: const EdgeInsets.only(left: 30, top: 15),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey,
+              width: 2,
+            ),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 55,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: 100,
+                      height: 10,
+                      color: Colors.grey,
+                    ),
+                  ]
+                )
+              ]
+            ),
+            const SizedBox(height: 8),
+            Container(
+              width: 300,
+              height: 10,
+              color: Colors.grey,
+            ),
+            Container(
+              width: 300,
+              height: 10,
+              color: Colors.grey,
+            ),
+            Container(
+              width: 300,
+              height: 10,
+              color: Colors.grey,
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: <Widget>[
+                const SizedBox(width: 4),
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Container(
+                  width: 20,
+                  height: 20,
+                  color: Colors.grey,
+                ),
+              ]
+            )
+          ],
+        )
+      )
     );
   }
 }
