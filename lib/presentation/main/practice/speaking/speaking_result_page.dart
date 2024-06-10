@@ -11,7 +11,14 @@ class SpeakingResultPage extends StatelessWidget {
   const SpeakingResultPage({required this.isCorrectList, required this.part});
 
   int totalScore() {
+    final uuid = supabase.auth.currentUser!.id;
     int score = 0;
+    supabase.from('level_progress')
+      .select('speaking_point')
+      .eq('uuid', uuid)
+      .single().then((value) {
+        score = value['speaking_point'] as int;
+      });
     for (var i = 0; i < isCorrectList.length; i++) {
       if (isCorrectList[i].keys.first) {
         score += 10;
