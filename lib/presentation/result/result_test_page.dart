@@ -56,6 +56,30 @@ class _ResultTestPageState extends State<ResultTestPage> {
         i.id, resultMap["Total"] as int, true, supabase.auth.currentUser!.id));
   }
 
+  Future<void> upsertLevelProgress() async {
+    final response = await supabase
+        .from("level_progress")
+        .select()
+        .eq("uuid", supabase.auth.currentUser!.id);
+    resultMap.entries.map(
+      (e) async {
+        if (e.key != "Total") {
+          if (response.isNotEmpty && e.value >= 450 * 0.3) {
+            await supabase.from('level_progress').update({
+              getSKillProgressColumn(e.key):
+                  response.first[getSKillProgressColumn(e.key)] +
+                      (e.value * 0.3).toInt()
+            }).eq("uuid", supabase.auth.currentUser!.id);
+          } else {
+            await supabase
+                .from("level_progress")
+                .insert({"uuid": supabase.auth.currentUser!.id});
+          }
+        }
+      },
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -70,107 +94,111 @@ class _ResultTestPageState extends State<ResultTestPage> {
       canPop: canPop,
       child: Scaffold(
           body: SingleChildScrollView(
-        child: Column(
-          children: [
-            GradientAppBar(
-              content: AppLocalizations.of(context)!.result,
-            ),
-            ResultItem(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ClipOval(
-                  child: Image.asset(
-                    ImagePath.logoPath,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Expanded(
-                  child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(children: [
-                        TextSpan(
-                            text:
-                                "${AppLocalizations.of(context)!.complete_test} \n",
-                            style: getMediumStyle(
-                                color: Colors.black, fontSize: 18)),
-                        TextSpan(
-                            text: "${widget.testItem.name} \n",
-                            style: getMediumStyle(
-                                color: Colors.orange, fontSize: 18)),
-                        TextSpan(
-                            text: AppLocalizations.of(context)!.good_luck,
-                            style: getRegularStyle(
-                                color: Colors.black, fontSize: 16)),
-                      ])),
-                )
-              ],
-            )),
-            ResultItem(
-                child: Column(
-              children: [
-                ...resultMap.entries.map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "${e.key} ${AppLocalizations.of(context)!.result}: ",
-                          style:
-                              getMediumStyle(color: Colors.black, fontSize: 18),
-                        ),
-                        ClipOval(
-                          child: Container(
-                            color: Colors.red,
-                            width: 60,
-                            height: 60,
-                            child: Center(
-                                child: Text(
-                              "${e.value}",
-                              style: getMediumStyle(
-                                  color: Colors.white, fontSize: 16),
-                            )),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            )),
-            ResultItem(
-              child: Row(
+        child: FutureBuilder(
+          future: upsertLevelProgress(),
+          builder: (context, snapshot) => Column(
+            children: [
+              GradientAppBar(
+                content: AppLocalizations.of(context)!.result,
+              ),
+              ResultItem(
+                  child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Center(
-                    child: FilledButton(
-                        onPressed: () {
-                          canPop = true;
-                          Navigator.pop(context, true);
-                        },
-                        child: Text(
-                            AppLocalizations.of(context)!.see_all_answers)),
+                  ClipOval(
+                    child: Image.asset(
+                      ImagePath.logoPath,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  FilledButton(
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        RoutesName.mainRoute,
-                        (route) => route.settings.name != RoutesName.mainRoute,
-                      );
-                    },
-                    child: Text(AppLocalizations.of(context)!.app_continue),
-                  ),
+                  Expanded(
+                    child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text:
+                                  "${AppLocalizations.of(context)!.complete_test} \n",
+                              style: getMediumStyle(
+                                  color: Colors.black, fontSize: 18)),
+                          TextSpan(
+                              text: "${widget.testItem.name} \n",
+                              style: getMediumStyle(
+                                  color: Colors.orange, fontSize: 18)),
+                          TextSpan(
+                              text: AppLocalizations.of(context)!.good_luck,
+                              style: getRegularStyle(
+                                  color: Colors.black, fontSize: 16)),
+                        ])),
+                  )
                 ],
+              )),
+              ResultItem(
+                  child: Column(
+                children: [
+                  ...resultMap.entries.map(
+                    (e) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${e.key} ${AppLocalizations.of(context)!.result}: ",
+                            style: getMediumStyle(
+                                color: Colors.black, fontSize: 18),
+                          ),
+                          ClipOval(
+                            child: Container(
+                              color: Colors.red,
+                              width: 60,
+                              height: 60,
+                              child: Center(
+                                  child: Text(
+                                "${e.value}",
+                                style: getMediumStyle(
+                                    color: Colors.white, fontSize: 16),
+                              )),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              )),
+              ResultItem(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Center(
+                      child: FilledButton(
+                          onPressed: () {
+                            canPop = true;
+                            Navigator.pop(context, true);
+                          },
+                          child: Text(
+                              AppLocalizations.of(context)!.see_all_answers)),
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          RoutesName.mainRoute,
+                          (route) =>
+                              route.settings.name != RoutesName.mainRoute,
+                        );
+                      },
+                      child: Text(AppLocalizations.of(context)!.app_continue),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 18,
-            ),
-          ],
+              const SizedBox(
+                height: 18,
+              ),
+            ],
+          ),
         ),
       )),
     );

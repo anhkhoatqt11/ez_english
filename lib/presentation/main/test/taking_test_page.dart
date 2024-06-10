@@ -45,12 +45,13 @@ class _TakingTestPageState extends State<TakingTestPage> {
   List<PartObject> partList = [];
   PageController pagePartController = PageController();
   List<int> itemList = List.generate(5, (index) => index, growable: true);
-  Timer? timer;
+
   bool isReview = false;
   @override
   Widget build(BuildContext context) {
     partList = getPartByTest(widget.skills, context);
     // TODO: implement build
+    print(isReview);
     return PopScope(
       onPopInvoked: (didPop) {
         if (!didPop) {
@@ -65,13 +66,16 @@ class _TakingTestPageState extends State<TakingTestPage> {
           GradientAppBar(
             suffixIcon: InkWell(
               onTap: () async {
-                bool isReview = await Navigator.pushNamed(
+                isReview = await Navigator.pushNamed(
                         context, RoutesName.resultTestRoute, arguments: [
                       answerMap,
                       widget.skills,
                       widget.testItem
                     ]) ??
                     false;
+                if (isReview) {
+                  setState(() {});
+                }
               },
               child: Text(
                 !isReview
@@ -93,15 +97,23 @@ class _TakingTestPageState extends State<TakingTestPage> {
                 }),
             content: '',
           ),
-          TestTimeCounter(
-            timeLimit: Duration(minutes: widget.testItem.time),
-            navigateToNextPage: () async {
-              bool isReview = await Navigator.pushNamed(
-                      context, RoutesName.resultTestRoute,
-                      arguments: [answerMap, widget.skills, widget.testItem]) ??
-                  false;
-            },
-          ),
+          !isReview
+              ? TestTimeCounter(
+                  timeLimit: Duration(minutes: widget.testItem.time),
+                  navigateToNextPage: () async {
+                    isReview = await Navigator.pushNamed(
+                            context, RoutesName.resultTestRoute, arguments: [
+                          answerMap,
+                          widget.skills,
+                          widget.testItem
+                        ]) ??
+                        false;
+                    if (isReview) {
+                      setState(() {});
+                    }
+                  },
+                )
+              : Container(),
           Expanded(
             child: PageView.builder(
                 controller: pagePartController,

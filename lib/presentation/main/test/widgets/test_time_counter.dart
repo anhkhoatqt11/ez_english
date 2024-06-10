@@ -61,6 +61,8 @@ class _TestTimeCounterState extends State<TestTimeCounter>
   void dispose() {
     // TODO: implement dispose
     _animation.removeListener(onEndAnimation);
+    _controller.stop();
+    _controller.dispose();
     super.dispose();
   }
 
