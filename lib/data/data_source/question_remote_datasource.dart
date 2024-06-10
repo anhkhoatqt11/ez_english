@@ -19,12 +19,11 @@ class QuestionRemoteDateSouceImpl implements QuestionRemoteDataSouce {
       GetQuestionByPartRequest request) async {
     debugPrint("${request.skill} ${request.partIndex}");
     try {
-      final response = await supabaseClient
-          .from(QUESTION_TABLE)
-          .select('* , part!question_part_id_fkey!inner(*)')
-          .eq('part.skill', request.skill)
-          .eq('part.part_index', request.partIndex)
-          .limit(request.limit);
+      final response = await supabaseClient.rpc('select_random_data', params: {
+        'limit_question': request.limit,
+        '_skill': request.skill,
+        'index': request.partIndex
+      }).select();
       /*final response =
           await supabaseClient.from(QUESTION_TABLE).select('* ,choice(*)');*/
       debugPrint(response.first.toString());
@@ -36,6 +35,7 @@ class QuestionRemoteDateSouceImpl implements QuestionRemoteDataSouce {
       }
       return questionList;
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
