@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Login success'),
+            content: Text("Đăng nhập thành công"),
           ),
         );
         emailController.clear();
@@ -206,7 +206,22 @@ class _LoginPageState extends State<LoginPage> {
                   obsucure: true,
                   textInputType: TextInputType.visiblePassword,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushReplacementNamed(RoutesName.passwordRecoveryRoute);
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.forgot_password,
+                      style: getLightStyle(
+                          color: ColorManager.primaryColor, fontSize: 12),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 // ElevatedButton(
                 //     onPressed: isLoading ? null : signIn,
                 //     child: Text(AppLocalizations.of(context)!.login)),

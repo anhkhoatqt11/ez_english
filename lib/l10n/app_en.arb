@@ -122,5 +122,6 @@
     "error": "Error",
     "please_enter_answer": "Please enter your answer",
     "answer_correction": "Answer & Correction",
-    "incomplete": "Incomplete"
+    "incomplete": "Incomplete",
+    "you_have_completed": "You have completed your pratice"
 }

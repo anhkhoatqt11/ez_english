@@ -57,6 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
             "https://txtkdxqiihbhcqrhippj.supabase.co/storage/v1/object/sign/avatars/2.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzLzIuanBnIiwiaWF0IjoxNzE3NTkzOTYwLCJleHAiOjIwMzI5NTM5NjB9.bDS1r_BnRuLDKdo5_YGhRre-pdc8aN4E_abOTwdomAA"
       }).eq("uuid", user.id);
 
+
       await supabase.from("level_progress").insert({
         "listening_point": 0,
         "reading_point": 0,

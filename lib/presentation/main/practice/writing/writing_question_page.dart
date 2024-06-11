@@ -4,6 +4,7 @@ import 'package:ez_english/app_prefs.dart';
 import 'package:ez_english/config/style_manager.dart';
 import 'package:ez_english/presentation/common/objects/part_object.dart';
 import 'package:ez_english/presentation/common/widgets/stateless/common_button.dart';
+import 'package:ez_english/utils/route_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
@@ -114,6 +115,7 @@ class _WritingQuestionBodyState extends State<WritingQuestionBody> {
         final question = questions[index];
         return QuestionPage(
           index: index,
+          totalQuestion: questions.length,
           partIndex: partIndex,
           language: widget.selectedLanguage,
           imageUrl: question['imageurl'],
@@ -126,8 +128,11 @@ class _WritingQuestionBodyState extends State<WritingQuestionBody> {
                 duration: Duration(milliseconds: 300),
                 curve: Curves.easeIn,
               );
+              Navigator.of(context).pop();
+            } else {
+              Navigator.pushNamed(context, RoutesName.writingCompleteRoute);
             }
-            Navigator.of(context).pop();
+            ;
           },
         );
       },
@@ -137,6 +142,7 @@ class _WritingQuestionBodyState extends State<WritingQuestionBody> {
 
 class QuestionPage extends StatefulWidget {
   final int index;
+  final int totalQuestion;
   final int partIndex;
   final String? imageUrl;
   final String questionText;
@@ -155,6 +161,7 @@ class QuestionPage extends StatefulWidget {
     required this.index,
     required this.language,
     required this.partIndex,
+    required this.totalQuestion,
   }) : super(key: key);
 
   @override
@@ -219,6 +226,8 @@ class _QuestionPageState extends State<QuestionPage> {
           imageUrl: widget.imageUrl ?? '',
           question: widget.questionText,
           onNext: widget.onNext,
+          index: widget.index,
+          totalQuestion: widget.totalQuestion,
         ),
       ),
     );
@@ -341,6 +350,8 @@ class _QuestionPageState extends State<QuestionPage> {
 }
 
 class ResultWritingPage extends StatelessWidget {
+  final int index;
+  final int totalQuestion;
   final String geminiAnswer;
   final String? imageUrl;
   final String question;
@@ -352,6 +363,8 @@ class ResultWritingPage extends StatelessWidget {
     required this.onNext,
     required this.imageUrl,
     required this.question,
+    required this.index,
+    required this.totalQuestion,
   }) : super(key: key);
 
   @override
@@ -411,7 +424,9 @@ class ResultWritingPage extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.all(16.0),
               child: CommonButton(
-                  text: AppLocalizations.of(context)!.app_continue,
+                  text: index + 1 == totalQuestion
+                      ? AppLocalizations.of(context)!.confirm
+                      : AppLocalizations.of(context)!.app_continue,
                   action: onNext)),
         ],
       ),

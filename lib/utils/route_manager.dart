@@ -10,6 +10,7 @@ import 'package:ez_english/presentation/main/main_view.dart';
 import 'package:ez_english/presentation/main/practice/listening/listening_question_page.dart';
 import 'package:ez_english/presentation/main/practice/reading/reading_question_page.dart';
 import 'package:ez_english/presentation/main/practice/skill_practice_page.dart';
+import 'package:ez_english/presentation/main/practice/writing/writing_completed_page.dart';
 import 'package:ez_english/presentation/main/practice/writing/writing_question_page.dart';
 import 'package:ez_english/presentation/main/profile/progress/progress_page.dart';
 import 'package:ez_english/presentation/main/test/taking_test_page.dart';
@@ -62,6 +63,7 @@ class RoutesName {
   static const String progressRoute = "progress";
   static const String resultTestRoute = "test_result";
   static const String writingQuestionRoute = "writing_question";
+  static const String writingCompleteRoute = "writing_complete";
 }
 
 class Routes {
@@ -181,6 +183,8 @@ class Routes {
                   part: arguments[0],
                   limit: arguments[1],
                 ));
+      case RoutesName.writingCompleteRoute:
+        return MaterialPageRoute(builder: (_) => const WritingCompletePage());
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

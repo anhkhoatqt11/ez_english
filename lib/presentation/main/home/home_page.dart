@@ -11,7 +11,6 @@ import 'package:ez_english/presentation/main/home/history.dart';
 import 'package:ez_english/presentation/main/home/tip/tip.dart';
 
 class HomePage extends StatefulWidget {
-
   const HomePage({super.key});
 
   @override
@@ -21,7 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
@@ -37,15 +35,12 @@ class _HomePageState extends State<HomePage> {
     final uuid = supabase.auth.currentUser!.id;
 
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          HomePageAppBar(uuid),
-          Expanded(
-            child: HomePageBody(uuid),
-          ),  
-        ]
-      )
-    );
+        body: Column(children: <Widget>[
+      HomePageAppBar(uuid),
+      Expanded(
+        child: HomePageBody(uuid),
+      ),
+    ]));
   }
 }
 
@@ -56,7 +51,7 @@ class HomePageAppBar extends StatefulWidget {
   _HomePageAppBarState createState() => _HomePageAppBarState();
 }
 
-class _HomePageAppBarState extends State<HomePageAppBar> {  
+class _HomePageAppBarState extends State<HomePageAppBar> {
   late String userLevel;
 
   @override
@@ -67,7 +62,8 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
         gradient: ColorManager.linearGradientPrimary,
       ),
       child: FutureBuilder(
-        future: supabase.from("profiles").select().eq("uuid", widget.uuid).single(), 
+        future:
+            supabase.from("profiles").select().eq("uuid", widget.uuid).single(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Shimmer.fromColors(
@@ -78,7 +74,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
                   SizedBox(width: 28),
                   Container(
                     width: 62,
-                    height: 62,                                    
+                    height: 62,
                   ),
                   SizedBox(width: 12),
                   Column(
@@ -86,7 +82,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
                     children: <Widget>[
                       Container(
                         width: 100,
-                        height: 20,                      
+                        height: 20,
                       ),
                       Container(
                         width: 100,
@@ -114,41 +110,43 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
             children: <Widget>[
               const SizedBox(height: 66),
               Row(
-                  children: <Widget>[
-                    const SizedBox(width: 28),
-                    SizedBox(
-                      width: 62,
-                      height: 62,
-                      child: ClipOval(
-                        child: Image.network(
-                          userInfor['avatar_url'],
-                          fit: BoxFit.cover,
-                        ),
+                children: <Widget>[
+                  const SizedBox(width: 28),
+                  SizedBox(
+                    width: 62,
+                    height: 62,
+                    child: ClipOval(
+                      child: Image.network(
+                        userInfor['avatar_url'],
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          userInfor['full_name'],
-                          style: getSemiBoldStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        Text(
-                          userLevel,
-                          style: getRegularStyle(color: Colors.white, fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        userInfor['full_name'],
+                        style:
+                            getSemiBoldStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      Text(
+                        userLevel,
+                        style:
+                            getRegularStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
           );
         },
       ),
-    );   
+    );
   }
-}    
+}
 
 class HomePageBody extends StatefulWidget {
   final String uuid;
@@ -162,47 +160,45 @@ class HomePageBody extends StatefulWidget {
 class _HomePageBodyState extends State<HomePageBody> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        const SizedBox(height: 30),
-        BannerList(),
-        Expanded(
-          child: HistoryList(widget.uuid),
-        ),
-        const SizedBox(height: 16),
-        Container(
-          width: 393,
-          padding: const EdgeInsets.only(left: 36),
-          child: Row(
-            children: <Widget>[
-              Text(
-                AppLocalizations.of(context)!.english_tips,
-                style: getSemiBoldStyle(color: Colors.black, fontSize: 20),
-              ),
-              const SizedBox(width: 10),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesName.newTipRoute);
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    gradient: ColorManager.linearGradientPrimary,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
+    return ListView(children: <Widget>[
+      const SizedBox(height: 30),
+      BannerList(),
+      Expanded(
+        child: HistoryList(widget.uuid),
+      ),
+      const SizedBox(height: 16),
+      Container(
+        width: 393,
+        padding: const EdgeInsets.only(left: 36),
+        child: Row(
+          children: <Widget>[
+            Text(
+              AppLocalizations.of(context)!.english_tips,
+              style: getSemiBoldStyle(color: Colors.black, fontSize: 20),
+            ),
+            const SizedBox(width: 10),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, RoutesName.newTipRoute);
+              },
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  gradient: ColorManager.linearGradientPrimary,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        const SizedBox(height: 30),
-        TipList(),
-      ]
-    );
+      ),
+      const SizedBox(height: 30),
+      TipList(),
+    ]);
   }
 }

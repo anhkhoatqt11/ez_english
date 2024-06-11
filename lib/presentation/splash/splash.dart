@@ -22,7 +22,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   Future<void> redirect() async {
-    await Future.delayed(Duration.zero);
+    await Future.delayed(Duration(seconds: 5));
     if (!mounted) {
       return;
     }

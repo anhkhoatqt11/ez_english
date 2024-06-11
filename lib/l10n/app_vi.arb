@@ -120,5 +120,6 @@
     "error": "Lỗi",
     "please_enter_answer": "Hãy nhập câu trả lời của bạn",
     "answer_correction": "Đáp án & Sửa lỗi",
-    "incomplete": "Chưa hoàn thành"
+    "incomplete": "Chưa hoàn thành",
+    "you_have_completed": "Bạn đã hoàn thành bài luyện tập"
 }
